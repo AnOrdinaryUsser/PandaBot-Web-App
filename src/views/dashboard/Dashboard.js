@@ -58,7 +58,7 @@ const Dashboard = () => {
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
   const fetchValue = () => {
-    const url = 'http://192.168.1.192:9000?value=Mesa1'
+    const url = 'http://192.168.1.192:9000?value=Mesa3'
     fetch(url, {
       headers: {'Content-Type': 'application/json', 
                 'Cache-Control' : 'max-age=10'},  
