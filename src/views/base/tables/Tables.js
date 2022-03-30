@@ -15,6 +15,7 @@ import {
 } from '@coreui/react'
 import { DocsCallout, DocsExample } from 'src/components'
 
+
 const Tables = () => {
   return (
     <CRow>

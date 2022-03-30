@@ -19,6 +19,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import { CChartLine } from '@coreui/react-chartjs'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getStyle, hexToRgba } from '@coreui/utils'
 import CIcon from '@coreui/icons-react'
 import {
@@ -204,7 +205,7 @@ const Dashboard = () => {
             </CCol>
             <CCol sm={7} className="d-none d-md-block">
               <CButton color="primary" className="float-end" onClick={fetchValue}>
-                <CIcon icon={cilCloudDownload} />
+                <FontAwesomeIcon icon="fa-solid fa-circle-plus" />
               </CButton>
               <CButtonGroup className="float-end me-3">
                 {['Day', 'Month', 'Year'].map((value) => (

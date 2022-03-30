@@ -43,8 +43,7 @@ const Page404 = () => {
                     <p>
                       Si quieres disfrutar de todos los servicios que ofrece NombreEmpresa registrate ahora
                     </p>
-                      <button color="primary" onClick={fetchValue}>mIERDA </button>
-                      <CButton color="primary" onClick={fetchValue} className="mt-3">
+                      <CButton color="primary" className="mt-3" active tabIndex={-1}>
                         Continuar
                       </CButton>
                   </div>

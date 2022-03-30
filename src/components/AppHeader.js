@@ -11,6 +11,7 @@ import {
   CNavLink,
   CNavItem,
 } from '@coreui/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CIcon from '@coreui/icons-react'
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 
@@ -38,6 +39,7 @@ const AppHeader = () => {
           <CNavItem>
             <CNavLink href="#">
               <CIcon icon={cilBell} size="lg" />
+              <FontAwesomeIcon icon="fa-solid fa-circle-plus" />
             </CNavLink>
           </CNavItem>
         </CHeaderNav>

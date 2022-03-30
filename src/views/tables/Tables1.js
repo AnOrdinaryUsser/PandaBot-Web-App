@@ -1,4 +1,5 @@
 import React from 'react'
+import { View, StyleSheet, Image, Text, Button } from 'react-native'
 
 import {
   CAvatar,
@@ -58,63 +59,31 @@ import avatar6 from 'src/assets/images/avatars/6.jpg'
 import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import { cilArrowCircleRight } from '@coreui/icons'
+import { CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react'
+
 
 const Tables1 = () => {
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
   return (
     <>
-    <CContainer>  
-      <CRow>  
+    <CContainer fluid>
+      <CRow>
         <CCol>
-          <CCard className="text-center" style={{ width: '18rem' }}>
-          <CCardBody>
-            <h2 class="card-title">1</h2>
-            <h5 class="card-title">Table</h5>
-            <div className="d-grid gap-2">
-              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
-              </CButton>
-            </div>
-          </CCardBody>
-          </CCard>
+          <CRow>
+            <CButton>Example</CButton>
+          </CRow>
+          <CRow>
+            <CButton>Example</CButton>
+          </CRow>
+          <CRow>
+            <CButton>Example</CButton>
+          </CRow>
         </CCol>
-        <CCol>
-        <CCard className="text-center" style={{ width: '18rem' }}>
-          <CCardBody>
-            <h2 class="card-title">2</h2>
-            <h5 class="card-title">Table</h5>
-            <div className="d-grid gap-2">
-              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
-              </CButton>
-            </div>
-          </CCardBody>
-          </CCard>
+        <CCol xs={10}>
+          
         </CCol>
-        <CCol>
-        <CCard className="text-center" style={{ width: '18rem' }}>
-          <CCardBody>
-            <h2 class="card-title">3</h2>
-            <h5 class="card-title">Table</h5>
-            <div className="d-grid gap-2">
-              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
-              </CButton>
-            </div>
-          </CCardBody>
-          </CCard>
-        </CCol>
-        <CCol>
-        <CCard className="text-center" style={{ width: '18rem' }}>
-          <CCardBody>
-            <h2 class="card-title">4</h2>
-            <h5 class="card-title">Table</h5>
-            <div className="d-grid gap-2">
-              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
-              </CButton>
-            </div>
-          </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
+      </CRow>      
     </CContainer>
     </>
   )
