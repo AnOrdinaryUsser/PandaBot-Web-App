@@ -52,6 +52,9 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 //Own
 const Tables1 = React.lazy(() => import('./views/tables/Tables1'))
+const Map = React.lazy(() => import('./views/map/Map'))
+const Carta = React.lazy(() => import('./views/carta/Carta'))
+const Pedidos = React.lazy(() => import('./views/pedidos/Pedidos'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -74,6 +77,9 @@ const routes = [
   { path: '/base/spinners', name: 'Spinners', element: Spinners },
   { path: '/base/tables', name: 'Tables', element: Tables },
   { path: '/tables', name: 'Tables1', element: Tables1 },
+  { path: '/map', name: 'Map', element: Map },
+  { path: '/carta', name: 'Carta', element: Carta },
+  { path: '/pedidos', name: 'Pedidos', element: Pedidos },
   { path: '/base/tooltips', name: 'Tooltips', element: Tooltips },
   { path: '/buttons', name: 'Buttons', element: Buttons, exact: true },
   { path: '/buttons/buttons', name: 'Buttons', element: Buttons },

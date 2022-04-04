@@ -68,22 +68,200 @@ const Tables1 = () => {
   return (
     <>
     <CContainer fluid>
-      <CRow>
+      <CRow xs={{ gutter: 4 }}>  
         <CCol>
-          <CRow>
-            <CButton>Example</CButton>
-          </CRow>
-          <CRow>
-            <CButton>Example</CButton>
-          </CRow>
-          <CRow>
-            <CButton>Example</CButton>
-          </CRow>
+          <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">1</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
         </CCol>
-        <CCol xs={10}>
-          
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">2</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
         </CCol>
-      </CRow>      
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">3</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">4</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+          <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">1</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">2</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">3</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">4</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+          <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">1</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">2</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">3</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">4</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+          <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">1</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">2</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">3</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+        <CCard className="text-center" style={{ width: '18rem' }}>
+          <CCardBody>
+            <h2 class="card-title">4</h2>
+            <h5 class="card-title">Table</h5>
+            <div className="d-grid gap-2">
+              <CButton href="#">Send <CIcon icon={cilArrowCircleRight} size="xs" />
+              </CButton>
+            </div>
+          </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
     </CContainer>
     </>
   )
