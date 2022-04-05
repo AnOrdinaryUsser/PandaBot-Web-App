@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 import {
   CButton,
@@ -11,10 +11,41 @@ import {
 } from '@coreui/react'
 
 import logo from '../../assets/images/react.jpg';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
+
+function init() {
+  // Connect to ROS.
+   var ros = new ROSLIB.Ros({
+     url : 'ws://192.168.1.193:9090'
+    });
+
+   // Create the main viewer.
+   var viewer = new ROS2D.Viewer({
+     divID : 'map',
+     width : 600,
+     height : 500
+   });
+
+   // Setup the map client.
+   var gridClient = new ROS2D.OccupancyGridClient({
+     ros : ros,
+     rootObject : viewer.scene
+   });
+   // Scale the canvas to fit to the map
+   gridClient.on('change', function(){
+     viewer.scaleToDimensions(gridClient.currentGrid.width, gridClient.currentGrid.height);
+   });
+ }
+
+ 
 const Tables1 = () => {
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <>
+    
     <CContainer fluid>
       <h2>Edit tables</h2>
       <CRow>
@@ -51,6 +82,7 @@ const Tables1 = () => {
           </CRow>
         </CCol>
         <CCol xs={8}>
+          <div id="map"></div>
         <CImage src={logo} width={1000} height={700}/>
         </CCol>
       </CRow>      
