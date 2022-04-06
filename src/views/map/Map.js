@@ -33,9 +33,11 @@ function init() {
      rootObject : viewer.scene
    });
    // Scale the canvas to fit to the map
-   gridClient.on('change', function(){
-     viewer.scaleToDimensions(gridClient.currentGrid.width, gridClient.currentGrid.height);
-   });
+   gridClient.on('change', function() {
+    viewer.scaleToDimensions(gridClient.currentGrid.width, gridClient.currentGrid.height);
+    viewer.shift(gridClient.currentGrid.pose.position.x, gridClient.currentGrid.pose.position.y);
+    displayPoseMarker();
+  });
  }
 
  
@@ -82,8 +84,7 @@ const Tables1 = () => {
           </CRow>
         </CCol>
         <CCol xs={8}>
-          <div id="map"></div>
-        <CImage src={logo} width={1000} height={700}/>
+          <div id="map" width="640" Height="480"></div>         
         </CCol>
       </CRow>      
     </CContainer>
