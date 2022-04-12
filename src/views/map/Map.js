@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, Component} from 'react'
 
 import {
   CButton,
@@ -9,10 +9,6 @@ import {
   CForm,
   CFormInput
 } from '@coreui/react'
-
-import logo from '../../assets/images/react.jpg';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-
 
 function init() {
   // Connect to ROS.
@@ -286,21 +282,19 @@ function init() {
      return [x, y];
    }
 } */
- 
-const Tables1 = () => {
-  useEffect(() => {
-    init();
-  }, []);
+
+const Map = () => {
   return (
     <>
-    
     <CContainer fluid>
       <h2>Edit tables</h2>
       <CRow>
         <CCol xs={4}>
           <CRow>
             <CCol xs={{ span: 4 }}>
+              <div>
               <CButton className="mb-4">Add table</CButton>
+            </div>
             </CCol>
             <CCol>
               <CButton className="mb-4">Delete table</CButton>
@@ -339,4 +333,4 @@ const Tables1 = () => {
   )
 }
 
-export default Tables1
+export default Map
