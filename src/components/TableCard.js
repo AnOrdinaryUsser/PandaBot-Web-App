@@ -10,7 +10,7 @@ const TableCard = () => {
         <CCol className="mb-4">
         <CCard className="text-center" style={{ width: '18rem' }}>
             <CCardBody>
-                <h2 className="card-title">{item.tableID}</h2>
+                <h2 className="card-title">1</h2>
                 <h5 className="card-title">Table</h5>
                 <div className="d-grid gap-2">
                     <CButton href="#">Send <CIcon icon={cilArrowCircleRight}  />
