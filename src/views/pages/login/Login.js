@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useRef} from 'react';
 import { Link } from 'react-router-dom'
 import {
   CButton,
@@ -17,6 +17,47 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 
 const Login = () => {
+
+  // Validate form
+  const [validated, setValidated] = useState(false)
+  // Event to validate form
+  const handleSubmit = (e) => {
+    const form = e.currentTarget
+    if (form.checkValidity() === false) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    setValidated(true)
+
+    // Picking data
+    e.preventDefault();
+    const {user, password} = e.target.elements
+    console.log(user.value, password.value)
+
+    // Formdata on JSON 
+    const data = {name: user.value, password: password.value}
+    const JSONdata = JSON.stringify(data)
+    console.log(JSONdata)
+
+    // Make a fetch
+    fetch('http://192.168.1.128:9000/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+      body: JSON.stringify(data),
+    })
+    .then(res => console.log(res.text()))
+    .then(data => {
+      // enter you logic when the fetch is successful
+      console.log(data)
+    })
+    .catch(error => {
+    // enter your logic for when there is an error (ex. error toast)
+      console.log(error)
+    })  
+  }
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -25,20 +66,21 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm>
+                  <CForm onSubmit={handleSubmit}>
                     <h1>Login</h1>
                     <p className="text-medium-emphasis">Inicia sesión con tu cuenta</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Usuario" autoComplete="username" />
+                      <CFormInput id="user" placeholder="Usuario" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
+                        id="password"
                         type="password"
                         placeholder="Contraseña"
                         autoComplete="current-password"
@@ -46,11 +88,9 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <Link to="/dashboard">
-                          <CButton color="primary" className="px-4">
+                          <CButton type="submit" color="primary" className="px-4">
                             Continuar
                           </CButton>
-                        </Link>
                       </CCol>
                       <CCol xs={6} className="text-right">
                         <CButton color="link" className="px-0">

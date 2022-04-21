@@ -33,7 +33,7 @@ const Tables1 = () => {
     console.log("After: " + event.target.value)  
   };
 
-  /* var newURL = "ws://" + "192.168.1.193" + ":9090";
+  var newURL = "ws://" + "192.168.1.193" + ":9090";
   var ros = new ROSLIB.Ros({
     url : newURL
   });

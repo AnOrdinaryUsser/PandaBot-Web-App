@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useRef} from 'react';
 import {
   CButton,
   CCard,
@@ -15,6 +15,51 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 
 const Register = () => {
+ 
+  // Validate form
+  const [validated, setValidated] = useState(false)
+  // Event to validate form
+  const handleSubmit = (e) => {
+    const form = e.currentTarget
+    if (form.checkValidity() === false) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    setValidated(true)
+
+    // Picking data
+    e.preventDefault();
+    const {user, email, pass, repeatPass} = e.target.elements
+    console.log(user.value, email.value, pass.value)
+
+    // Formdata on JSON 
+    const data = {name: user.value, email: email.value, password: pass.value, confirmPassword: repeatPass.value}
+    const JSONdata = JSON.stringify(data)
+    console.log(JSONdata)
+
+    // Make a fetch
+    fetch('http://192.168.1.128:9000/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+      body: JSON.stringify(data),
+    })
+    .then(res => console.log(res.text()))
+    .then(data => {
+      // enter you logic when the fetch is successful
+      console.log(data)
+    })
+    .catch(error => {
+    // enter your logic for when there is an error (ex. error toast)
+      console.log(error)
+    })  
+    
+
+   
+      
+  }
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -22,18 +67,30 @@ const Register = () => {
           <CCol md={9} lg={7} xl={6}>
             <CCard className="mx-4">
               <CCardBody className="p-4">
-                <CForm>
+                <CForm 
+                  validated={validated}
+                  onSubmit={handleSubmit}>
                   <h1>Register</h1>
                   <p className="text-medium-emphasis">Create your account</p>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
                     </CInputGroupText>
-                    <CFormInput placeholder="Username" autoComplete="username" />
+                    <CFormInput 
+                    placeholder="Username" 
+                    id="user" 
+                    autoComplete="username" 
+                    required />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>@</CInputGroupText>
-                    <CFormInput placeholder="Email" autoComplete="email" />
+                    <CFormInput 
+                    type="email"
+                    id="email" 
+                    placeholder="Email" 
+                    autoComplete="email" 
+                    required
+                     />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
@@ -43,7 +100,9 @@ const Register = () => {
                       type="password"
                       placeholder="Password"
                       autoComplete="new-password"
-                    />
+                      id="pass" 
+                      required 
+                      />
                   </CInputGroup>
                   <CInputGroup className="mb-4">
                     <CInputGroupText>
@@ -53,10 +112,12 @@ const Register = () => {
                       type="password"
                       placeholder="Repeat password"
                       autoComplete="new-password"
+                      id="repeatPass" 
+                      required         
                     />
                   </CInputGroup>
                   <div className="d-grid">
-                    <CButton color="success">Create Account</CButton>
+                    <CButton type="submit" color="success" aria-pressed="true">Create Account</CButton>
                   </div>
                 </CForm>
               </CCardBody>

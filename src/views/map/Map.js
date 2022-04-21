@@ -123,10 +123,13 @@ function init() {
  } 
 
 const Map = () => {
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <>
     <CContainer fluid>
-      <h2>Edit tables</h2>
+      <h2 className="mb-4">Edit tables</h2>
       <CRow>
         <CCol xs={4}>
           <CRow>
@@ -134,9 +137,6 @@ const Map = () => {
               <div>
               <CButton className="mb-4">Add table</CButton>
             </div>
-            </CCol>
-            <CCol>
-              <CButton className="mb-4">Delete table</CButton>
             </CCol>
           </CRow>
           <CRow>
