@@ -1,5 +1,6 @@
 import React, {useState, useRef} from 'react';
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import {
   CButton,
   CCard,
@@ -15,9 +16,39 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import AuthHelperMethods from '../../../components/Auth/AuthHelperMethods';
 
 const Login = () => {
 
+   const setToken = idToken => {
+    // Saves user token to localStorage
+    localStorage.setItem("id_token", idToken);
+  };
+  const isTokenExpired = token => {
+    try {
+      const decoded = decode(token);
+      if (decoded.exp < Date.now() / 1000) {
+        // Checking if token is expired.
+        return true;
+      } else return false;
+    } catch (err) {
+      console.log("expired check failed! Line 42: AuthService.js");
+      return false;
+    }
+  };
+
+  const getToken = () => {
+    // Retrieves the user token from localStorage
+    return localStorage.getItem("id_token");
+  };
+
+  const loggedIn = () => {
+    // Checks if there is a saved token and it's still valid
+    const token = getToken(); // Getting token from localstorage
+    return !!token && !isTokenExpired(token); // handwaiving here
+  };
+
+  const navigate = useNavigate();
   // Validate form
   const [validated, setValidated] = useState(false)
   // Event to validate form
@@ -47,15 +78,36 @@ const Login = () => {
     },
       body: JSON.stringify(data),
     })
-    .then(res => console.log(res.text()))
+    .then( (response) => {
+      //console.log(response.status)
+      //console.log(response)
+      return response.json()
+    })
+    .then( (data) => {
+      console.log(data)
+      //console.log(data.password)
+      if(data.password == "incorrect") {
+        console.log("mierda")
+        window.location.reload();
+      }
+      else
+        setToken(data)
+        if (!loggedIn()){
+          window.location.reload();
+        } else 
+          fetch
+        
+    })
+    
+    /* .then(res => console.log(res.data.message)console.log(res.text() ))
     .then(data => {
       // enter you logic when the fetch is successful
       console.log(data)
-    })
+    })  */
     .catch(error => {
     // enter your logic for when there is an error (ex. error toast)
       console.log(error)
-    })  
+    })   
   }
 
   return (
@@ -73,7 +125,7 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput id="user" placeholder="Usuario" autoComplete="username" />
+                      <CFormInput id="user" placeholder="Usuario" pattern="^[a-zA-Z0-9_.-]*$" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>

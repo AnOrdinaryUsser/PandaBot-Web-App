@@ -26,7 +26,7 @@ const Home = () => {
                   <div>
                     <h2>Cliente</h2>
                     <p>
-                      Si quieres disfrutar de todos los servicios que ofrece NombreEmpresa registrate ahora
+                      Si estas esperando y no te decides, pulsa continuar y mira nuestra carta
                     </p>
                       <CButton color="secondary" className="mt-3" active tabIndex={-1}>
                         Continuar
@@ -39,7 +39,7 @@ const Home = () => {
                   <div>
                     <h2>Empresa</h2>
                     <p>
-                      Si quieres disfrutar de todos los servicios que ofrece NombreEmpresa registrate ahora
+                      Si quieres disfrutar de todos los servicios que ofrece WaiterRobot registrate ahora
                     </p>
                     <Link to="/login">
                       <CButton color="secondary" className="mt-3" active tabIndex={-1}>

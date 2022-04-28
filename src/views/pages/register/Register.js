@@ -70,15 +70,16 @@ const Register = () => {
                 <CForm 
                   validated={validated}
                   onSubmit={handleSubmit}>
-                  <h1>Register</h1>
-                  <p className="text-medium-emphasis">Create your account</p>
+                  <h1>Registrate</h1>
+                  <p className="text-medium-emphasis">Crea tu cuenta</p>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
                     </CInputGroupText>
                     <CFormInput 
-                    placeholder="Username" 
+                    placeholder="Usuario" 
                     id="user" 
+                    pattern="^[a-zA-Z0-9_.-]*$"
                     autoComplete="username" 
                     required />
                   </CInputGroup>
@@ -98,7 +99,7 @@ const Register = () => {
                     </CInputGroupText>
                     <CFormInput
                       type="password"
-                      placeholder="Password"
+                      placeholder="Contraseña"
                       autoComplete="new-password"
                       id="pass" 
                       required 
@@ -110,14 +111,14 @@ const Register = () => {
                     </CInputGroupText>
                     <CFormInput
                       type="password"
-                      placeholder="Repeat password"
+                      placeholder="Repite tu constraseña"
                       autoComplete="new-password"
                       id="repeatPass" 
                       required         
                     />
                   </CInputGroup>
                   <div className="d-grid">
-                    <CButton type="submit" color="success" aria-pressed="true">Create Account</CButton>
+                    <CButton type="submit" color="success" aria-pressed="true">Crear Cuenta</CButton>
                   </div>
                 </CForm>
               </CCardBody>
