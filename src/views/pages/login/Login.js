@@ -16,43 +16,15 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import AuthHelperMethods from '../../../components/Auth/AuthHelperMethods';
+import axios from "axios";
 
 const Login = () => {
-
-   const setToken = idToken => {
-    // Saves user token to localStorage
-    localStorage.setItem("id_token", idToken);
-  };
-  const isTokenExpired = token => {
-    try {
-      const decoded = decode(token);
-      if (decoded.exp < Date.now() / 1000) {
-        // Checking if token is expired.
-        return true;
-      } else return false;
-    } catch (err) {
-      console.log("expired check failed! Line 42: AuthService.js");
-      return false;
-    }
-  };
-
-  const getToken = () => {
-    // Retrieves the user token from localStorage
-    return localStorage.getItem("id_token");
-  };
-
-  const loggedIn = () => {
-    // Checks if there is a saved token and it's still valid
-    const token = getToken(); // Getting token from localstorage
-    return !!token && !isTokenExpired(token); // handwaiving here
-  };
-
   const navigate = useNavigate();
+  const [msg, setMsg] = useState('');
   // Validate form
   const [validated, setValidated] = useState(false)
   // Event to validate form
-  const handleSubmit = (e) => {
+/*   const handleSubmit = (e) => {
     const form = e.currentTarget
     if (form.checkValidity() === false) {
       e.preventDefault()
@@ -98,17 +70,35 @@ const Login = () => {
           fetch
         
     })
-    
-    /* .then(res => console.log(res.data.message)console.log(res.text() ))
-    .then(data => {
-      // enter you logic when the fetch is successful
-      console.log(data)
-    })  */
     .catch(error => {
     // enter your logic for when there is an error (ex. error toast)
       console.log(error)
     })   
-  }
+  } */
+
+  const Auth = async (e) => {
+    const form = e.currentTarget
+    if (form.checkValidity() === false) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    setValidated(true)
+    // picking data
+    const {user, password} = e.target.elements
+    e.preventDefault();
+    try {
+        await axios.post('http://192.168.1.128:9000/login', {
+          
+            user: user.value,
+            password: password.value
+        });
+        navigate("/dashboard");
+    } catch (error) {
+        if (error.response) {
+            setMsg(error.response.data.msg);
+        }
+    }
+}
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -118,7 +108,7 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm onSubmit={handleSubmit}>
+                  <CForm onSubmit={Auth}>
                     <h1>Login</h1>
                     <p className="text-medium-emphasis">Inicia sesión con tu cuenta</p>
                     <CInputGroup className="mb-3">

@@ -13,13 +13,17 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const Register = () => {
  
+  const navigate = useNavigate();
+  const [msg, setMsg] = useState('');
   // Validate form
   const [validated, setValidated] = useState(false)
   // Event to validate form
-  const handleSubmit = (e) => {
+  /* const handleSubmit = (e) => {
     const form = e.currentTarget
     if (form.checkValidity() === false) {
       e.preventDefault()
@@ -54,11 +58,31 @@ const Register = () => {
     // enter your logic for when there is an error (ex. error toast)
       console.log(error)
     })  
-    
+  } */
 
-   
-      
-  }
+  const Register = async (e) => {
+    const form = e.currentTarget
+    if (form.checkValidity() === false) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    setValidated(true)
+
+    e.preventDefault();
+    try {
+        await axios.post('http://192.168.1.128:9000/users', {
+            name: user.value,
+            email: email.value,
+            password: pass.value,
+            confPassword: repeatPass.value
+        });
+        navigate("/");
+    } catch (error) {
+        if (error.response) {
+            setMsg(error.response.data.msg);
+        }
+    }
+}
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -69,9 +93,10 @@ const Register = () => {
               <CCardBody className="p-4">
                 <CForm 
                   validated={validated}
-                  onSubmit={handleSubmit}>
+                  onSubmit={Register}>
                   <h1>Registrate</h1>
                   <p className="text-medium-emphasis">Crea tu cuenta</p>
+                  <p className="has-text-centered">{msg}</p>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
