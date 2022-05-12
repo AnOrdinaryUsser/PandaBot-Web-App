@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {
   CCol,
@@ -11,9 +11,23 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilArrowCircleRight } from '@coreui/icons'
 import { TableCard } from '../../components'
-
+import axios from 'axios';
 
 const Tables1 = () => {
+
+  const [id, setId] = useState('');
+  const [seats, setSeats] = useState('');
+  const [tables, setTables] = useState([]);
+
+  useEffect(() => {
+      getTables();
+  }, []);
+
+  const getTables = async () => {
+    const response = await axios.get('http://localhost:9000/getTables', {
+    });
+    setTables(response.data);
+  }
 
   const [tableID, setTableID] = useState(1);
   const [tablesList, setTablesList] = useState([]);
@@ -55,12 +69,12 @@ const Tables1 = () => {
     <>
     <CContainer fluid>
       <CRow className="mb-4" xs={{ cols: 1 }} sm={{ cols: 2 }} md={{ cols: 2 }} xl={{ cols: 4 }}>
-        {tablesList.map((id,index) => {
-          return (<CCol key={index} className="mb-4">
+        {tables.map((table,index) => {
+          return (<CCol key={table.id} className="mb-4">
           <CCard  className="text-center" style={{ width: '18rem' }}>
               <CCardBody>
-                  <h2 className="card-title">{id.tableID}</h2>
-                  <h5 className="card-title">Table + {index}</h5>
+                  <h2 className="card-title">{table.id}</h2>
+                  <h5 className="card-title">Table</h5>
                   <div className="d-grid gap-2">
                       {/* <CButton onClick={sendLocation(value+"")}>Send <CIcon icon={cilArrowCircleRight}  /> */}
                       <CButton onClick={() => console.log('Mesa'+id.tableID)}>Send <CIcon icon={cilArrowCircleRight}  />
@@ -72,7 +86,6 @@ const Tables1 = () => {
         })}
       </CRow>
     </CContainer>
-    <CButton onClick={handleClick}>Add Table</CButton>
     </>
   )
 }

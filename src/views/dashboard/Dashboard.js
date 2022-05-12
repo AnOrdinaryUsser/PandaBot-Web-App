@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   const refreshToken = async () => {
       try {
-          const response = await axios.get('http://192.168.1.128:9000/token');
+          const response = await axios.get('http://localhost:9000/token');
           setToken(response.data.accessToken);
           console.log(response)
           const decoded = jwt_decode(response.data.accessToken);
@@ -35,7 +35,7 @@ const Dashboard = () => {
   axiosJWT.interceptors.request.use(async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-          const response = await axios.get('http://192.168.1.128:9000/token');
+          const response = await axios.get('http://localhost:9000/token');
           config.headers.Authorization = `Bearer ${response.data.accessToken}`;
           setToken(response.data.accessToken);
           const decoded = jwt_decode(response.data.accessToken);
@@ -48,7 +48,7 @@ const Dashboard = () => {
   });
 
   const getUsers = async () => {
-      const response = await axiosJWT.get('http://192.168.1.128:9000/users', {
+      const response = await axiosJWT.get('http://localhost:9000/users', {
           headers: {
               Authorization: `Bearer ${token}`
           }
@@ -61,6 +61,7 @@ const Dashboard = () => {
           <h1>Welcome Back: {name}</h1>
           <table className="table is-striped is-fullwidth">
               <thead>
+                  <h2>Usuarios</h2>
                   <tr>
                       <th>No</th>
                       <th>Name</th>

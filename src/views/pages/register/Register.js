@@ -42,7 +42,7 @@ const Register = () => {
     console.log(JSONdata)
 
     // Make a fetch
-    fetch('http://192.168.1.128:9000/register', {
+    fetch('http://localhost:9000/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ const Register = () => {
 
     e.preventDefault();
     try {
-        await axios.post('http://192.168.1.128:9000/users', {
+        await axios.post('http://localhost:9000/users', {
             name: user.value,
             email: email.value,
             password: pass.value,
