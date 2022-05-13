@@ -3,7 +3,7 @@ import Tables from "../models/TableModel.js";
 export const getTables = async(req, res) => {
     try {
         const tables = await Tables.findAll({
-            attributes:['id','seats']
+            attributes:['id','seats','positionX','positionY']
         });
         res.json(tables);
     } catch (error) {

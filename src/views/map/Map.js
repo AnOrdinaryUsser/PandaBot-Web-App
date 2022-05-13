@@ -99,17 +99,24 @@ function init() {
 const Map = () => {
 
   const [position, setPosition] = useState([]);
+  const [posX, setPosX] = useState('');
+  const [posY, setPosY] = useState('');
 
-  useEffect(() => {
+ /*  useEffect(() => {
       getPosition();
   }, []);
-
+ */
   const getPosition = async () => {
     const response = await axios.get('http://192.168.1.193:10000/getPosition', {
     });
     console.log(response.data)
-    //setPosition(response.data);
+    const result = JSON.stringify(response.data).slice(14,50).replace("\\ny", "").split(":")
+    console.log(result)
+    setPosX(result[0])
+    setPosY(result[1])
   }
+  
+
 
   const [validated, setValidated] = useState(false)
   const addTable = async (e) => {
@@ -121,12 +128,20 @@ const Map = () => {
     setValidated(true)
     e.preventDefault();
     try {
-        await axios.post('http://localhost:10000/addTable', {
+      const response = await axios.get('http://192.168.1.193:10000/getPosition', {
+    });
+    console.log(response.data)
+    const result = JSON.stringify(response.data).slice(14,47).replace("\\ny", "").split(":")
+    console.log(result)
+    setPosX(result[0])
+    setPosY(result[1])
+        await axios.post('http://localhost:9000/addTable', {
             id: id.value,
             seats: seats.value,
-            positionX: position.posX,
-            positionY: position.posY
+            positionX: result[0],
+            positionY: result[1]
         });
+        
         navigate("/map");
     } catch (error) {
         if (error.response) {

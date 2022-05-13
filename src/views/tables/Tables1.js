@@ -27,6 +27,7 @@ const Tables1 = () => {
     const response = await axios.get('http://localhost:9000/getTables', {
     });
     setTables(response.data);
+    console.log(response.data)
   }
 
   const [tableID, setTableID] = useState(1);
@@ -77,7 +78,7 @@ const Tables1 = () => {
                   <h5 className="card-title">Table</h5>
                   <div className="d-grid gap-2">
                       {/* <CButton onClick={sendLocation(value+"")}>Send <CIcon icon={cilArrowCircleRight}  /> */}
-                      <CButton onClick={() => console.log('Mesa'+id.tableID)}>Send <CIcon icon={cilArrowCircleRight}  />
+                      <CButton onClick={() => sendLocation('{\'x\' : ' + table.positionX +  ', \'y\' : ' + table.positionY + '}')}>Send <CIcon icon={cilArrowCircleRight}  />
                       </CButton>
                   </div>
               </CCardBody>
