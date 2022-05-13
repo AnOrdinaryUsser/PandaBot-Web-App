@@ -1,10 +1,9 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { useState, useEffect} from "react";
 
 import {
   CButton,
   CCol,
   CRow,
-  CImage,
   CContainer,
   CForm,
   CFormInput,
@@ -94,31 +93,62 @@ function init() {
   } // end display pose marker
 }
 
- 
-
 const Map = () => {
 
-  const [position, setPosition] = useState([]);
-  const [posX, setPosX] = useState('');
-  const [posY, setPosY] = useState('');
+  const [token, setToken] = useState('');
+  const [expire, setExpire] = useState('');
+  const navigate = useNavigate();
 
- /*  useEffect(() => {
-      getPosition();
+  useEffect(() => {
+      refreshToken();
+      init();
   }, []);
- */
-  const getPosition = async () => {
-    const response = await axios.get('http://192.168.1.193:10000/getPosition', {
-    });
-    console.log(response.data)
-    const result = JSON.stringify(response.data).slice(14,50).replace("\\ny", "").split(":")
-    console.log(result)
-    setPosX(result[0])
-    setPosY(result[1])
-  }
-  
-
 
   const [validated, setValidated] = useState(false)
+
+  const refreshToken = async () => {
+      try {
+          const response = await axios.get('http://localhost:9000/token');
+          setToken(response.data.accessToken);
+          console.log(response)
+          const decoded = jwt_decode(response.data.accessToken);
+          setName(decoded.name);
+          setExpire(decoded.exp);
+      } catch (error) {
+          if (error.response) {
+              navigate("/");
+          }
+      }
+  }
+
+  const axiosJWT = axios.create();
+
+  axiosJWT.interceptors.request.use(async (config) => {
+      const currentDate = new Date();
+      if (expire * 1000 < currentDate.getTime()) {
+          const response = await axios.get('http://localhost:9000/token');
+          config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+          setToken(response.data.accessToken);
+          const decoded = jwt_decode(response.data.accessToken);
+          setName(decoded.name);
+          setExpire(decoded.exp);
+      }
+      return config;
+  }, (error) => {
+      return Promise.reject(error);
+  });
+
+  const getUsers = async () => {
+      const response = await axiosJWT.get('http://localhost:9000/users', {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      });
+      setUsers(response.data);
+  }
+
+
+  
   const addTable = async (e) => {
     const form = e.currentTarget
     if (form.checkValidity() === false) {
@@ -130,18 +160,15 @@ const Map = () => {
     try {
       const response = await axios.get('http://192.168.1.193:10000/getPosition', {
     });
-    console.log(response.data)
+    //console.log(response.data)
     const result = JSON.stringify(response.data).slice(14,47).replace("\\ny", "").split(":")
-    console.log(result)
-    setPosX(result[0])
-    setPosY(result[1])
+    //console.log(result)
         await axios.post('http://localhost:9000/addTable', {
             id: id.value,
             seats: seats.value,
             positionX: result[0],
             positionY: result[1]
         });
-        
         navigate("/map");
     } catch (error) {
         if (error.response) {
@@ -150,11 +177,7 @@ const Map = () => {
     }
 }
 
-  useEffect(() => {
-    init();
-  }, []);
-  
-  return (
+return (
     <>
       <CContainer fluid>
         <h2 className="mb-4">Añade una mesa</h2>
@@ -165,7 +188,6 @@ const Map = () => {
           <CCol xs={4}>
             <CRow>
               <p>Numero de mesa:</p>
-              
                 <div className="mb-3">
                   <CFormInput
                     type="number"
@@ -177,12 +199,12 @@ const Map = () => {
                 </div>
             </CRow>
             <CRow>
-              <p>No. de sitios:</p>
+              <p>Nº. de sitios:</p>
               <CCol xs="auto">
                 <CButton>-</CButton>
               </CCol>
               <CCol xs={3}>
-                  <CFormInput type="number" id="seats" placeholder="" min={1} required/>
+                  <CFormInput type="number" id="seats" placeholder="-" min={1} required/>
               </CCol>
               <CCol xs="auto">
                 <CButton className="mb-4">+</CButton>
@@ -198,7 +220,6 @@ const Map = () => {
           </CCol>
           <CCol xs={8}>
             <div id="map" width="640" height="480"></div>
-            {/* <div id="myCanvas" width="640" height="480"></div>  */}
           </CCol>
         </CRow>
         </CForm>

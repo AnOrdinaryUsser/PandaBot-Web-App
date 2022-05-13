@@ -12,8 +12,6 @@ import {
   CCardText
 } from '@coreui/react'
 
-import react from '../../assets/images/react.jpg'
-import vue from '../../assets/images/vue.jpg'
 import CIcon from '@coreui/icons-react'
 import { cilChevronRight, cilInfo } from '@coreui/icons'
 const change = { react, vue }

@@ -22,43 +22,6 @@ const Register = () => {
   const [msg, setMsg] = useState('');
   // Validate form
   const [validated, setValidated] = useState(false)
-  // Event to validate form
-  /* const handleSubmit = (e) => {
-    const form = e.currentTarget
-    if (form.checkValidity() === false) {
-      e.preventDefault()
-      e.stopPropagation()
-    }
-    setValidated(true)
-
-    // Picking data
-    e.preventDefault();
-    const {user, email, pass, repeatPass} = e.target.elements
-    console.log(user.value, email.value, pass.value)
-
-    // Formdata on JSON 
-    const data = {name: user.value, email: email.value, password: pass.value, confirmPassword: repeatPass.value}
-    const JSONdata = JSON.stringify(data)
-    console.log(JSONdata)
-
-    // Make a fetch
-    fetch('http://localhost:9000/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-      body: JSON.stringify(data),
-    })
-    .then(res => console.log(res.text()))
-    .then(data => {
-      // enter you logic when the fetch is successful
-      console.log(data)
-    })
-    .catch(error => {
-    // enter your logic for when there is an error (ex. error toast)
-      console.log(error)
-    })  
-  } */
 
   const Register = async (e) => {
     const form = e.currentTarget
