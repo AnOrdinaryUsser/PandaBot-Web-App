@@ -10,9 +10,9 @@ const DATA_DB = process.env.DATA_DB
 
 
 // Connection to DB
-const tableDB = new Sequelize(DATA_DB, DB_USER, DB_PASSWORD, {
+const dataDB = new Sequelize(DATA_DB, DB_USER, DB_PASSWORD, {
     host: DB_HOST,
     dialect: "mysql"
 });
 
-export default tableDB;
+export default dataDB;

@@ -16,6 +16,21 @@ import {
 
 const Carta = () => {
     
+
+  const addProduct = async () => {
+    try {
+        await axios.post('http://localhost:9000/addProduct', {
+            seats: seats.value,
+            positionX: result[0],
+            positionY: result[1]
+        });
+        navigate("/map");
+    } catch (error) {
+        if (error.response) {
+            setMsg(error.response.data.msg);
+        }
+    }
+}
   return (
     <>
     <CContainer>
@@ -40,6 +55,7 @@ const Carta = () => {
             </CCol>
         </CRow>
         <CRow>
+        <CContainer fluid>
           <CTable>
             <CTableHead>
               <CTableRow>
@@ -63,6 +79,7 @@ const Carta = () => {
             </CTableBody>
           </CTable>
           <CButton className="mb-4 d-grid gap-2 col-6 mx-auto" >Add product</CButton>
+          </CContainer>
         </CRow>
     </CContainer>
     </>
