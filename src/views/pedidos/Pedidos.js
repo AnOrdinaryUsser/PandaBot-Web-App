@@ -14,10 +14,8 @@ import {
 
 import CIcon from '@coreui/icons-react'
 import { cilChevronRight, cilInfo } from '@coreui/icons'
-const change = { react, vue }
 
 const Carta = () => {
-    const [selected, setSelected] = useState(change.react)
     
   return (
     <>

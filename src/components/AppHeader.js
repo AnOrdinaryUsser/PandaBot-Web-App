@@ -12,13 +12,23 @@ import {
   CNavItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
+import { cilBell, cilEnvelopeOpen, cilList, cilAccountLogout } from '@coreui/icons'
 
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from 'src/assets/brand/logo'
 
 const AppHeader = () => {
+
+  const Logout = async () => {
+    try {
+        await axios.delete('http://localhost:9000/logout');
+        navigate("/");
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
@@ -29,26 +39,19 @@ const AppHeader = () => {
           className="ps-1"
           onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
         >
-          <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none" to="/">
           <CIcon icon={logo} height={48} alt="Logo" />
         </CHeaderBrand>
         <CHeaderNav>
+          <AppHeaderDropdown />
           <CNavItem>
-            <CNavLink href="#">
+            <CNavLink onClick={Logout}>
+              <CIcon icon={cilAccountLogout} size="lg"  />
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
-        <CHeaderNav className="ms-3">
-          <AppHeaderDropdown />
-        </CHeaderNav>
       </CContainer>
-      {/* <CHeaderDivider />
-      <CContainer fluid>
-        <AppBreadcrumb />
-      </CContainer>
-      */}
     </CHeader>
   )
 }

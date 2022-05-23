@@ -12,7 +12,9 @@ export const getProducts = async(req, res) => {
 }
  
 export const addProduct = async(req, res) => {
-    const { name , description , price , allergens, img , section } = req.body;
+    const { name , description , price , allergens, img ,section } = req.body;
+    //const image = req.body.selectedFile;
+    console.log(req.body)
     try {
         await Products.create({
             name: name,
@@ -27,5 +29,6 @@ export const addProduct = async(req, res) => {
         console.log(error);
     }
 }
+
 
 
