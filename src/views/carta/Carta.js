@@ -21,7 +21,8 @@ import {
   CForm,
   CFormInput,
   CInputGroup,
-  CInputGroupText
+  CInputGroupText,
+  CLink
 } from '@coreui/react'
 
 import CIcon from '@coreui/icons-react'
@@ -45,34 +46,20 @@ const Carta = () => {
     console.log(response.data)
   }
 
-  function getBase64(file, onLoadCallback) {
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = onLoadCallback;
-    reader.onerror = function(error) {
-        console.log('Error when converting PDF file to base64: ', error);
-    };
-  }
-
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false)
   const [validated, setValidated] = useState(false)
+  const [file, setFile] = useState();
+  const [fileName, setFileName] = useState("");
   const [msg, setMsg] = useState('');
-  const [selectedFile, setSelectedFile] = React.useState(null);
 
-  const handleFileSelect = (event) => {
-    setSelectedFile(event.target.files[0])
-  }
+  const saveFile = (e) => {
+    setFile(e.target.files[0]);
+    setFileName(e.target.files[0].name);
+  };  
 
   const addProduct = async (e) => {
     const form = e.currentTarget
-    var selectFile_as_base64 = "";
-     getBase64(selectedFile, function(e) {
-      selectFile_as_base64 = e.target.result;
-      console.log(selectFile_as_base64);
-    });
-
-    console.log("Mierda: " + selectFile_as_base64);
 
     if (form.checkValidity() === false) {
       e.preventDefault()
@@ -81,16 +68,35 @@ const Carta = () => {
     setValidated(true)
 
     e.preventDefault();
+
+
+    //////////////
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("fileName", fileName);
+    console.log(formData.get("fileName"))
+    //////////////
+
     try {
-        await axios.post('http://localhost:9000/addProduct', {headers: {
-          'Content-Type': 'multipart/form-data'
-        },
+      const res = await axios.post(
+        "http://localhost:9000/uploadImg",
+        formData
+      );
+      console.log(res);
+    } catch (ex) {
+      console.log(ex);
+    }
+
+
+
+    try {
+        await axios.post('http://localhost:9000/addProduct', {
           name: productName.value,
           description: descp.value,
           price: price.value,
           allergens: allergens.value,
-          section: "1",
-          img: selectFile_as_base64
+          img:formData.get("fileName"),
+          section: "1"
         });
         //navigate("/carta");
     } catch (error) {
@@ -145,6 +151,9 @@ const Carta = () => {
                 <CTableDataCell>{product.description}</CTableDataCell>
                 <CTableDataCell>{product.price} €</CTableDataCell>
                 <CTableDataCell> {product.allergens}</CTableDataCell>
+                <CLink href={"http://localhost:9000/public/images/" + product.img}>
+                  <CTableDataCell> {product.img} </CTableDataCell>
+                </CLink>
               </CTableRow>
             )
             })}
@@ -186,7 +195,7 @@ const Carta = () => {
                   <CRow className="mb-3">
                     <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Foto</CFormLabel>
                     <CCol sm={10} >
-                    <CFormInput type="file" id="imgFile" onChange={(e) => setSelectedFile(e.target.files[0])} required/>
+                    <CFormInput type="file" onChange={saveFile} enctype="multipart/form-data" required/>
                     </CCol>
                   </CRow>
                   <CButton type="submit" color="primary">Save changes</CButton>

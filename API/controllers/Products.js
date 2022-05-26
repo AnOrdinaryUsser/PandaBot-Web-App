@@ -1,5 +1,6 @@
 import Products from "../models/ProductModel.js";
- 
+import multer from 'multer';
+
 export const getProducts = async(req, res) => {
     try {
         const products = await Products.findAll({
@@ -13,8 +14,6 @@ export const getProducts = async(req, res) => {
  
 export const addProduct = async(req, res) => {
     const { name , description , price , allergens, img ,section } = req.body;
-    //const image = req.body.selectedFile;
-    console.log(req.body)
     try {
         await Products.create({
             name: name,
@@ -30,5 +29,12 @@ export const addProduct = async(req, res) => {
     }
 }
 
+export const uploadImg = async(req, res) => {
+    try {
+        res.json({msg: "ImageUpload"});
+    } catch (error) {
+        return res.status(201).json({ url: "http://localhost:5000/image/" + imageName });
+    }
+}
 
 

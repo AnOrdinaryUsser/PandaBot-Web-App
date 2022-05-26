@@ -21,7 +21,7 @@ const Tables = db.define('products',{
         allowNull: false,
     },
     img:{
-        type: DataTypes.BLOB("long"), 
+        type: DataTypes.STRING, 
         allowNull: false,
     },
     section:{

@@ -17,6 +17,7 @@ import { cilBell, cilEnvelopeOpen, cilList, cilAccountLogout } from '@coreui/ico
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from 'src/assets/brand/logo'
+import axios from 'axios';
 
 const AppHeader = () => {
 
@@ -47,7 +48,7 @@ const AppHeader = () => {
           <AppHeaderDropdown />
           <CNavItem>
             <CNavLink onClick={Logout}>
-              <CIcon icon={cilAccountLogout} size="lg"  />
+              <CIcon icon={cilAccountLogout} size="lg" style={{color:"red"}} />
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
