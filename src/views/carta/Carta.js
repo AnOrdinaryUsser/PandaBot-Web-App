@@ -22,19 +22,56 @@ import {
   CFormInput,
   CInputGroup,
   CInputGroupText,
-  CLink
+  CLink,
+  CFormSelect
 } from '@coreui/react'
 
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import { 
+  FishIcon, 
+  EggIcon,
+  CeleryIcon,
+  CrustaceanIcon,
+  GlutenIcon,
+  LupinIcon,
+  MilkIcon,
+  MolluscIcon,
+  MustardIcon,
+  NutsIcon,
+  PeanutIcon,
+  SesameIcon,
+  SoyaIcon,
+  SulphiteIcon,
+ } from 'react-allergens';
 import { useNavigate } from 'react-router-dom';
+import { MultiSelect } from 'react-multi-select-component';
 import axios from "axios";
+
+const options = [
+  { label: "Pescado", value: "pescado" },
+  { label: "Frutos secos", value: "frutosSecos" },
+  { label: "Lacteos", value: "lacteos" },
+  { label: "Moluscos", value: "moluscos" },
+  { label: "Cereales con gluten", value: "gluten" },
+  { label: "Crustáceos", value: "crustaceos" },
+  { label: "Huevos", value: "huevos" },
+  { label: "Cacahuetes", value: "cacahuetes" },
+  { label: "Soja", value: "soja" },
+  { label: "Apio", value: "apio" },
+  { label: "Mostaza", value: "mostaza" },
+  { label: "Sésamo", value: "sesamo" },
+  { label: "Altramuces", value: "altramuces" },
+  { label: "Sulfitos", value: "sulfitos" },
+ 
+];
 
 
 const Carta = () => {
   
   const [products, setProducts] = useState([]);
-
+  const [selected, setSelected] = useState([]);
+  
   useEffect(() => {
       getProducts();
   }, []);
@@ -94,11 +131,11 @@ const Carta = () => {
           name: productName.value,
           description: descp.value,
           price: price.value,
-          allergens: allergens.value,
+          allergens: JSON.stringify(selected),
           img:formData.get("fileName"),
-          section: "1"
+          section: section.value
         });
-        //navigate("/carta");
+        navigate("/carta");
     } catch (error) {
         if (error.response) {
             setMsg(error.response.data.msg);
@@ -124,9 +161,6 @@ const Carta = () => {
             <CCol  xl={2}>
               <CButton className="mb-4" onClick={() => setSelected(change.react)}> Section 3</CButton> 
             </CCol>
-            <CCol>
-              <CButton className="mb-4" onClick={() => setSelected(change.react)}> + </CButton>
-            </CCol>
         </CRow>
         <CRow>
         <CContainer fluid>
@@ -144,6 +178,7 @@ const Carta = () => {
             <CTableBody>
 
             {products.map((product,index) => {
+
             return (
               <CTableRow key={product.id}>
                 <CTableDataCell>{product.id}</CTableDataCell>
@@ -152,7 +187,9 @@ const Carta = () => {
                 <CTableDataCell>{product.price} €</CTableDataCell>
                 <CTableDataCell> {product.allergens}</CTableDataCell>
                 <CLink href={"http://localhost:9000/public/images/" + product.img}>
-                  <CTableDataCell> {product.img} </CTableDataCell>
+                  <CTableDataCell> 
+                    <CImage fluid className="clearfix" src={"http://localhost:9000/public/images/" + product.img} width={200} height={200}/>
+                  </CTableDataCell>
                 </CLink>
               </CTableRow>
             )
@@ -189,7 +226,28 @@ const Carta = () => {
                   <CRow className="mb-3">
                     <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Alergenos</CFormLabel>
                     <CCol sm={10} >
-                      <CFormInput type="text" id="allergens" placeholder="Alergenos" required/>
+                      <MultiSelect
+                        options={options}
+                        value={selected}
+                        onChange={setSelected}
+                        labelledBy="Seleccione los alergenos"
+                      />
+                      {console.log(JSON.stringify(selected))}
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                  <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Sección</CFormLabel>
+                    <CCol sm={10} >
+                      <CFormSelect id="section" required>
+                        <option>Escoja una sección</option>
+                        <option>Entrantes</option>
+                        <option>Platos</option>
+                        <option>Postres</option>
+                        <option>Refrescos</option>
+                        <option>Bebidas Alcoholicas</option>
+                        <option>Vinos</option>
+                        <option>Cafes</option>
+                      </CFormSelect> 
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">

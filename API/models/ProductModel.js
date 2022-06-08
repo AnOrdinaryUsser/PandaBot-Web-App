@@ -3,7 +3,7 @@ import db from "../config/DataDB.js";
  
 const { DataTypes } = Sequelize;
  
-const Tables = db.define('products',{
+const Products = db.define('products',{
     name:{
         type: DataTypes.STRING,
         allowNull: false,
@@ -25,7 +25,7 @@ const Tables = db.define('products',{
         allowNull: false,
     },
     section:{
-        type: DataTypes.STRING, 
+        type: DataTypes.INTEGER, 
         allowNull: false,
     },
 },{
@@ -36,4 +36,4 @@ const Tables = db.define('products',{
     await db.sync();
 })();
  
-export default Tables;
+export default Products;
