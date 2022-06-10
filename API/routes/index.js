@@ -6,6 +6,7 @@ import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import multer from 'multer';
 import path from 'path';
+import { getSections } from "../controllers/Sections.js";
  
 const router = express.Router();
 
@@ -39,5 +40,8 @@ router.get('/getTables', getTables);
 router.post('/addProduct', addProduct);
 router.get('/getProducts', getProducts); 
 router.post('/uploadImg',upload.single('file'),uploadImg); 
+
+// Sections DB
+router.get('/getSections', getSections); 
 
 export default router;

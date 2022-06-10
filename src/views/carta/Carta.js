@@ -70,16 +70,24 @@ const options = [
 const Carta = () => {
   
   const [products, setProducts] = useState([]);
+  const [sections, setSections] = useState([]);
   const [selected, setSelected] = useState([]);
   
   useEffect(() => {
       getProducts();
+      getSections();
   }, []);
 
   const getProducts = async () => {
     const response = await axios.get('http://localhost:9000/getProducts', {
     });
     setProducts(response.data);
+    console.log(response.data)
+  }
+  const getSections = async () => {
+    const response = await axios.get('http://localhost:9000/getSections', {
+    });
+    setSections(response.data);
     console.log(response.data)
   }
 
@@ -146,21 +154,12 @@ const Carta = () => {
     <>
     <CContainer>
         <CRow>
-            <CCol  xl={2}>
-              <CButton className="mb-4" onClick={() => setSelected(change.vue)}> Section 1</CButton>
+            {sections.map((section,index) => {
+            return (
+            <CCol xl={2} >
+              <CButton key={section.id} className="mb-4">{section.name}</CButton>
             </CCol>
-            <CCol  xl={2}>
-              <CButton className="mb-4" onClick={() => setSelected(change.react)}> Section 2</CButton> 
-            </CCol>
-            <CCol  xl={2}>
-              <CButton className="mb-4" onClick={() => setSelected(change.react)}> Section 3</CButton> 
-            </CCol>
-            <CCol  xl={2}>
-              <CButton className="mb-4" onClick={() => setSelected(change.react)}> Section 3</CButton> 
-            </CCol>
-            <CCol  xl={2}>
-              <CButton className="mb-4" onClick={() => setSelected(change.react)}> Section 3</CButton> 
-            </CCol>
+            )})}
         </CRow>
         <CRow>
         <CContainer fluid>
@@ -178,14 +177,26 @@ const Carta = () => {
             <CTableBody>
 
             {products.map((product,index) => {
-
+                var allergens = JSON.parse(product.allergens)
             return (
               <CTableRow key={product.id}>
                 <CTableDataCell>{product.id}</CTableDataCell>
                 <CTableDataCell>{product.name}</CTableDataCell>
                 <CTableDataCell>{product.description}</CTableDataCell>
                 <CTableDataCell>{product.price} €</CTableDataCell>
-                <CTableDataCell> {product.allergens}</CTableDataCell>
+                <CTableDataCell> 
+                 
+                  {
+                    <div>
+                      {allergens.map(p => {
+                        return p.label + " ,"; 
+                      })
+                      }
+                      </div>                    
+                 }
+                  
+                  
+                </CTableDataCell>
                 <CLink href={"http://localhost:9000/public/images/" + product.img}>
                   <CTableDataCell> 
                     <CImage fluid className="clearfix" src={"http://localhost:9000/public/images/" + product.img} width={200} height={200}/>

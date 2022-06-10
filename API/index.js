@@ -22,12 +22,15 @@ Sections.hasMany(Products);
 Products.belongsTo(Sections, {foreignKey: "id", as:"id_"});
 
 db2.sync().then(() => {
-    /* Sections.create({id:1, name: "Entrantes"});
+    /* 
+    Sections.create({id:1, name: "Entrantes"});
     Sections.create({id:2, name: "Platos"});
     Sections.create({id:3, name: "Postres"});
     Sections.create({id:4, name: "Refrescos"});
     Sections.create({id:5, name: "Bebidas Alcoholicas"});
-    Sections.create({id:6, name: "Vinos"}); */
+    Sections.create({id:6, name: "Vinos"}); 
+    Sections.create({id:7, name: "Cafés"}); 
+    */
   })
 
 
