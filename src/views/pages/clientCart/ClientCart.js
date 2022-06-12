@@ -22,26 +22,24 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 
 const Login = () => {
   return (
-    <CNav className="justify-content-center">
-        <CNavItem>
-          <CNavLink>Entrantes</CNavLink>
-        </CNavItem>
-        <CNavItem>
-            <CNavLink>Platos</CNavLink>
-        </CNavItem>
-        <CNavItem>
-            <CNavLink >Postres</CNavLink>
-        </CNavItem>
-        <CNavItem>
-          <CNavLink>Refrescos</CNavLink>
-        </CNavItem>
-        <CNavItem>
-          <CNavLink>Bebidas Alcoholicas</CNavLink>
-        </CNavItem>
-        <CNavItem>
-          <CNavLink>Vinos</CNavLink>
-        </CNavItem>
-    </CNav>
+    <CNav class="nav nav-underline">
+  <CNavItem>
+    <CNavLink href="#" active>
+      Active
+    </CNavLink>
+  </CNavItem>
+  <CNavItem>
+    <CNavLink href="#">Link</CNavLink>
+  </CNavItem>
+  <CNavItem>
+    <CNavLink href="#">Link</CNavLink>
+  </CNavItem>
+  <CNavItem>
+    <CNavLink href="#" disabled>
+      Disabled
+    </CNavLink>
+  </CNavItem>
+</CNav>
   )
 }
 

@@ -19,7 +19,7 @@ app.use('/public',express.static('public'))
 app.listen(9000, ()=> console.log('Server running at port 9000'));
 
 Sections.hasMany(Products);
-Products.belongsTo(Sections, {foreignKey: "id", as:"id_"});
+Products.belongsTo(Sections, {foreignKey: "section", as:"id_"});
 
 db2.sync().then(() => {
     /* 

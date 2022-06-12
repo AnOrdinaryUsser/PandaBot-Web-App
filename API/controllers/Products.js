@@ -22,7 +22,7 @@ export const addProduct = async(req, res) => {
                 name: section,
             }
         })
-        console.log("HOLAAAAAA",section_id.dataValues.id)
+        {console.log("HOLA: " + section + " " + section_id.dataValues.id)}
         await Products.create({
             name: name,
             description: description,
@@ -32,6 +32,18 @@ export const addProduct = async(req, res) => {
             img: img,
         });
         res.json({msg: "Product Created"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const deleteProduct = async(req, res) => {
+    const { id } = req.body;
+    try {
+        await Products.destroy({
+            where: { id: id },
+        });
+        res.json({msg: "Product Destroyed"});
     } catch (error) {
         console.log(error);
     }

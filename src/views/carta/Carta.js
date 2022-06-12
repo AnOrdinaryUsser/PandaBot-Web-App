@@ -23,11 +23,17 @@ import {
   CInputGroup,
   CInputGroupText,
   CLink,
-  CFormSelect
+  CFormSelect,
+  CNav,
+  CNavGroup,
+  CNavItem,
+  CNavLink,
+  CTabPane,
+  CTabContent,
 } from '@coreui/react'
 
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
+import { cilLockLocked, cilUser, cilX } from '@coreui/icons'
 import { 
   FishIcon, 
   EggIcon,
@@ -63,6 +69,7 @@ const options = [
   { label: "Sésamo", value: "sesamo" },
   { label: "Altramuces", value: "altramuces" },
   { label: "Sulfitos", value: "sulfitos" },
+  { label: "Ninguno", value: "ninguno" },
  
 ];
 
@@ -72,6 +79,7 @@ const Carta = () => {
   const [products, setProducts] = useState([]);
   const [sections, setSections] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [activeKey, setActiveKey] = useState(1)
   
   useEffect(() => {
       getProducts();
@@ -91,6 +99,11 @@ const Carta = () => {
     console.log(response.data)
   }
 
+  function useForceUpdate() {
+    let [value, setState] = useState(true);
+    return () => setState(!value);
+  }
+
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false)
   const [validated, setValidated] = useState(false)
@@ -102,6 +115,19 @@ const Carta = () => {
     setFile(e.target.files[0]);
     setFileName(e.target.files[0].name);
   };  
+
+  const deleteProduct = async (e) => {
+    try {
+      await axios.post('http://localhost:9000/deleteProduct', {
+        id: e.currentTarget.id,
+      });
+      window.location.reload();
+  } catch (error) {
+      if (error.response) {
+          setMsg(error.response.data.msg);
+      }
+  }
+  }
 
   const addProduct = async (e) => {
     const form = e.currentTarget
@@ -143,95 +169,115 @@ const Carta = () => {
           img:formData.get("fileName"),
           section: section.value
         });
-        navigate("/carta");
+        window.location.reload();
     } catch (error) {
         if (error.response) {
             setMsg(error.response.data.msg);
         }
     }
 }
+
+
   return (
     <>
-    <CContainer>
-        <CRow>
-            {sections.map((section,index) => {
-            return (
-            <CCol xl={2} >
-              <CButton key={section.id} className="mb-4">{section.name}</CButton>
-            </CCol>
-            )})}
-        </CRow>
-        <CRow>
-        <CContainer fluid>
-          <CTable>
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Nombre del producto</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Descripción</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Precio</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Alergenos</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Foto</CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody>
-
-            {products.map((product,index) => {
+    <CContainer >
+        <CNav className="justify-content-center">
+          {sections.map((section,index) => {
+          return (
+          <CNavItem key={index}>
+            <CNavLink 
+            href="javascript:void(0);"
+            active={activeKey === section.id}
+            onClick={() => setActiveKey(section.id)}>
+              {section.name}
+            </CNavLink>
+          </CNavItem>
+          )})}
+        </CNav>
+        <CTabContent>
+        
+        {sections.map((section,index) => {
+          return (
+            
+            <CTabPane key={section.id} role="tabpanel" visible={activeKey === section.id}>
+              <CRow>
+          <CContainer fluid>
+        <CTable>
+              <CTableHead>
+                <CTableRow>
+                  <CTableHeaderCell scope="col">Producto</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Descripción</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Precio</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Alergenos</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Foto</CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+              {products.filter(product => product.section == section.id).map((product,index) => {
                 var allergens = JSON.parse(product.allergens)
-            return (
-              <CTableRow key={product.id}>
-                <CTableDataCell>{product.id}</CTableDataCell>
-                <CTableDataCell>{product.name}</CTableDataCell>
-                <CTableDataCell>{product.description}</CTableDataCell>
-                <CTableDataCell>{product.price} €</CTableDataCell>
-                <CTableDataCell> 
-                 
-                  {
-                    <div>
-                      {allergens.map(p => {
-                        return p.label + " ,"; 
-                      })
+                return (
+                  <CTableRow key={product.id}>
+                    <CTableDataCell>{product.name}</CTableDataCell>
+                    <CTableDataCell>{product.description}</CTableDataCell>
+                    <CTableDataCell>{product.price} €</CTableDataCell>
+                    <CTableDataCell> 
+                      {
+                        <div>
+                          {allergens.map(p => {
+                            return p.label + "  "; 
+                          })
+                          }
+                          </div>                    
                       }
-                      </div>                    
-                 }
-                  
-                  
-                </CTableDataCell>
-                <CLink href={"http://localhost:9000/public/images/" + product.img}>
-                  <CTableDataCell> 
-                    <CImage fluid className="clearfix" src={"http://localhost:9000/public/images/" + product.img} width={200} height={200}/>
-                  </CTableDataCell>
-                </CLink>
-              </CTableRow>
-            )
+                    </CTableDataCell>
+                    <CTableDataCell> 
+                      <CImage fluid className="clearfix" src={"http://localhost:9000/public/images/" + product.img} width={200} height={200}/>
+                    </CTableDataCell>
+                    <CTableDataCell> 
+                      <CButton id={product.id} style={{background: "transparent", color:"transparent", borderColor:"transparent"}} onClick={deleteProduct}>
+                      <CIcon icon={cilX}  style={{color: "red"}}/>
+                      </CButton>
+                    </CTableDataCell>
+                  </CTableRow>
+                )
             })}
             </CTableBody>
           </CTable>
-          <CButton className="mb-4 d-grid gap-2 col-6 mx-auto"  onClick={() => setVisible(!visible)}>Add product</CButton>
+          </CContainer>
+          </CRow>
+            </CTabPane>
+            
+          )})}
+          
+    </CTabContent>
+        <CRow>
+          <CContainer fluid>
+
+          <CButton className="mb-4 d-grid gap-2 col-6 mx-auto"  onClick={() => setVisible(!visible)}>Añadir Producto</CButton>
           <CModal alignment="center" visible={visible} onClose={() => setVisible(false)}>
             <CModalHeader onClose={() => setVisible(false)}>
               <CModalTitle>Añadir producto</CModalTitle>
             </CModalHeader>
             <CModalBody>
-            <CForm className="mb-3"
+            <CForm className="mb-4"
                   validated={validated}
                   onSubmit={addProduct}>
                   <CRow className="mb-3">
                     <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Nombre</CFormLabel>
                     <CCol sm={10} >
-                      <CFormInput type="text" id="productName" placeholder="Nombre del producto" required/>
+                      <CFormInput type="text" id="productName" placeholder="Nombre del producto" pattern="^[a-zA-Z ()]*$"  title="Solo puedes introducir letras a-Z, parentesis o espacios" required/>
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">
-                    <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Descripción</CFormLabel>
+                    <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Descp.</CFormLabel>
                     <CCol sm={10} >
-                      <CFormInput type="text" id="descp" placeholder="Descripción" required/>
+                      <CFormInput type="text" id="descp" placeholder="Descripción"/>
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">
                     <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Precio</CFormLabel>
                     <CCol sm={10} >
-                      <CFormInput type="text" id="price" placeholder="Precio" required/>
+                      <CFormInput type="text" id="price" placeholder="Precio" pattern="[+-]?\d+(?:[.,]\d+)?" required/>
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">
@@ -243,7 +289,6 @@ const Carta = () => {
                         onChange={setSelected}
                         labelledBy="Seleccione los alergenos"
                       />
-                      {console.log(JSON.stringify(selected))}
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">
@@ -255,7 +300,7 @@ const Carta = () => {
                         <option>Platos</option>
                         <option>Postres</option>
                         <option>Refrescos</option>
-                        <option>Bebidas Alcoholicas</option>
+                        <option>Cervezas</option>
                         <option>Vinos</option>
                         <option>Cafes</option>
                       </CFormSelect> 
@@ -267,12 +312,11 @@ const Carta = () => {
                     <CFormInput type="file" onChange={saveFile} enctype="multipart/form-data" required/>
                     </CCol>
                   </CRow>
-                  <CButton type="submit" color="primary">Save changes</CButton>
+                  <CButton className='mb-4' type="submit" color="primary">Guardar</CButton>
                   <CModalFooter>
-              <CButton color="secondary" onClick={() => setVisible(false)}>
-                Close
-              </CButton>
-              
+                  <CButton color="secondary" onClick={() => setVisible(false)}>
+                    Cerrar
+                  </CButton>
             </CModalFooter>
             </CForm>
             </CModalBody>

@@ -1,7 +1,7 @@
 import express from "express";
 import { getUsers, Register, Login, Logout } from "../controllers/Users.js";
 import { addTable, getTables } from "../controllers/Tables.js";
-import { addProduct, getProducts, uploadImg } from "../controllers/Products.js";
+import { addProduct, deleteProduct, getProducts, uploadImg } from "../controllers/Products.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import multer from 'multer';
@@ -38,6 +38,7 @@ router.get('/getTables', getTables);
 
 // Products DB
 router.post('/addProduct', addProduct);
+router.post('/deleteProduct', deleteProduct);
 router.get('/getProducts', getProducts); 
 router.post('/uploadImg',upload.single('file'),uploadImg); 
 
