@@ -28,9 +28,11 @@ const Home = () => {
                     <p>
                       Si estas esperando y no te decides, pulsa continuar y mira nuestra carta
                     </p>
+                    <Link to="/clientCart">
                       <CButton color="secondary" className="mt-3" active tabIndex={-1}>
                         Continuar
                       </CButton>
+                    </Link>
                   </div>
                 </CCardBody>
               </CCard>

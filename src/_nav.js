@@ -20,6 +20,10 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
 const _nav = [
   {
+    component: CNavTitle,
+    name: "Servicio de Mesas",
+  },
+  {
     component: CNavItem,
     name: 'Mapa',
     to: '/map',
@@ -32,6 +36,10 @@ const _nav = [
     icon: <CIcon icon={cilBorderAll} customClassName="nav-icon" />,
   },
   {
+    component: CNavTitle,
+    name: "Productos",
+  },
+  {
     component: CNavItem,
     name: 'Carta',
     to: '/carta',
@@ -42,6 +50,10 @@ const _nav = [
     name: 'Pedidos',
     to: '/pedidos',
     icon: <CIcon icon={cilList} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
+    name: "Personal",
   },
   {
     component: CNavItem,

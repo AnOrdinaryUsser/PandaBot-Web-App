@@ -17,6 +17,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from "axios";
+import image from "./../../../assets/images/backgroundLogin.jpg"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ const Login = () => {
 }
 
   return (
-    <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+    <div style={{backgroundImage: `url(${image})`,backgroundRepeat:"no-repeat",backgroundSize:"cover"}} className="min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={8}>
