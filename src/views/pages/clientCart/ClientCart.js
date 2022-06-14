@@ -35,6 +35,11 @@ import {
   CCard,
   CCardBody,
   CCardText,
+  CHeader,
+  CHeaderBrand,
+  CHeaderDivider,
+  CHeaderNav,
+  CHeaderToggler,
 } from '@coreui/react'
 import { 
   FishIcon, 
@@ -53,9 +58,11 @@ import {
   SulphiteIcon,
  } from 'react-allergens';
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from "axios";
 import prueba from "./../../../assets/images/tarta.jpg"
+import { AppHeaderClient } from "./../../../components"
+import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cilExitToApp, cilCart, cilPlus } from '@coreui/icons'
+
 
 const Login = () => {
 
@@ -84,20 +91,33 @@ const Login = () => {
 
   return (
     <>
-    <CContainer className='mb-4'>
-      <CNav className="justify-content-center" variant='underline'>
+      <CHeader position="sticky" className="mb-4">
+      <CContainer fluid className="justify-content-center">
+      
+      <CNav className="justify-content-center">
         {sections.map((section,index) => {
         return (
         <CNavItem key={index}>
           <CNavLink className="nav-link active" aria-current="page" 
           href="javascript:void(0);"
-          active
-          onClick={() => setActiveKey(section.id)}>
+          active={activeKey === 1}
+          onClick={() => setActiveKey(section.id)}
+          style={{color:"black"}}>
             {section.name}
           </CNavLink>
         </CNavItem>
         )})}
       </CNav>
+      <CHeaderNav className="d-none d-md-flex me-auto">
+        </CHeaderNav>
+
+        <CHeaderToggler>
+          <CIcon icon={cilCart} size="lg" />
+        </CHeaderToggler>
+      
+      </CContainer>
+    </CHeader>
+      
       <CTabContent>
     
     {sections.map((section,index) => {
@@ -106,9 +126,10 @@ const Login = () => {
           {products.filter(product => product.section == section.id).map((product,index) => {
                 var allergens = JSON.parse(product.allergens)
                 return (
-                  <CContainer className='justify-content-center' fluid>
+                  <CContainer className='justify-content-center' >
                     <CRow className='justify-content-center mb-4'>
-                      <CCard style={{ width: ' 60rem' }}>
+                    <CCol >
+                      <CCard style={{ width: '60rem' }}>
                             <CCardBody>
                                 <CContainer fluid>
                                   <CRow>
@@ -182,6 +203,12 @@ const Login = () => {
                                 </CContainer>
                             </CCardBody>
                         </CCard>
+                        </CCol>
+                        <CCol className="d-flex justify-content-center align-items-center" style={{margin:"0"}}>
+                          <CButton className="justify-content-center shadow-none" style={{ width: '10rem', height: "10rem", background: "transparent", color:"transparent", borderColor:"transparent" }}>
+                            <CIcon icon={cilPlus} size="3xl" style={{color:"black"}}/>
+                          </CButton>               
+                        </CCol>
                     </CRow>
                   </CContainer>
                 )
@@ -189,10 +216,6 @@ const Login = () => {
         </CTabPane>
       )})}
     </CTabContent>
-    
-  </CContainer>
-    
-    
     </>
   )
 }
