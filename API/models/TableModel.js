@@ -22,6 +22,15 @@ const Tables = db.define('tables',{
         type: DataTypes.FLOAT,
         allowNull: false,
     },
+    positionY:{
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    qrURL:{
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
 },{
     freezeTableName:true
 });

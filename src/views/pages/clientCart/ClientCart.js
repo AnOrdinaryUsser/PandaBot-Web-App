@@ -40,6 +40,9 @@ import {
   CHeaderDivider,
   CHeaderNav,
   CHeaderToggler,
+  CCardImage,
+  CListGroup,
+  CListGroupItem
 } from '@coreui/react'
 import { 
   FishIcon, 
@@ -69,6 +72,7 @@ const Login = () => {
   const [products, setProducts] = useState([]);
   const [sections, setSections] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [visible, setVisible] = useState(false)
   const [activeKey, setActiveKey] = useState(1)
   
   useEffect(() => {
@@ -77,13 +81,13 @@ const Login = () => {
   }, []);
 
   const getProducts = async () => {
-    const response = await axios.get('http://localhost:9000/getProducts', {
+    const response = await axios.get('http://192.168.1.128:9000/getProducts', {
     });
     setProducts(response.data);
     console.log(response.data)
   }
   const getSections = async () => {
-    const response = await axios.get('http://localhost:9000/getSections', {
+    const response = await axios.get('http://192.168.1.128:9000/getSections', {
     });
     setSections(response.data);
     console.log(response.data)
@@ -112,7 +116,7 @@ const Login = () => {
         </CHeaderNav>
 
         <CHeaderToggler>
-          <CIcon icon={cilCart} size="lg" />
+          <CIcon icon={cilCart} size="lg" onClick={() => setVisible(!visible)}/>
         </CHeaderToggler>
       
       </CContainer>
@@ -126,24 +130,22 @@ const Login = () => {
           {products.filter(product => product.section == section.id).map((product,index) => {
                 var allergens = JSON.parse(product.allergens)
                 return (
-                  <CContainer className='justify-content-center' >
-                    <CRow className='justify-content-center mb-4'>
-                    <CCol >
-                      <CCard style={{ width: '60rem' }}>
+                  <CContainer className='justify-content-center'>
+                    <CCard className="justify-content-center mb-4">
+                      <CRow className='g-0'>
+                      <CCol md={4}>
+                        <CCardImage align='center' fluid className="clearfix" src={"http://192.168.1.128:9000/public/images/" + product.img} />
+                      </CCol>
+                      <CCol md={8}>
                             <CCardBody>
                                 <CContainer fluid>
                                   <CRow>
-                                    <CCol xs={4} >
-                                      <CImage align='center' fluid className="clearfix" src={"http://localhost:9000/public/images/" + product.img}/>
-                                    </CCol>
-                                    <CCol xs={8}>
                                       <CRow>
                                       <h1>{product.name}</h1>
                                       <p>{product.description}</p>
                                       </CRow>
-                                      <CRow xl={{ gutter: 0 }}>
+                                      <CRow className='mb-4'>
                                         {allergens.map(p => {
-                                          
                                           switch (p.label) {
                                             case "Pescado":
                                               return <CCol xs={1}> <FishIcon width="25px" height="25px"/> </CCol>
@@ -188,34 +190,67 @@ const Login = () => {
                                               return <CCol xs={1}> <SulphiteIcon width="25px" height="25px"/> </CCol>
                                               break;
                                             case "Ninguno":
-                                              return "Ningun alergeno"
+                                              return <CCol xs={1}></CCol>
                                               break;
                                           }
                                         })
                                         }
-                                        
-                                        <CCol className='text-end'>
+                                        <CCol className="text-end">
                                           <h3>{product.price} €</h3>
                                         </CCol>
                                       </CRow>
-                                    </CCol>
+                                     <CRow className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                      <CCol xs={12} xl={3}>
+                                        <CButton color="secondary">
+                                        <CIcon icon={cilPlus}/> Añadir al carrito
+                                        </CButton>
+                                      </CCol>
+                                      </CRow>
                                   </CRow>
                                 </CContainer>
                             </CCardBody>
-                        </CCard>
-                        </CCol>
-                        <CCol className="d-flex justify-content-center align-items-center" style={{margin:"0"}}>
-                          <CButton className="justify-content-center shadow-none" style={{ width: '10rem', height: "10rem", background: "transparent", color:"transparent", borderColor:"transparent" }}>
-                            <CIcon icon={cilPlus} size="3xl" style={{color:"black"}}/>
-                          </CButton>               
-                        </CCol>
-                    </CRow>
+                      </CCol>
+                      
+                      </CRow>
+                    </CCard>
                   </CContainer>
                 )
             })}
         </CTabPane>
       )})}
     </CTabContent>
+    <CModal size="xl" alignment="center" visible={visible} onClose={() => setVisible(false)}>
+      <CModalHeader onClose={() => setVisible(false)}>
+        <CModalTitle>Carrito</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CContainer className='justify-content-center'>
+          <CRow className='justify-content-center'>
+           <CCol xs={9}>
+           <CCard className="mb-3">
+              <CRow className="g-0">
+                <CCol md={4}>
+                  <CCardImage src="http://192.168.1.128:9000/public/images/estrella-galicia-escerveza-3.jpg" />
+                </CCol>
+                <CCol md={8}>
+                  <CCardBody>
+                    <h3>Tarta de queso</h3>
+                    <h4 className='text-end'>5 €</h4>
+                  </CCardBody>
+                </CCol>
+              </CRow>
+            </CCard>
+           </CCol>
+           <CCol xs={3} className="justify-items-content">
+              <CFormInput className='text-center' placeholder='2' />
+           </CCol>
+          </CRow>
+        </CContainer>
+        <CModalFooter>
+          <h3>Total: 20 €</h3>
+        </CModalFooter>
+      </CModalBody>
+    </CModal>
     </>
   )
 }

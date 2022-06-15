@@ -3,7 +3,7 @@ import Tables from "../models/TableModel.js";
 export const getTables = async(req, res) => {
     try {
         const tables = await Tables.findAll({
-            attributes:['id','seats','positionX','positionY']
+            attributes:['id','seats','positionX','positionY','qrURL']
         });
         res.json(tables);
     } catch (error) {
@@ -12,13 +12,14 @@ export const getTables = async(req, res) => {
 }
  
 export const addTable = async(req, res) => {
-    const { id, seats, positionX, positionY } = req.body;
+    const { id, seats, positionX, positionY, qrURL } = req.body;
     try {
         await Tables.create({
             id: id,
             seats: seats,
             positionX: positionX,
-            positionY: positionY
+            positionY: positionY,
+            qrURL: qrURL,
         });
         res.json({msg: "Table Created"});
     } catch (error) {

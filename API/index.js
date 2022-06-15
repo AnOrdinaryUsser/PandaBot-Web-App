@@ -7,10 +7,11 @@ import db2 from "./config/DataDB.js";
 import router from "./routes/index.js";
 import Sections from "./models/SectionModel.js";
 import Products from "./models/ProductModel.js";
+import Tables from "./models/TableModel.js";
 dotenv.config();
 const app = express();
  
-app.use(cors({ credentials:true, origin:'http://localhost:3000' }));
+app.use(cors({ credentials:true, origin:'http://192.168.1.128:3000' }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(router);
@@ -20,6 +21,9 @@ app.listen(9000, ()=> console.log('Server running at port 9000'));
 
 Sections.hasMany(Products);
 Products.belongsTo(Sections, {foreignKey: "section", as:"id_"});
+
+Products.belongsToMany(Tables, { through: 'Cart' });
+Tables.belongsToMany(Products, { through: 'Cart' });
 
 db2.sync().then(() => {
     /* 
