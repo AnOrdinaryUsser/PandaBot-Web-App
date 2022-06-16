@@ -7,6 +7,7 @@ import { refreshToken } from "../controllers/RefreshToken.js";
 import multer from 'multer';
 import path from 'path';
 import { getSections } from "../controllers/Sections.js";
+import { addProductToCart, getCart } from "../controllers/Cart.js";
  
 const router = express.Router();
 
@@ -45,4 +46,8 @@ router.post('/uploadImg',upload.single('file'),uploadImg);
 // Sections DB
 router.get('/getSections', getSections); 
 
+
+// Cart DB
+router.post('/addProductToCart', addProductToCart);
+router.get('/getCart', getCart);
 export default router;

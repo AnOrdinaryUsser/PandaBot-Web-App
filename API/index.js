@@ -8,8 +8,12 @@ import router from "./routes/index.js";
 import Sections from "./models/SectionModel.js";
 import Products from "./models/ProductModel.js";
 import Tables from "./models/TableModel.js";
+import Cart from "./models/CartModel.js";
+import { Sequelize } from "sequelize";
 dotenv.config();
 const app = express();
+const { DataTypes } = Sequelize;
+
  
 app.use(cors({ credentials:true, origin:'http://192.168.1.128:3000' }));
 app.use(cookieParser());
@@ -22,8 +26,20 @@ app.listen(9000, ()=> console.log('Server running at port 9000'));
 Sections.hasMany(Products);
 Products.belongsTo(Sections, {foreignKey: "section", as:"id_"});
 
-Products.belongsToMany(Tables, { through: 'Cart' });
-Tables.belongsToMany(Products, { through: 'Cart' });
+
+/* const Cart = db2.define('cart',{
+  qty:{
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+},{
+  freezeTableName:true
+}); */
+
+Products.belongsToMany(Tables, { through: 'cart' });
+Tables.belongsToMany(Products, { through: 'cart' });
+
+
 
 db2.sync().then(() => {
     /* 

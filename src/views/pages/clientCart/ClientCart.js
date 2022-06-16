@@ -65,6 +65,7 @@ import axios from "axios";
 import prueba from "./../../../assets/images/tarta.jpg"
 import { AppHeaderClient } from "./../../../components"
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cilExitToApp, cilCart, cilPlus } from '@coreui/icons'
+import { getByPlaceholderText } from '@testing-library/react';
 
 
 const Login = () => {
@@ -74,6 +75,7 @@ const Login = () => {
   const [selected, setSelected] = useState([]);
   const [visible, setVisible] = useState(false)
   const [activeKey, setActiveKey] = useState(1)
+  const [cart, setCart] = useState([]);
   
   useEffect(() => {
       getProducts();
@@ -91,6 +93,31 @@ const Login = () => {
     });
     setSections(response.data);
     console.log(response.data)
+  }
+  const getCart = async () => {
+    const response = await axios.get('http://192.168.1.128:9000/getCart?mesa=1', {
+    });
+    setCart(response.data);
+    console.log(response.data)
+  }
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const tableID = queryParams.get('mesa');
+  console.log(tableID)
+
+  const addProductToCart = async (e, productID) => {
+    e.stopPropagation();
+    console.log("tableID: " + tableID + " productID: " + productID)
+    try {
+          await axios.post('http://192.168.1.128:9000/addProductToCart', {
+            tableID: tableID,
+            productID: productID,
+        });
+    } catch (error) {
+        if (error.response) {
+            setMsg(error.response.data.msg);
+        }
+    }
   }
 
   return (
@@ -201,7 +228,7 @@ const Login = () => {
                                       </CRow>
                                      <CRow className="d-grid gap-2 d-md-flex justify-content-md-end">
                                       <CCol xs={12} xl={3}>
-                                        <CButton color="secondary">
+                                        <CButton onClick={(e) => addProductToCart(e,product.id)} color="secondary">
                                         <CIcon icon={cilPlus}/> Añadir al carrito
                                         </CButton>
                                       </CCol>
@@ -225,26 +252,28 @@ const Login = () => {
       </CModalHeader>
       <CModalBody>
         <CContainer className='justify-content-center'>
-          <CRow className='justify-content-center'>
-           <CCol xs={9}>
-           <CCard className="mb-3">
-              <CRow className="g-0">
-                <CCol md={4}>
-                  <CCardImage src="http://192.168.1.128:9000/public/images/estrella-galicia-escerveza-3.jpg" />
-                </CCol>
-                <CCol md={8}>
-                  <CCardBody>
-                    <h3>Tarta de queso</h3>
-                    <h4 className='text-end'>5 €</h4>
-                  </CCardBody>
-                </CCol>
-              </CRow>
-            </CCard>
-           </CCol>
-           <CCol xs={3} className="justify-items-content">
-              <CFormInput className='text-center' placeholder='2' />
-           </CCol>
-          </CRow>
+        {cart.map((product,index) => {
+              <CRow className='justify-content-center'>
+              <CCol xs={9}>
+              <CCard className="mb-3">
+                 <CRow className="g-0">
+                   <CCol md={4}>
+                     <CCardImage src="http://192.168.1.128:9000/public/images/estrella-galicia-escerveza-3.jpg" />
+                   </CCol>
+                   <CCol md={8}>
+                     <CCardBody>
+                       <h3>{product.name}</h3>
+                       <h4 className='text-end'>5 €</h4>
+                     </CCardBody>
+                   </CCol>
+                 </CRow>
+               </CCard>
+              </CCol>
+              <CCol xs={3} className="justify-items-content">
+                 <CFormInput className='text-center' placeholder='2' />
+              </CCol>
+             </CRow>
+            })}
         </CContainer>
         <CModalFooter>
           <h3>Total: 20 €</h3>
