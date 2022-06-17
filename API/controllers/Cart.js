@@ -40,15 +40,18 @@ export const getCart = async(req, res) => {
     console.log("tableID: " + tableID)
     try {
         //Check if cart exits
-        const cart = await Cart.findAll({ where: {tableId: tableID }, raw: true });
+        const cart = await Cart.findAll({ where: {tableId: tableID }, raw: true, include: {model: Products, required: true} });
         if(cart === null)
             console.log('Cart not found!')
-        //Check if the product is added to cart
-        //If product not added, add product to cart
-        //Else is added, update qty value
         console.log(cart)
-        //const cartProducts = await Products.findAll({ where: {id: cart.productId}});
-        //res.json(cartProducts);
+        // Find all products of the cart
+         /* const cartProducts = [];
+         await Promise.all(cart.map( async function(cart){
+            console.log(cart.productId)
+            const Product = await Products.findByPk(cart.productId, { raw: true } );
+            cartProducts.push(Product)
+        }))
+        res.json(cartProducts); */
     } catch (error) {
         console.log(error);
     }

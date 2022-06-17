@@ -76,6 +76,7 @@ const Login = () => {
   const [visible, setVisible] = useState(false)
   const [activeKey, setActiveKey] = useState(1)
   const [cart, setCart] = useState([]);
+  const price = 0;
   
   useEffect(() => {
       getProducts();
@@ -99,6 +100,11 @@ const Login = () => {
     });
     setCart(response.data);
     console.log(response.data)
+  }
+
+  function handlerButtonCart() {
+    setVisible(!visible);
+    getCart();
   }
 
   const queryParams = new URLSearchParams(window.location.search);
@@ -143,7 +149,7 @@ const Login = () => {
         </CHeaderNav>
 
         <CHeaderToggler>
-          <CIcon icon={cilCart} size="lg" onClick={() => setVisible(!visible)}/>
+          <CIcon icon={cilCart} size="lg" onClick={handlerButtonCart}/>
         </CHeaderToggler>
       
       </CContainer>
@@ -253,17 +259,18 @@ const Login = () => {
       <CModalBody>
         <CContainer className='justify-content-center'>
         {cart.map((product,index) => {
-              <CRow className='justify-content-center'>
+          return(
+              <CRow className='justify-content-center' key={index}>
               <CCol xs={9}>
               <CCard className="mb-3">
                  <CRow className="g-0">
                    <CCol md={4}>
-                     <CCardImage src="http://192.168.1.128:9000/public/images/estrella-galicia-escerveza-3.jpg" />
+                     <CCardImage src={"http://192.168.1.128:9000/public/images/" + product.img} />
                    </CCol>
                    <CCol md={8}>
                      <CCardBody>
                        <h3>{product.name}</h3>
-                       <h4 className='text-end'>5 €</h4>
+                       <h4 className='text-end'>{product.price} €</h4>
                      </CCardBody>
                    </CCol>
                  </CRow>
@@ -272,7 +279,7 @@ const Login = () => {
               <CCol xs={3} className="justify-items-content">
                  <CFormInput className='text-center' placeholder='2' />
               </CCol>
-             </CRow>
+             </CRow>)
             })}
         </CContainer>
         <CModalFooter>
