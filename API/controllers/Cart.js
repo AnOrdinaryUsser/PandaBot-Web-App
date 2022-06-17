@@ -40,7 +40,7 @@ export const getCart = async(req, res) => {
     console.log("tableID: " + tableID)
     try {
         //Check if cart exits
-        const cart = await Cart.findAll({ where: {tableId: tableID }, raw: true, include: {model: Products, required: true} });
+        const cart = await Tables.findAll({ where: {id: tableID }, raw: true, include: {model: Products, required: true} });
         if(cart === null)
             console.log('Cart not found!')
         console.log(cart)
