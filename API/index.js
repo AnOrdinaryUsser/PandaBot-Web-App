@@ -9,6 +9,7 @@ import Sections from "./models/SectionModel.js";
 import Products from "./models/ProductModel.js";
 import Tables from "./models/TableModel.js";
 import Cart from "./models/CartModel.js";
+import Order from "./models/OrderModel.js";
 import { Sequelize } from "sequelize";
 dotenv.config();
 const app = express();
@@ -26,20 +27,11 @@ app.listen(9000, ()=> console.log('Server running at port 9000'));
 Sections.hasMany(Products);
 Products.belongsTo(Sections, {foreignKey: "section", as:"id_"});
 
-
-/* const Cart = db2.define('cart',{
-  qty:{
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-},{
-  freezeTableName:true
-}); */
-
 Products.belongsToMany(Tables, { through: 'cart' });
 Tables.belongsToMany(Products, { through: 'cart' });
 
-
+Cart.hasOne(Order, {foreignKey: 'tableId'});
+Order.belongsTo(Cart);
 
 db2.sync().then(() => {
     /* 

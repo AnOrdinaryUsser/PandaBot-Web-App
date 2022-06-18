@@ -127,6 +127,22 @@ const Login = () => {
     }
   }
 
+  const addOrder = async (e, totalPrice, id) => {
+    e.stopPropagation();
+    console.log("totalPrice: " + totalPrice + "mesa: " + id)
+    try {
+          await axios.post('http://localhost:9000/addOrder', {
+            totalPrice: totalPrice,
+            id: id,
+        });
+    } catch (error) {
+        if (error.response) {
+            setMsg(error.response.data.msg);
+        }
+    }
+  }
+
+
   return (
     <>
       <CHeader position="sticky" className="mb-4">
@@ -286,6 +302,7 @@ const Login = () => {
         </CContainer>
         <CModalFooter>
           <h3>{totalPrice} €</h3>
+          <CButton color="success" onClick={(e) => addOrder(e,totalPrice,tableID)}>Pedir</CButton>
         </CModalFooter>
       </CModalBody>
     </CModal>

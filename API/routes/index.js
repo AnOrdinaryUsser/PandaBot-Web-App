@@ -8,6 +8,7 @@ import multer from 'multer';
 import path from 'path';
 import { getSections } from "../controllers/Sections.js";
 import { addProductToCart, getCart } from "../controllers/Cart.js";
+import { addOrder, getOrders } from "../controllers/Order.js";
  
 const router = express.Router();
 
@@ -50,4 +51,9 @@ router.get('/getSections', getSections);
 // Cart DB
 router.post('/addProductToCart', addProductToCart);
 router.get('/getCart', getCart);
+
+// Order DB
+router.post('/addOrder', addOrder);
+router.get('/getOrders', getOrders);
+
 export default router;
