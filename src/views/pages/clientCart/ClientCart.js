@@ -64,19 +64,19 @@ import CIcon from '@coreui/icons-react'
 import axios from "axios";
 import prueba from "./../../../assets/images/tarta.jpg"
 import { AppHeaderClient } from "./../../../components"
-import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cilExitToApp, cilCart, cilPlus } from '@coreui/icons'
+import { cilBell, cilEnvelopeOpen, cilList, cilMenu, cilExitToApp, cilCart, cilPlus, cibProductHunt } from '@coreui/icons'
 import { getByPlaceholderText } from '@testing-library/react';
 
 
 const Login = () => {
 
-  const [products, setProducts] = useState([]);
+  const [productsList, setProductsList] = useState([]);
   const [sections, setSections] = useState([]);
   const [selected, setSelected] = useState([]);
   const [visible, setVisible] = useState(false)
   const [activeKey, setActiveKey] = useState(1)
   const [cart, setCart] = useState([]);
-  const price = 0;
+  let totalPrice = 0;
   
   useEffect(() => {
       getProducts();
@@ -84,19 +84,21 @@ const Login = () => {
   }, []);
 
   const getProducts = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getProducts', {
+    const response = await axios.get('http://localhost:9000/getProducts', {
     });
-    setProducts(response.data);
+    setProductsList(response.data);
     console.log(response.data)
   }
   const getSections = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getSections', {
+    const response = await axios.get('http://localhost:9000/getSections', {
     });
     setSections(response.data);
     console.log(response.data)
   }
   const getCart = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getCart?mesa=1', {
+    const queryParams = new URLSearchParams(window.location.search);
+    const tableID = queryParams.get('mesa');
+    const response = await axios.get('http://localhost:9000/getCart?mesa='+tableID, {
     });
     setCart(response.data);
     console.log(response.data)
@@ -109,13 +111,12 @@ const Login = () => {
 
   const queryParams = new URLSearchParams(window.location.search);
   const tableID = queryParams.get('mesa');
-  console.log(tableID)
 
   const addProductToCart = async (e, productID) => {
     e.stopPropagation();
     console.log("tableID: " + tableID + " productID: " + productID)
     try {
-          await axios.post('http://192.168.1.128:9000/addProductToCart', {
+          await axios.post('http://localhost:9000/addProductToCart', {
             tableID: tableID,
             productID: productID,
         });
@@ -160,14 +161,14 @@ const Login = () => {
     {sections.map((section,index) => {
       return (
         <CTabPane key={section.id} role="tabpanel" visible={activeKey === section.id}>
-          {products.filter(product => product.section == section.id).map((product,index) => {
+          {productsList.filter(product => product.section == section.id).map((product,index) => {
                 var allergens = JSON.parse(product.allergens)
                 return (
-                  <CContainer className='justify-content-center'>
+                  <CContainer className='justify-content-center' key={product.id}>
                     <CCard className="justify-content-center mb-4">
                       <CRow className='g-0'>
                       <CCol md={4}>
-                        <CCardImage align='center' fluid className="clearfix" src={"http://192.168.1.128:9000/public/images/" + product.img} />
+                        <CCardImage align='center' className="clearfix" src={"http://localhost:9000/public/images/" + product.img} />
                       </CCol>
                       <CCol md={8}>
                             <CCardBody>
@@ -259,31 +260,32 @@ const Login = () => {
       <CModalBody>
         <CContainer className='justify-content-center'>
         {cart.map((product,index) => {
+          totalPrice += (product["products.cart.qty"] * product["products.price"] );
           return(
               <CRow className='justify-content-center' key={index}>
               <CCol xs={9}>
               <CCard className="mb-3">
                  <CRow className="g-0">
                    <CCol md={4}>
-                     <CCardImage src={"http://192.168.1.128:9000/public/images/" + product.img} />
+                     <CCardImage src={"http://localhost:9000/public/images/" + product["products.img"]} />
                    </CCol>
                    <CCol md={8}>
                      <CCardBody>
-                       <h3>{product.name}</h3>
-                       <h4 className='text-end'>{product.price} €</h4>
+                       <h3>{product["products.name"]}</h3>
+                       <h4 className='text-end'>{product["products.price"]} €</h4>
                      </CCardBody>
                    </CCol>
                  </CRow>
                </CCard>
               </CCol>
               <CCol xs={3} className="justify-items-content">
-                 <CFormInput className='text-center' placeholder='2' />
+                 <CFormInput className='text-center' value={product["products.cart.qty"]}/>
               </CCol>
              </CRow>)
             })}
         </CContainer>
         <CModalFooter>
-          <h3>Total: 20 €</h3>
+          <h3>{totalPrice} €</h3>
         </CModalFooter>
       </CModalBody>
     </CModal>

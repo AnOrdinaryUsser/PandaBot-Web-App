@@ -50,8 +50,8 @@ export const getCart = async(req, res) => {
             console.log(cart.productId)
             const Product = await Products.findByPk(cart.productId, { raw: true } );
             cartProducts.push(Product)
-        }))
-        res.json(cartProducts); */
+        }))*/
+        res.json(cart);
     } catch (error) {
         console.log(error);
     }

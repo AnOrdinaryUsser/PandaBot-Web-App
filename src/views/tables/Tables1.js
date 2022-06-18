@@ -30,7 +30,7 @@ const Tables1 = () => {
   }, []);
 
   const getTables = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getTables', {
+    const response = await axios.get('http://localhost:9000/getTables', {
     });
     setTables(response.data);
     console.log(response.data)

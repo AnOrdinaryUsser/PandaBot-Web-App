@@ -87,13 +87,13 @@ const Carta = () => {
   }, []);
 
   const getProducts = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getProducts', {
+    const response = await axios.get('http://localhost:9000/getProducts', {
     });
     setProducts(response.data);
     console.log(response.data)
   }
   const getSections = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getSections', {
+    const response = await axios.get('http://localhost:9000/getSections', {
     });
     setSections(response.data);
     console.log(response.data)
@@ -118,7 +118,7 @@ const Carta = () => {
 
   const deleteProduct = async (e) => {
     try {
-      await axios.post('http://192.168.1.128:9000/deleteProduct', {
+      await axios.post('http://localhost:9000/deleteProduct', {
         id: e.currentTarget.id,
       });
       window.location.reload();
@@ -150,7 +150,7 @@ const Carta = () => {
 
     try {
       const res = await axios.post(
-        "http://192.168.1.128:9000/uploadImg",
+        "http://localhost:9000/uploadImg",
         formData
       );
       console.log(res);
@@ -161,7 +161,7 @@ const Carta = () => {
 
 
     try {
-        await axios.post('http://192.168.1.128:9000/addProduct', {
+        await axios.post('http://localhost:9000/addProduct', {
           name: productName.value,
           description: descp.value,
           price: price.value,
@@ -231,7 +231,7 @@ const Carta = () => {
                       }
                     </CTableDataCell>
                     <CTableDataCell> 
-                      <CImage fluid className="clearfix" src={"http://192.168.1.128:9000/public/images/" + product.img} width={200} height={200}/>
+                      <CImage fluid className="clearfix" src={"http://localhost:9000/public/images/" + product.img} width={200} height={200}/>
                     </CTableDataCell>
                     <CTableDataCell> 
                       <CButton id={product.id} style={{background: "transparent", color:"transparent", borderColor:"transparent"}} onClick={deleteProduct}>
