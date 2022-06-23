@@ -108,7 +108,7 @@ const Map = () => {
 
   const refreshToken = async () => {
       try {
-          const response = await axios.get('http://192.168.1.128:9000/token');
+          const response = await axios.get('http://192.168.1.50:9000/token');
           setToken(response.data.accessToken);
           console.log(response)
           const decoded = jwt_decode(response.data.accessToken);
@@ -126,7 +126,7 @@ const Map = () => {
   axiosJWT.interceptors.request.use(async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-          const response = await axios.get('http://192.168.1.128:9000/token');
+          const response = await axios.get('http://192.168.1.50:9000/token');
           config.headers.Authorization = `Bearer ${response.data.accessToken}`;
           setToken(response.data.accessToken);
           const decoded = jwt_decode(response.data.accessToken);
@@ -139,7 +139,7 @@ const Map = () => {
   });
 
   const getUsers = async () => {
-      const response = await axiosJWT.get('http://192.168.1.128:9000/users', {
+      const response = await axiosJWT.get('http://192.168.1.50:9000/users', {
           headers: {
               Authorization: `Bearer ${token}`
           }
@@ -164,12 +164,12 @@ const Map = () => {
     const result = JSON.stringify(response.data).slice(14,45).replace("\\ny", "").split(":")
     console.log(result)
     console.log(result[0], result[1])
-        await axios.post('http://192.168.1.128:9000/addTable', {
+        await axios.post('http://192.168.1.50:9000/addTable', {
             id: id.value,
             seats: seats.value,
             positionX: result[0],
             positionY: result[1],
-            qrURL: "http://192.168.1.128:3000/clientCart?mesa=" + id.value
+            qrURL: "http://192.168.1.50:3000/clientCart?mesa=" + id.value
         });
         navigate("/map");
     } catch (error) {

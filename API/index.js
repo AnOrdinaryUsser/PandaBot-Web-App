@@ -16,7 +16,7 @@ const app = express();
 const { DataTypes } = Sequelize;
 
  
-app.use(cors({ credentials:true, origin:'http://192.168.1.128:3000' }));
+app.use(cors({ credentials:true, origin:'http://192.168.1.50:3000' }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(router);
@@ -44,7 +44,5 @@ db2.sync().then(() => {
     Sections.create({id:7, name: "Cafés"}); 
     */
   })
-
-
 
   

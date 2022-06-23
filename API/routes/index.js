@@ -9,6 +9,7 @@ import path from 'path';
 import { getSections } from "../controllers/Sections.js";
 import { addProductToCart, getCart } from "../controllers/Cart.js";
 import { addOrder, getOrders } from "../controllers/Order.js";
+import { recoverPassword } from "../controllers/Mail.js";
  
 const router = express.Router();
 
@@ -47,7 +48,6 @@ router.post('/uploadImg',upload.single('file'),uploadImg);
 // Sections DB
 router.get('/getSections', getSections); 
 
-
 // Cart DB
 router.post('/addProductToCart', addProductToCart);
 router.get('/getCart', getCart);
@@ -55,5 +55,8 @@ router.get('/getCart', getCart);
 // Order DB
 router.post('/addOrder', addOrder);
 router.get('/getOrders', getOrders);
+
+// Mail
+router.post('/recoverPassword', recoverPassword)
 
 export default router;
