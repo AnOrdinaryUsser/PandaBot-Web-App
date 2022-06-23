@@ -9,7 +9,7 @@ const Carta = React.lazy(() => import('./views/carta/Carta'))
 const Pedidos = React.lazy(() => import('./views/pedidos/Pedidos'))
 
 const routes = [
-  { path: '/', exact: true, name: 'Home' },
+  { path: '/', exact: true, name: 'Login' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/tables', name: 'Tables1', element: Tables1 },
   { path: '/map', name: 'Map', element: Map },
