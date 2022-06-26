@@ -55,6 +55,19 @@ const Carta = () => {
         console.log(response.data)
       }
     
+    const statusCart = async (tableID) => {
+        try {
+            await axios.post('http://192.168.1.50:9000/statusCart', {
+                id: tableID
+            });
+            window.location.reload();
+        } catch (error) {
+            if (error.response) {
+                setMsg(error.response.data.msg);
+            }
+        }
+    }
+    
 
   return (
     <>
@@ -65,14 +78,14 @@ const Carta = () => {
         <CRow>
             <CCol>
             <h3 className="mb-4">En curso</h3>
-            {orders.map((order,index) => {
+            {orders.filter(orders => orders.status == "En curso").map((order,index) => {
                 return(
                     <CCard key={index} style={{ width: '22rem' }} className="mb-4">
                         <CCardBody>
                             <CCardTitle>Pedido de mesa: {order.tableId}</CCardTitle>
                             <CCardText>
                             Total a pagar: {order.price}
-                            <CButton className="float-end"><CIcon icon={cilChevronRight}/></CButton>
+                            <CButton className="float-end" id="En curso" onClick={() => statusCart(order.id)}><CIcon icon={cilChevronRight}/></CButton>
                             </CCardText>
                             <CCardText onClick={() => handlerButton(order.tableId)}>Ticket</CCardText>
                         </CCardBody>
@@ -82,14 +95,14 @@ const Carta = () => {
             </CCol>
             <CCol>
             <h3 className="mb-4">Enviado</h3>
-            {orders.map((order,index) => {
+            {orders.filter(orders => orders.status == "Enviado").map((order,index) => {
                 return(
                     <CCard key={index} style={{ width: '22rem' }} className="mb-4">
                         <CCardBody>
                             <CCardTitle>Pedido de mesa: {order.tableId}</CCardTitle>
                             <CCardText>
                             Total a pagar: {order.price}
-                            <CButton className="float-end"><CIcon icon={cilChevronRight}/></CButton>
+                            <CButton className="float-end" id="Enviado" onClick={() => statusCart(order.id)}><CIcon icon={cilChevronRight}/></CButton>
                             </CCardText>
                             <CCardText onClick={() => handlerButton(order.tableId)}>Ticket</CCardText>
                         </CCardBody>
@@ -99,14 +112,14 @@ const Carta = () => {
             </CCol>
             <CCol>
             <h3 className="mb-4">Pagado</h3>
-            {orders.map((order,index) => {
+            {orders.filter(orders => orders.status == "Pagado").map((order,index) => {
                 return(
                     <CCard key={index} style={{ width: '22rem' }} className="mb-4">
                         <CCardBody>
                             <CCardTitle>Pedido de mesa: {order.tableId}</CCardTitle>
                             <CCardText>
                             Total a pagar: {order.price}
-                            <CButton className="float-end"><CIcon icon={cilChevronRight}/></CButton>
+                            <CButton className="float-end" id="Pagado" onClick={() => statusCart(order.id)}><CIcon icon={cilChevronRight}/></CButton>
                             </CCardText>
                             <CCardText onClick={() => handlerButton(order.tableId)}>Ticket</CCardText>
                         </CCardBody>

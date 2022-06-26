@@ -53,11 +53,11 @@ const _nav = [
   },
   {
     component: CNavTitle,
-    name: "Personal",
+    name: "Perfil",
   },
   {
     component: CNavItem,
-    name: 'Empleados',
+    name: 'Mis datos',
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },

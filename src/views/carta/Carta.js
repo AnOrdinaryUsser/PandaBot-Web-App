@@ -77,6 +77,7 @@ const options = [
 const Carta = () => {
   
   const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState([]);
   const [sections, setSections] = useState([]);
   const [selected, setSelected] = useState([]);
   const [activeKey, setActiveKey] = useState(1)
@@ -92,16 +93,20 @@ const Carta = () => {
     setProducts(response.data);
     console.log(response.data)
   }
+
+  const getProduct = async (productID) => {
+    const response = await axios.post('http://192.168.1.50:9000/getProduct', {
+      id: productID,
+    });
+    setProduct(response.data);
+    console.log(response.data)
+  }
+
   const getSections = async () => {
     const response = await axios.get('http://192.168.1.50:9000/getSections', {
     });
     setSections(response.data);
     console.log(response.data)
-  }
-
-  function useForceUpdate() {
-    let [value, setState] = useState(true);
-    return () => setState(!value);
   }
 
   const navigate = useNavigate();
@@ -110,16 +115,66 @@ const Carta = () => {
   const [file, setFile] = useState();
   const [fileName, setFileName] = useState("");
   const [msg, setMsg] = useState('');
+  const [visibleModify, setVisibleModify] = useState(false)
 
   const saveFile = (e) => {
     setFile(e.target.files[0]);
     setFileName(e.target.files[0].name);
   };  
 
+  function handlerButton(productID) {
+    setVisibleModify(!visibleModify);
+    getProduct(productID);
+  }
+
   const deleteProduct = async (e) => {
     try {
       await axios.post('http://192.168.1.50:9000/deleteProduct', {
         id: e.currentTarget.id,
+      });
+      window.location.reload();
+  } catch (error) {
+      if (error.response) {
+          setMsg(error.response.data.msg);
+      }
+  }
+  }
+
+  const modifyProduct = async (e, productID) => {
+    const form = e.currentTarget
+
+    if (form.checkValidity() === false) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    setValidated(true)
+
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("fileName", fileName);
+    console.log(formData.get("fileName"))
+
+    try {
+      const res = await axios.post(
+        "http://192.168.1.50:9000/uploadImg",
+        formData
+      );
+      console.log(res);
+    } catch (ex) {
+      console.log(ex);
+    }
+
+    try {
+      await axios.post('http://192.168.1.50:9000/modifyProduct', {
+          id: productID,
+          name: productName.value,
+          description: descp.value,
+          price: price.value,
+          allergens: JSON.stringify(selected),
+          img:formData.get("fileName"),
+          section: section.value
       });
       window.location.reload();
   } catch (error) {
@@ -181,11 +236,11 @@ const Carta = () => {
   return (
     <>
     <CContainer >
-        <CNav className="justify-content-center">
+        <CNav className="justify-content-center mb-4">
           {sections.map((section,index) => {
           return (
           <CNavItem key={index}>
-            <CNavLink 
+            <CNavLink style={{color: "black"}}
             href="javascript:void(0);"
             active={activeKey === section.id}
             onClick={() => setActiveKey(section.id)}>
@@ -210,6 +265,7 @@ const Carta = () => {
                   <CTableHeaderCell scope="col">Precio</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Alergenos</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Foto</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Acciones</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -233,10 +289,10 @@ const Carta = () => {
                     <CTableDataCell> 
                       <CImage fluid className="clearfix" src={"http://192.168.1.50:9000/public/images/" + product.img} width={200} height={200}/>
                     </CTableDataCell>
-                    <CTableDataCell> 
-                      <CButton id={product.id} style={{background: "transparent", color:"transparent", borderColor:"transparent"}} onClick={deleteProduct}>
-                      <CIcon icon={cilX}  style={{color: "red"}}/>
-                      </CButton>
+                    <CTableDataCell>
+                      <CButton id={product.id} style={{backgroundColor: "#3a8cbe", borderColor: "#3a8cbe"}} onClick={() => handlerButton(product.id)}>Editar</CButton>
+                      <p></p>
+                      <CButton id={product.id} style={{backgroundColor: "#e8463a", borderColor: "#e8463a"}} onClick={deleteProduct}>Eliminar</CButton>
                     </CTableDataCell>
                   </CTableRow>
                 )
@@ -252,7 +308,6 @@ const Carta = () => {
     </CTabContent>
         <CRow>
           <CContainer fluid>
-
           <CButton className="mb-4 d-grid gap-2 col-6 mx-auto"  onClick={() => setVisible(!visible)}>Añadir Producto</CButton>
           <CModal alignment="center" visible={visible} onClose={() => setVisible(false)}>
             <CModalHeader onClose={() => setVisible(false)}>
@@ -321,6 +376,73 @@ const Carta = () => {
             </CForm>
             </CModalBody>
           
+          </CModal>
+          <CModal alignment="center" visible={visibleModify} onClose={() => setVisibleModify(false)}>
+            <CModalHeader onClose={() => setVisibleModify(false)}>
+              <CModalTitle>Modificar producto</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+            <CForm className="mb-4"
+                  validated={validated}
+                  onSubmit={(e) => modifyProduct(e,product.id)}>
+                  <CRow className="mb-3">
+                    <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Nombre</CFormLabel>
+                    <CCol sm={10} >
+                      <CFormInput type="text" id="productName" placeholder={product.name} pattern="^[a-zA-Z ()]*$"  title="Solo puedes introducir letras a-Z, parentesis o espacios" required/>
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Descp.</CFormLabel>
+                    <CCol sm={10} >
+                      <CFormInput type="text" id="descp" placeholder={product.description}/>
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Precio</CFormLabel>
+                    <CCol sm={10} >
+                      <CFormInput type="text" id="price" placeholder={product.price} pattern="[+-]?\d+(?:[.,]\d+)?" required/>
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Alergenos</CFormLabel>
+                    <CCol sm={10} >
+                      <MultiSelect
+                        options={options}
+                        value={selected}
+                        onChange={setSelected}
+                        labelledBy="Seleccione los alergenos"
+                      />
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                  <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Sección</CFormLabel>
+                    <CCol sm={10} >
+                      <CFormSelect id="section" required>
+                        <option>Escoja una sección</option>
+                        <option>Entrantes</option>
+                        <option>Platos</option>
+                        <option>Postres</option>
+                        <option>Refrescos</option>
+                        <option>Cervezas</option>
+                        <option>Vinos</option>
+                        <option>Cafes</option>
+                      </CFormSelect> 
+                    </CCol>
+                  </CRow>
+                  <CRow className="mb-3">
+                    <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Foto</CFormLabel>
+                    <CCol sm={10} >
+                    <CFormInput type="file" onChange={saveFile} enctype="multipart/form-data" required/>
+                    </CCol>
+                  </CRow>
+                  <CButton className='mb-4' type="submit" color="primary">Modificar</CButton>
+                  <CModalFooter>
+                  <CButton color="secondary" onClick={() => setVisibleModify(false)}>
+                    Cerrar
+                  </CButton>
+            </CModalFooter>
+            </CForm>
+            </CModalBody>
           </CModal>
           </CContainer>
         </CRow>

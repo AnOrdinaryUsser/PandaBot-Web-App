@@ -138,16 +138,6 @@ const Map = () => {
       return Promise.reject(error);
   });
 
-  const getUsers = async () => {
-      const response = await axiosJWT.get('http://192.168.1.50:9000/users', {
-          headers: {
-              Authorization: `Bearer ${token}`
-          }
-      });
-      setUsers(response.data);
-  }
-
-
   
   const addTable = async (e) => {
     const form = e.currentTarget
@@ -158,17 +148,16 @@ const Map = () => {
     setValidated(true)
     e.preventDefault();
     try {
-      const response = await axios.get('http://192.168.1.193:10000/getPosition', {
-    }); 
-    console.log(response.data)
-    const result = JSON.stringify(response.data).slice(14,45).replace("\\ny", "").split(":")
-    console.log(result)
-    console.log(result[0], result[1])
+      //const response = await axios.get('http://192.168.1.193:10000/getPosition', {}); 
+    //console.log(response.data)
+    //const result = JSON.stringify(response.data).slice(14,45).replace("\\ny", "").split(":")
+    //console.log(result)
+    //console.log(result[0], result[1])
         await axios.post('http://192.168.1.50:9000/addTable', {
             id: id.value,
             seats: seats.value,
-            positionX: result[0],
-            positionY: result[1],
+            positionX: 0,
+            positionY: 0,
             qrURL: "http://192.168.1.50:3000/clientCart?mesa=" + id.value
         });
         navigate("/map");
@@ -203,19 +192,19 @@ return (
             <CRow>
               <p>Nº. de sitios:</p>
               <CCol xs="auto">
-                <CButton>-</CButton>
+                <CButton className="mb-4" color="dark" id="-">-</CButton>
               </CCol>
               <CCol xs={3}>
-                  <CFormInput type="number" id="seats" placeholder="-" min={1} required/>
+                  <CFormInput className="text-center" id="seats" placeholder="-" min={1} pattern="[0-9]*" required/>
               </CCol>
               <CCol xs="auto">
-                <CButton className="mb-4">+</CButton>
+                <CButton className="mb-4" color="dark" id="+">+</CButton>
               </CCol>
             </CRow>
             <CRow className="mb-4">
               <CCol xs={{ span: 4 }}>
                 <div>
-                  <CButton type="submit" className="mb-4">Añadir mesa</CButton>
+                  <CButton type="submit" style={{backgroundColor: "#3a8cbe", borderColor: "#3a8cbe"}} className="mb-4">Añadir mesa</CButton>
                 </div>
               </CCol>
             </CRow>

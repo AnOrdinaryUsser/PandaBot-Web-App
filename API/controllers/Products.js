@@ -12,6 +12,17 @@ export const getProducts = async(req, res) => {
         console.log(error);
     }
 }
+
+export const getProduct = async(req, res) => {
+    const { id } = req.body;
+    try {
+        const product = await Products.findOne({ where: { id: id } });
+        res.json(product);
+    } catch (error) {
+        console.log(error);
+    }
+}
+ 
  
 export const addProduct = async(req, res) => {
     const { name , description , price , allergens, img , section } = req.body;
@@ -22,7 +33,6 @@ export const addProduct = async(req, res) => {
                 name: section,
             }
         })
-        {console.log("HOLA: " + section + " " + section_id.dataValues.id)}
         await Products.create({
             name: name,
             description: description,
@@ -32,6 +42,35 @@ export const addProduct = async(req, res) => {
             img: img,
         });
         res.json({msg: "Product Created"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const modifyProduct = async(req, res) => {
+    const { id, name , description , price , allergens, img , section } = req.body;
+    try {
+        console.log(section)
+        const product = await Products.findOne({
+            where: {
+                id: id,
+            }
+        })
+        console.log(section)
+        const section_id = await Sections.findOne({
+            where: {
+                name: section,
+            }
+        })
+        await Products.update({
+            name: name,
+            description: description,
+            price: price,
+            allergens: allergens,
+            section: section_id.dataValues.id,
+            img: img,
+        }, {where: {id: id}});               
+        res.json({msg: "Product modified"});
     } catch (error) {
         console.log(error);
     }

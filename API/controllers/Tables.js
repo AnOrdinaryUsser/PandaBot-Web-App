@@ -27,4 +27,16 @@ export const addTable = async(req, res) => {
     }
 }
 
+export const deleteTable = async(req, res) => {
+    const { id } = req.body;
+    try {
+        await Tables.destroy({
+            where: { id: id },
+        });
+        res.json({msg: "Table Destroyed"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 

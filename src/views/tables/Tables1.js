@@ -10,13 +10,10 @@ import {
   CModal,
   CModalHeader,
   CModalBody,
-  CModalFooter,
-  CModalContent,
   CModalTitle,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilArrowCircleRight, cilQrCode, cilVerticalAlignBottom } from '@coreui/icons'
-import { TableCard } from '../../components'
+import { cilArrowCircleRight, cilQrCode, cilVerticalAlignBottom, cilTrash } from '@coreui/icons'
 import axios from 'axios';
 import {QRCodeSVG} from 'qrcode.react';
 
@@ -34,6 +31,19 @@ const Tables1 = () => {
     });
     setTables(response.data);
     console.log(response.data)
+  }
+
+  const deleteTable = async (e) => {
+    try {
+      await axios.post('http://192.168.1.50:9000/deleteTable', {
+        id: e.currentTarget.id,
+      });
+      window.location.reload();
+  } catch (error) {
+      if (error.response) {
+          setMsg(error.response.data.msg);
+      }
+  }
   }
 
   var newURL = "ws://" + "192.168.1.193" + ":9090";
@@ -86,6 +96,7 @@ const Tables1 = () => {
           return (<CCol key={table.id} className="mb-4">
           <CCard  className="text-center" style={{ width: '18rem' }}>
               <CCardBody>
+                <CIcon className="float-end" style={{color:"red"}} icon={cilTrash}  id={table.id} onClick={deleteTable}/><p></p>
                   <h2 className="card-title">{table.id}</h2>
                   <h5 className="card-title">Mesa</h5>
                   <div className="d-grid gap-2">
