@@ -7,8 +7,8 @@
         {
             "type": "pwa-chrome",
             "request": "launch",
-            "name": "Launch Chrome against 192.168.1.50",
-            "url": "http://192.168.1.50:8080",
+            "name": "Launch Chrome against 192.168.1.128",
+            "url": "http://192.168.1.128:8080",
             "webRoot": "${workspaceFolder}"
         }
     ]

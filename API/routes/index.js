@@ -6,7 +6,7 @@ import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import multer from 'multer';
 import path from 'path';
-import { getSections } from "../controllers/Sections.js";
+import { getSections, getSection, deleteSection, modifySection } from "../controllers/Sections.js";
 import { addProductToCart, getCart } from "../controllers/Cart.js";
 import { addOrder, getOrders, statusOrder } from "../controllers/Order.js";
 import { recoverPassword } from "../controllers/Mail.js";
@@ -50,6 +50,9 @@ router.post('/uploadImg',upload.single('file'),uploadImg);
 
 // Sections DB
 router.get('/getSections', getSections); 
+router.post('/getSection', getSection); 
+router.post('/deleteSection', deleteSection);
+router.post('modifySection', modifySection) 
 
 // Cart DB
 router.post('/addProductToCart', addProductToCart);

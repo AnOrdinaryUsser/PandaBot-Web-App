@@ -10,3 +10,49 @@ export const getSections = async(req, res) => {
         console.log(error);
     }
 }
+
+export const getSection = async(req, res) => {
+    const { id } = req.body;
+    try {
+        const section = await Sections.findOne({
+            where: {
+                id: id,
+            }
+        });
+        res.json(section);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const deleteSection = async(req, res) => {
+    const { id } = req.body;
+    try {
+        await Sections.destroy({
+            where: { id: id },
+        });
+        res.json({msg: "Section Destroyed"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const modifySection = async(req, res) => {
+    const { id, name } = req.body;
+    try {
+        console.log(section)
+        const section = await Sections.findOne({
+            where: {
+                id: id,
+            }
+        })
+        console.log(section)
+        await Sections.update({
+            id: id, 
+            name: name,
+        }, {where: {id: id}});               
+        res.json({msg: "Section modified"});
+    } catch (error) {
+        console.log(error);
+    }
+}
