@@ -14,7 +14,6 @@ import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
-import navigation from '../_nav'
 import navigationAdmin from '../_navAdmin'
 import { cilCoffee } from '@coreui/icons'
 
@@ -37,7 +36,7 @@ const AppSidebar = () => {
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={navigation} />
+          <AppSidebarNav items={navigationAdmin} />
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler

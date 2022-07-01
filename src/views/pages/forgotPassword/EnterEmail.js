@@ -35,7 +35,7 @@ const Register = () => {
         setValidated(true)
     
         try {
-          await axios.post('http://192.168.1.128:9000/recoverPassword', {
+          await axios.post('http://192.168.1.50:9000/recoverPassword', {
             email: email.value
           });
           navigate("/SentEmail");

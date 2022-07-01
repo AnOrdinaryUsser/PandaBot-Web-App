@@ -34,6 +34,30 @@ export const addProductToCart = async(req, res) => {
     }
 }
 
+export const deleteProductToCart = async(req, res) => {
+    const { tableID, productID } = req.body;
+    console.log("tableID: " + tableID + " productID: " + productID)
+    try {
+        //Check if table & product exits
+        const table = await Tables.findOne({ where: {id: tableID } });
+        if(table === null)
+            console.log('Table not found!')
+        const product = await Products.findOne({ where: {id: productID } });
+        if(product === null)
+            console.log('Product not found!')
+        //Check if the product is added to cart
+        //If product not added, add product to cart
+        //Else is added, update qty value
+        const cartProduct = await Cart.findOne({ where: {productId: productID, tableId: tableID}});
+        if (cartProduct != null) {
+            await Cart.destroy({where: {productId: productID}})
+        }
+        res.json({msg: "Product" + {productID} + "destroyed!"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const getCart = async(req, res) => {
     //sconsole.log(req.query.mesa);
     const tableID  = req.query.mesa;

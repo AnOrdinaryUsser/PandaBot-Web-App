@@ -12,6 +12,8 @@ const Sections = db.define('sections',{
         type: Sequelize.STRING,
         unique: true
     }
+},{
+    freezeTableName:true
 });
  
 (async () => {

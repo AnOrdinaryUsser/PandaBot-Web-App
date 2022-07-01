@@ -3,25 +3,67 @@ import axios from 'axios';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 
+import {
+    CAvatar,
+    CButton,
+    CButtonGroup,
+    CCard,
+    CCardBody,
+    CCardFooter,
+    CCardHeader,
+    CCol,
+    CFormInput,
+    CFormOuput,
+    CProgress,
+    CRow,
+    CTable,
+    CTableBody,
+    CTableDataCell,
+    CTableHead,
+    CTableHeaderCell,
+    CTableRow,
+    CContainer,
+    CForm,
+    CFormSelect,
+    CFormCheck,
+  } from "@coreui/react";
+
 const Dashboard = () => {
   const [name, setName] = useState('');
+  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [expire, setExpire] = useState('');
-  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState([]);
+  const [visibility, setVisibility] = useState(true)
   const navigate = useNavigate();
+  const [validated, setValidated] = useState(false)
+
+
+  const [show, setShow] = useState(true);
+  const [edit, setEdit] = useState(false);
+
+  const buttonHandler = () => {
+    setVisibility(!visibility);
+    setShow(!show);
+    setEdit(!edit);
+    console.log(show);
+  };
+
 
   useEffect(() => {
       refreshToken();
-      getUsers();
   }, []);
 
   const refreshToken = async () => {
       try {
-          const response = await axios.get('http://192.168.1.128:9000/token');
+          const response = await axios.get('http://192.168.1.50:9000/token');
           setToken(response.data.accessToken);
           console.log(response)
           const decoded = jwt_decode(response.data.accessToken);
+          setId(decoded.id);
           setName(decoded.name);
+          setEmail(decoded.email);
           setExpire(decoded.exp);
       } catch (error) {
           if (error.response) {
@@ -35,7 +77,7 @@ const Dashboard = () => {
   axiosJWT.interceptors.request.use(async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-          const response = await axios.get('http://192.168.1.128:9000/token');
+          const response = await axios.get('http://192.168.1.50:9000/token');
           config.headers.Authorization = `Bearer ${response.data.accessToken}`;
           setToken(response.data.accessToken);
           const decoded = jwt_decode(response.data.accessToken);
@@ -47,39 +89,106 @@ const Dashboard = () => {
       return Promise.reject(error);
   });
 
-  const getUsers = async () => {
-      const response = await axiosJWT.get('http://192.168.1.128:9000/users', {
-          headers: {
-              Authorization: `Bearer ${token}`
-          }
+
+  const modifyUser = async (e, name) => {
+    const form = e.currentTarget
+
+    if (form.checkValidity() === false) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    setValidated(true)
+    e.preventDefault();
+
+    try {
+      await axios.post('http://192.168.1.50:9000/modifyUser', {
+          username: name,
+          name: nombre.value,
+          email: emailInput.value,
+          password: pass.value,
       });
-      setUsers(response.data);
+      //window.location.reload();
+  } catch (error) {
+      if (error.response) {
+          setMsg(error.response.data.msg);
+      }
+  }
   }
 
   return (
-      <div className="container mt-5">
+    <>
           <h1 className='mb-4'>Bienvenido de nuevo: {name}</h1>
           <h2 className='mb-4'>Mis datos</h2>
-          <table className="table is-striped is-fullwidth">
-              <thead>
-                  <tr>
-                      <th>No</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {users.map((user, index) => (
-                      <tr key={user.id}>
-                          <td>{index + 1}</td>
-                          <td>{user.name}</td>
-                          <td>{user.email}</td>
-                      </tr>
-                  ))}
-
-              </tbody>
-          </table>
-      </div>
+          <CContainer>
+        <CRow>
+          <CCol md={20} lg={20} xl={6}>
+            <CForm className="row g-4" validated={validated} onSubmit={(e) => modifyUser(e,name)}>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  id="nombre"
+                  label="Nombre"
+                  defaultValue={name}
+                  disabled={visibility}
+                  required
+                />
+              </CCol>
+              <CCol xs={12}>
+                <CFormInput
+                  type="email"
+                  id="emailInput"
+                  label="Email"
+                  defaultValue={email}
+                  disabled={visibility}
+                  required
+                />
+              </CCol>
+              <CCol xs={12}>
+                <CFormInput
+                  type="password"
+                  id="pass"
+                  label="Contraseña"
+                  defaultValue={email}
+                  disabled={visibility}
+                  required
+                />
+              </CCol>
+              <CCol md={12}>
+                {show && (
+                  <CButton
+                    color="secondary" 
+                    style={{color:"white"}}
+                    aria-pressed="true"
+                    onClick={buttonHandler}
+                  >
+                    Editar
+                  </CButton>
+                )}
+              </CCol>
+              <CCol md={3}>
+                {edit && (
+                  <CButton color="success" aria-pressed="true" type="submit">
+                    Guardar
+                  </CButton>
+                )}
+              </CCol>
+              <CCol md={3}>
+                {edit && (
+                  <CButton
+                    color="danger"
+                    aria-pressed="true"
+                    onClick={buttonHandler}
+                  >
+                    Cancelar
+                  </CButton>
+                )}
+              </CCol>
+            </CForm>
+          </CCol>
+          <p className="mb-4"></p>
+        </CRow>
+      </CContainer>
+      </>
   )
 }
 

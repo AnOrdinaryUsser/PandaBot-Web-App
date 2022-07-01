@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import bcrypt from "bcrypt";
 import db from "./config/Database.js";
 import db2 from "./config/DataDB.js";
 import router from "./routes/index.js";
@@ -10,13 +11,14 @@ import Products from "./models/ProductModel.js";
 import Tables from "./models/TableModel.js";
 import Cart from "./models/CartModel.js";
 import Order from "./models/OrderModel.js";
+import Users from "./models/UserModel.js";
 import { Sequelize } from "sequelize";
 dotenv.config();
 const app = express();
 const { DataTypes } = Sequelize;
-
+const DB_PASSWORD = process.env.DB_PASSWORD
  
-app.use(cors({ credentials:true, origin:'http://192.168.1.128:3000' }));
+app.use(cors({ credentials:true, origin:'http://192.168.1.50:3000' }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(router);
@@ -33,8 +35,26 @@ Tables.belongsToMany(Products, { through: 'cart' });
 Cart.hasOne(Order, {foreignKey: 'tableId'});
 Order.belongsTo(Cart);
 
-db2.sync().then(() => {
-    /* 
+const salt = await bcrypt.genSalt();
+const hashPassword = await bcrypt.hash(DB_PASSWORD, salt);
+
+db.sync().then(
+  result => {
+      return Users.findByPk(1);
+  })
+.then(user => {
+  if (!user) {
+      return Users.create({
+          name: 'admin',
+          email: "pandabot-not-reply@hotmail.com",
+          password: hashPassword,
+          role: "admin"
+      })
+  }
+  return user;
+}).catch(err => console.error(err));
+
+   /* 
     Sections.create({id:1, name: "Entrantes"});
     Sections.create({id:2, name: "Platos"});
     Sections.create({id:3, name: "Postres"});
@@ -43,6 +63,3 @@ db2.sync().then(() => {
     Sections.create({id:6, name: "Vinos"}); 
     Sections.create({id:7, name: "Cafés"}); 
     */
-  })
-
-  

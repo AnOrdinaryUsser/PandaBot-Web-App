@@ -12,7 +12,7 @@ export const getUsers = async(req, res) => {
         console.log(error);
     }
 }
- 
+
 export const Register = async(req, res) => {
     const { name, email, password, confPassword } = req.body;
     if(password !== confPassword) return res.status(400).json({msg: "Password and Confirm Password do not match"});
@@ -22,7 +22,8 @@ export const Register = async(req, res) => {
         await Users.create({
             name: name,
             email: email,
-            password: hashPassword
+            password: hashPassword,
+            role: "user"
         });
         res.json({msg: "Registration Successful"});
     } catch (error) {
@@ -81,4 +82,32 @@ export const Logout = async(req, res) => {
     });
     res.clearCookie('refreshToken');
     return res.sendStatus(200);
+}
+
+export const modifyUser = async(req, res) => {
+    const { username, name, email, password } = req.body;
+    console.log(req.body)
+    try {
+        const user = await Users.findOne({
+            where: {
+                name: username,
+            }
+        })
+        const salt = await bcrypt.genSalt();
+        const hashPassword = await bcrypt.hash(password, salt);
+        console.log(user)
+        user.name = name;
+        user.email = email;
+        user.password = hashPassword;
+        user.save({fields: ['name', 'email', 'password']})
+        /* await Users.update({
+            name: name,
+            email: email,
+            password: hashPassword,
+        }, {where: {refresh_token: refresh_token}}); */      
+        await user.reload();         
+        res.json({msg: "User modified"});
+    } catch (error) {
+        console.log(error);
+    }
 }

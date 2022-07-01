@@ -5,7 +5,8 @@ const { DataTypes } = Sequelize;
  
 const Users = db.define('users',{
     name:{
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: true
     },
     email:{
         type: DataTypes.STRING
@@ -15,6 +16,10 @@ const Users = db.define('users',{
     },
     refresh_token:{
         type: DataTypes.TEXT
+    },
+    role:{
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 },{
     freezeTableName:true

@@ -88,14 +88,14 @@ const Carta = () => {
   }, []);
 
   const getProducts = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getProducts', {
+    const response = await axios.get('http://192.168.1.50:9000/getProducts', {
     });
     setProducts(response.data);
     console.log(response.data)
   }
 
   const getProduct = async (productID) => {
-    const response = await axios.post('http://192.168.1.128:9000/getProduct', {
+    const response = await axios.post('http://192.168.1.50:9000/getProduct', {
       id: productID,
     });
     setProduct(response.data);
@@ -103,7 +103,7 @@ const Carta = () => {
   }
 
   const getSections = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getSections', {
+    const response = await axios.get('http://192.168.1.50:9000/getSections', {
     });
     setSections(response.data);
     console.log(response.data)
@@ -129,7 +129,7 @@ const Carta = () => {
 
   const deleteProduct = async (e) => {
     try {
-      await axios.post('http://192.168.1.128:9000/deleteProduct', {
+      await axios.post('http://192.168.1.50:9000/deleteProduct', {
         id: e.currentTarget.id,
       });
       window.location.reload();
@@ -158,7 +158,7 @@ const Carta = () => {
 
     try {
       const res = await axios.post(
-        "http://192.168.1.128:9000/uploadImg",
+        "http://192.168.1.50:9000/uploadImg",
         formData
       );
       console.log(res);
@@ -167,7 +167,7 @@ const Carta = () => {
     }
 
     try {
-      await axios.post('http://192.168.1.128:9000/modifyProduct', {
+      await axios.post('http://192.168.1.50:9000/modifyProduct', {
           id: productID,
           name: productName.value,
           description: descp.value,
@@ -205,7 +205,7 @@ const Carta = () => {
 
     try {
       const res = await axios.post(
-        "http://192.168.1.128:9000/uploadImg",
+        "http://192.168.1.50:9000/uploadImg",
         formData
       );
       console.log(res);
@@ -216,7 +216,7 @@ const Carta = () => {
 
 
     try {
-        await axios.post('http://192.168.1.128:9000/addProduct', {
+        await axios.post('http://192.168.1.50:9000/addProduct', {
           name: productName.value,
           description: descp.value,
           price: price.value,
@@ -287,7 +287,7 @@ const Carta = () => {
                       }
                     </CTableDataCell>
                     <CTableDataCell> 
-                      <CImage fluid className="clearfix" src={"http://192.168.1.128:9000/public/images/" + product.img} width={200} height={200}/>
+                      <CImage fluid className="clearfix" src={"http://192.168.1.50:9000/public/images/" + product.img} width={200} height={200}/>
                     </CTableDataCell>
                     <CTableDataCell>
                       <CButton id={product.id} style={{backgroundColor: "#3a8cbe", borderColor: "#3a8cbe"}} onClick={() => handlerButton(product.id)}>Editar</CButton>
@@ -308,7 +308,7 @@ const Carta = () => {
     </CTabContent>
         <CRow>
           <CContainer fluid>
-          <CButton className="mb-4 d-grid gap-2 col-6 mx-auto"  onClick={() => setVisible(!visible)}>Añadir Producto</CButton>
+          <CButton className="mb-4 d-grid mx-auto" color="secondary" style={{color:"white"}} onClick={() => setVisible(!visible)}>Añadir producto</CButton>
           <CModal alignment="center" visible={visible} onClose={() => setVisible(false)}>
             <CModalHeader onClose={() => setVisible(false)}>
               <CModalTitle>Añadir producto</CModalTitle>
@@ -367,12 +367,7 @@ const Carta = () => {
                     <CFormInput type="file" onChange={saveFile} enctype="multipart/form-data" required/>
                     </CCol>
                   </CRow>
-                  <CButton className='mb-4' type="submit" color="primary">Guardar</CButton>
-                  <CModalFooter>
-                  <CButton color="secondary" onClick={() => setVisible(false)}>
-                    Cerrar
-                  </CButton>
-            </CModalFooter>
+                  <CButton className='className="mb-4 d-grid gap-2 col-6 mx-auto' type="submit" color="secondary" style={{color:"white"}}>Añadir</CButton>
             </CForm>
             </CModalBody>
           
@@ -436,11 +431,6 @@ const Carta = () => {
                     </CCol>
                   </CRow>
                   <CButton className='mb-4' type="submit" color="primary">Modificar</CButton>
-                  <CModalFooter>
-                  <CButton color="secondary" onClick={() => setVisibleModify(false)}>
-                    Cerrar
-                  </CButton>
-            </CModalFooter>
             </CForm>
             </CModalBody>
           </CModal>

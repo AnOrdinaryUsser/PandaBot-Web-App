@@ -27,7 +27,7 @@ const Tables1 = () => {
   }, []);
 
   const getTables = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getTables', {
+    const response = await axios.get('http://192.168.1.50:9000/getTables', {
     });
     setTables(response.data);
     console.log(response.data)
@@ -35,7 +35,7 @@ const Tables1 = () => {
 
   const deleteTable = async (e) => {
     try {
-      await axios.post('http://192.168.1.128:9000/deleteTable', {
+      await axios.post('http://192.168.1.50:9000/deleteTable', {
         id: e.currentTarget.id,
       });
       window.location.reload();
@@ -87,20 +87,20 @@ const Tables1 = () => {
     <>
     <CContainer>
       <CRow className="d-grid gap-2 d-md-flex justify-content-md-start mb-4">
-        <CButton className='col-auto' onClick={() => setVisible(!visible)}>
-          <CIcon icon={cilQrCode} size="xl" />
+        <CButton color="secondary" className='col-auto' onClick={() => setVisible(!visible)}>
+          <CIcon icon={cilQrCode} style={{color:"white"}}  size="xl" />
         </CButton>
       </CRow>
       <CRow className="mb-4" xs={{ cols: 1 }} sm={{ cols: 2 }} md={{ cols: 2 }} xl={{ cols: 4 }}>
         {tables.map((table,index) => {
           return (<CCol key={table.id} className="mb-4">
-          <CCard  className="text-center" style={{ width: '18rem' }}>
+          <CCard className="text-center" style={{ width: '18rem' }}>
               <CCardBody>
                 <CIcon className="float-end" style={{color:"red"}} icon={cilTrash}  id={table.id} onClick={deleteTable}/><p></p>
                   <h2 className="card-title">{table.id}</h2>
                   <h5 className="card-title">Mesa</h5>
                   <div className="d-grid gap-2">
-                      <CButton onClick={() => sendLocation('{\'x\' : ' + table.positionX +  ', \'y\' : ' + table.positionY + '}')}>Enviar <CIcon icon={cilArrowCircleRight}  />
+                      <CButton color="secondary" onClick={() => sendLocation('{\'x\' : ' + table.positionX +  ', \'y\' : ' + table.positionY + '}')}>Enviar <CIcon icon={cilArrowCircleRight}  />
                       </CButton>
                   </div>
               </CCardBody>
@@ -121,7 +121,7 @@ const Tables1 = () => {
                     <CCard  className="text-center" style={{ width: '14rem' }}>
                         <CCardBody>
                             <QRCodeSVG id={"qr"+table.id} className='mb-4' value={table.qrURL}/>
-                                <CButton onClick={(e) => downloadQRCode(e,table.id)}><CIcon size="xs" icon={cilVerticalAlignBottom}/> Descargar
+                                <CButton  onClick={(e) => downloadQRCode(e,table.id)}><CIcon size="xs" icon={cilVerticalAlignBottom}/> Descargar
                                 </CButton>
                         </CCardBody>
                     </CCard>

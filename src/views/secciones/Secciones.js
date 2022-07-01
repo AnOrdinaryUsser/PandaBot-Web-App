@@ -79,14 +79,37 @@ const Secciones = () => {
   const [sections, setSections] = useState([]);
   const [section, setSection] = useState([]);
   const [validated, setValidated] = useState(false)
+  const [visible, setVisible] = useState(false)
   const [visibleModify, setVisibleModify] = useState(false)
   
   useEffect(() => {
       getSections();
   }, []);
 
+  const addSection = async (e) => {
+    const form = e.currentTarget
+
+    if (form.checkValidity() === false) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+    setValidated(true)
+    e.preventDefault();
+    console.log(section.value)
+    try {
+      await axios.post('http://192.168.1.50:9000/addSection', {
+          name: sectionInput.value,
+      });
+      window.location.reload();
+  } catch (error) {
+      if (error.response) {
+          setMsg(error.response.data.msg);
+      }
+  }
+  }
+
   const getSection = async (sectionID) => {
-    const response = await axios.post('http://192.168.1.128:9000/getSection', {
+    const response = await axios.post('http://192.168.1.50:9000/getSection', {
       id: sectionID,
     });
     setSection(response.data);
@@ -94,7 +117,7 @@ const Secciones = () => {
   }
 
   const getSections = async () => {
-    const response = await axios.get('http://192.168.1.128:9000/getSections', {
+    const response = await axios.get('http://192.168.1.50:9000/getSections', {
     });
     setSections(response.data);
     console.log(response.data)
@@ -102,7 +125,7 @@ const Secciones = () => {
 
   const deleteSection = async (e) => {
     try {
-      await axios.post('http://192.168.1.128:9000/deleteSection', {
+      await axios.post('http://192.168.1.50:9000/deleteSection', {
         id: e.currentTarget.id,
       });
       window.location.reload();
@@ -130,7 +153,7 @@ const Secciones = () => {
     e.preventDefault();
 
     try {
-      await axios.post('http://192.168.1.128:9000/modifySection', {
+      await axios.post('http://192.168.1.50:9000/modifySection', {
           id: sectionID,
           name: productName.value,
       });
@@ -169,9 +192,30 @@ const Secciones = () => {
                  )})}
             </CTableBody>
           </CTable>
+          <CButton className="mb-4 d-grid" color="secondary" style={{color:"white"}} onClick={() => setVisible(true)}>Añadir sección</CButton>
         </CContainer>
       </CRow>
     </CContainer>
+    <CModal alignment="center" visible={visible} onClose={() => setVisible(false)}>
+            <CModalHeader onClose={() => setVisible(false)}>
+              <CModalTitle>Añadir sección</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+            <CForm className="mb-4"
+                  validated={validated}
+                  onSubmit={addSection}>
+                  <CRow className="mb-3">
+                    <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Nombre</CFormLabel>
+                    <CCol sm={10} >
+                      <CFormInput type="text" id="sectionInput" required/>
+                    </CCol>
+                  </CRow>
+                  <div className="d-grid d-md-flex justify-content-end">
+                    <CButton className='text-end' type="submit" color="secondary" style={{color:"white"}}>Añadir</CButton>
+                  </div>
+            </CForm>
+            </CModalBody>
+          </CModal>
     <CModal alignment="center" visible={visibleModify} onClose={() => setVisibleModify(false)}>
             <CModalHeader onClose={() => setVisibleModify(false)}>
               <CModalTitle>Modificar sección</CModalTitle>
@@ -187,7 +231,7 @@ const Secciones = () => {
                     </CCol>
                   </CRow>
                   <div className="d-grid gap-2 d-md-flex justify-content-end">
-                    <CButton className='mb-4 text-end' type="submit" color="primary">Modificar</CButton>
+                    <CButton className='text-end' type="submit" color="secondary" style={{color:"white"}}>Modificar</CButton>
                   </div>
             </CForm>
             </CModalBody>

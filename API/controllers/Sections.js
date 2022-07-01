@@ -1,5 +1,18 @@
 import Sections from "../models/SectionModel.js";
 
+export const addSection = async(req, res) => {
+    const { name } = req.body;
+    try {
+        const section = await Sections.create({
+           name: name
+        });
+        res.json({msg: "Section Added"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 export const getSections = async(req, res) => {
     try {
         const sections = await Sections.findAll({
