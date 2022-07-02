@@ -83,13 +83,13 @@ const Login = () => {
   }, []);
 
   const getProducts = async () => {
-    const response = await axios.get('http://192.168.1.50:9000/getProducts', {
+    const response = await axios.get('http://192.168.1.128:9000/getProducts', {
     });
     setProductsList(response.data);
     console.log(response.data)
   }
   const getSections = async () => {
-    const response = await axios.get('http://192.168.1.50:9000/getSections', {
+    const response = await axios.get('http://192.168.1.128:9000/getSections', {
     });
     setSections(response.data);
     console.log(response.data)
@@ -97,7 +97,7 @@ const Login = () => {
   const getCart = async () => {
     const queryParams = new URLSearchParams(window.location.search);
     const tableID = queryParams.get('mesa');
-    const response = await axios.get('http://192.168.1.50:9000/getCart?mesa='+tableID, {
+    const response = await axios.get('http://192.168.1.128:9000/getCart?mesa='+tableID, {
     });
     setCart(response.data);
     console.log(response.data)
@@ -115,7 +115,7 @@ const Login = () => {
     e.stopPropagation();
     console.log("tableID: " + tableID + " productID: " + productID)
     try {
-          await axios.post('http://192.168.1.50:9000/addProductToCart', {
+          await axios.post('http://192.168.1.128:9000/addProductToCart', {
             tableID: tableID,
             productID: productID,
         });
@@ -130,7 +130,7 @@ const Login = () => {
     e.stopPropagation();
     console.log("tableID: " + tableID + " productID: " + productID)
     try {
-          await axios.post('http://192.168.1.50:9000/deleteProductToCart', {
+          await axios.post('http://192.168.1.128:9000/deleteProductToCart', {
             tableID: tableID,
             productID: productID,
         });
@@ -146,7 +146,7 @@ const Login = () => {
     e.stopPropagation();
     console.log("totalPrice: " + totalPrice + "mesa: " + id)
     try {
-          await axios.post('http://192.168.1.50:9000/addOrder', {
+          await axios.post('http://192.168.1.128:9000/addOrder', {
             totalPrice: totalPrice,
             id: id,
         });
@@ -199,7 +199,7 @@ const Login = () => {
                     <CCard className="justify-content-center mb-4">
                       <CRow className='g-0'>
                       <CCol md={4}>
-                        <CCardImage align='center' className="clearfix" src={"http://192.168.1.50:9000/public/images/" + product.img} />
+                        <CCardImage align='center' className="clearfix" src={"http://192.168.1.128:9000/public/images/" + product.img} />
                       </CCol>
                       <CCol md={8}>
                             <CCardBody>
@@ -298,7 +298,7 @@ const Login = () => {
               <CCard className="mb-3">
                  <CRow className="g-0">
                    <CCol md={4}>
-                     <CCardImage src={"http://192.168.1.50:9000/public/images/" + product["products.img"]} />
+                     <CCardImage src={"http://192.168.1.128:9000/public/images/" + product["products.img"]} />
                    </CCol>
                    <CCol md={8}>
                      <CCardBody>

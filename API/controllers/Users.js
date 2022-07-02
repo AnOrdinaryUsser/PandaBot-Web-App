@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 export const getUsers = async(req, res) => {
     try {
         const users = await Users.findAll({
-            attributes:['id','name','email']
         });
         res.json(users);
     } catch (error) {
@@ -107,6 +106,20 @@ export const modifyUser = async(req, res) => {
         }, {where: {refresh_token: refresh_token}}); */      
         await user.reload();         
         res.json({msg: "User modified"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const deleteUser = async(req, res) => {
+    const { id } = req.body;
+    try {
+        const users = await Users.destroy({
+            where:{
+                id: id
+            }
+        });
+        res.json({msg: "User destroyed"});
     } catch (error) {
         console.log(error);
     }

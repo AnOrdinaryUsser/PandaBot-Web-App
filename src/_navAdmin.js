@@ -14,7 +14,9 @@ import {
   cilMap,
   cilDinner,
   cilBorderAll,
-  cilList 
+  cilList ,
+  cilPeople,
+  cilUser,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -66,7 +68,7 @@ const _nav = [
     component: CNavItem,
     name: 'Mis datos',
     to: '/dashboard',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,
@@ -74,9 +76,9 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Mis datos',
-    to: '/dashboard',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+    name: 'Usuarios',
+    to: '/AdminDashboard',
+    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
   },
 ]
 

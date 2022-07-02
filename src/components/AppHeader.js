@@ -25,7 +25,7 @@ const AppHeader = () => {
 
   const Logout = async () => {
     try {
-        await axios.delete('http://192.168.1.50:9000/logout');
+        await axios.delete('http://192.168.1.128:9000/logout');
         navigate("/");
     } catch (error) {
         console.log(error);

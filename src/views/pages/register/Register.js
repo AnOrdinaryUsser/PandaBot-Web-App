@@ -33,7 +33,7 @@ const Register = () => {
 
     e.preventDefault();
     try {
-        await axios.post('http://192.168.1.50:9000/users', {
+        await axios.post('http://192.168.1.128:9000/users', {
             name: user.value,
             email: email.value,
             password: pass.value,

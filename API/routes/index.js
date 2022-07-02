@@ -1,5 +1,5 @@
 import express from "express";
-import { getUsers, Register, Login, Logout, modifyUser } from "../controllers/Users.js";
+import { getUsers, Register, Login, Logout, modifyUser, deleteUser } from "../controllers/Users.js";
 import { addTable, getTables, deleteTable } from "../controllers/Tables.js";
 import { addProduct, modifyProduct, deleteProduct, getProducts, getProduct, uploadImg } from "../controllers/Products.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
@@ -32,6 +32,7 @@ var upload = multer({
 router.get('/users', verifyToken, getUsers);
 router.post('/modifyUser', modifyUser);
 router.post('/users', Register);
+router.post('/deleteUser', deleteUser);
 router.post('/login', Login);
 router.get('/token', refreshToken);
 router.delete('/logout', Logout);
