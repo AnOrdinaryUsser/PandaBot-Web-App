@@ -7,9 +7,9 @@ import { refreshToken } from "../controllers/RefreshToken.js";
 import multer from 'multer';
 import path from 'path';
 import { addSection, getSections, getSection, deleteSection, modifySection } from "../controllers/Sections.js";
-import { addProductToCart, deleteProductToCart, getCart } from "../controllers/Cart.js";
-import { addOrder, getOrders, statusOrder } from "../controllers/Order.js";
-import { recoverPassword } from "../controllers/Mail.js";
+import { addProductToCart, destroyCart, destroyProductCart, getCart } from "../controllers/Cart.js";
+import { addOrder, getOrders, statusOrder, getOrder } from "../controllers/Order.js";
+import { recoverPassword, resetPassword } from "../controllers/Mail.js";
  
 const router = express.Router();
 
@@ -59,15 +59,18 @@ router.post('modifySection', modifySection)
 
 // Cart DB
 router.post('/addProductToCart', addProductToCart);
-router.post('/deleteProductToCart', deleteProductToCart);
+router.post('/destroyProductCart', destroyProductCart);
+router.post('/destroyCart', destroyCart);
 router.get('/getCart', getCart);
 
 // Order DB
 router.post('/addOrder', addOrder);
 router.get('/getOrders', getOrders);
+router.post('/getOrder', getOrder);
 router.post('/statusCart', statusOrder);
 
 // Mail
 router.post('/recoverPassword', recoverPassword)
+router.post('/resetPassword', resetPassword)
 
 export default router;

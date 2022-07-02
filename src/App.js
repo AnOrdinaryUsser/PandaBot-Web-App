@@ -20,6 +20,7 @@ const Home = React.lazy(() => import('./views/pages/main/home'))
 const ClientCart = React.lazy(() => import('./views/pages/clientCart/ClientCart'))
 const EnterEmail = React.lazy(() => import('./views/pages/forgotPassword/EnterEmail.js'))
 const SentEmail = React.lazy(() => import('./views/pages/forgotPassword/SentEmail.js'))
+const ResetPassword = React.lazy(() => import('./views/pages/forgotPassword/ResetPassword.js'))
 
 
 class App extends Component {
@@ -36,6 +37,7 @@ class App extends Component {
             <Route exact path="/clientCart" name="Client Cart" element={<ClientCart/>} />
             <Route exact path="/EnterEmail" name="EnterEmail" element={<EnterEmail/>} />
             <Route exact path="/SentEmail" name="SentEmail" element={<SentEmail/>} />
+            <Route exact path="/ResetPassword" name="ResetPassword" element={<ResetPassword/>} />
             <Route path="*" name="Home" element={<DefaultLayout />} />
           </Routes>
         </Suspense>

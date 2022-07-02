@@ -13,7 +13,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import image from "./../../../assets/images/backgroundLogin.jpg"
 
@@ -24,10 +24,10 @@ const Register = () => {
     const navigate = useNavigate();
     const [validated, setValidated] = useState(false)
     const [msg, setMsg] = useState('');
-    
+    const queryParams = new URLSearchParams(window.location.search);
+    const token = queryParams.get('token');
 
-    const forgotPassword = async (e) => {
-        console.log(email.value)
+    const changePassword = async (e) => {
         const form = e.currentTarget
         if (form.checkValidity() === false) {
           e.preventDefault()
@@ -36,11 +36,11 @@ const Register = () => {
         setValidated(true)
     
         try {
-          await axios.post('http://192.168.1.50:9000/recoverPassword', {
-            email: email.value
+          await axios.post('http://192.168.1.50:9000/resetPassword', {
+            token: token,
+            pass: password.value
           });
-          window.location.replace("http://192.168.1.50:3000/SentEmail");
-          //navigate("/")
+          navigate("/")
       } catch (error) {
           if (error.response) {
               setMsg(error.response.data.msg);
@@ -57,17 +57,17 @@ const Register = () => {
               <CCardBody className="p-4">
                 <CForm 
                   validated={validated}
-                  onSubmit={forgotPassword}>
-                  <h4 className='text-center mb-3'>Introduce tu correo</h4>
+                  onSubmit={changePassword}>
+                  <h4 className='text-center mb-3'>Introduce tu nueva contraseña</h4>
                   <CInputGroup className="align-content-center mb-3">
                     <CFormInput 
-                    placeholder="Email" 
-                    id="email" 
-                    type="email"
+                    placeholder="Contraseña" 
+                    id="password" 
+                    type="password"
                     required />
                   </CInputGroup>
                   <div className="d-grid gap-2 d-md-flex justify-content-end">
-                    <CButton type="submit" color="success" aria-pressed="true">Enviar</CButton>
+                    <CButton type="submit" color="success" aria-pressed="true">Cambiar</CButton>
                   </div>
                 </CForm>
               </CCardBody>

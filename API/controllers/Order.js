@@ -9,6 +9,7 @@ export const addOrder = async(req, res) => {
     try {
         //Check if table & product exits
         const cart = await Cart.findOne({ where: {tableId: id } });
+        console.log(cart)
         if (cart === null) {
             console.log('Cart not found!')
         } else {
@@ -26,8 +27,19 @@ export const addOrder = async(req, res) => {
 
 export const getOrders = async(req, res) => {
     try {
-        const products = await Order.findAll();
-        res.json(products);
+        const orders = await Order.findAll();
+        res.json(orders);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+export const getOrder = async(req, res) => {
+    const { tableID } = req.body;
+    try {
+        const order = await Order.findOne({ where: {tableId: tableID } });
+        res.json(order);
     } catch (error) {
         console.log(error);
     }
@@ -49,6 +61,10 @@ export const statusOrder = async(req, res) => {
                 await Order.update({
                     status: "Pagado",
                 }, {where: {status: "Enviado", id: id}})
+            } else if (cart.status === "Pagado") {
+                await Order.update({
+                    status: "Terminado",
+                }, {where: {status: "Pagado", id: id}})
             }
         }
         res.json({msg: "Order updated!"});

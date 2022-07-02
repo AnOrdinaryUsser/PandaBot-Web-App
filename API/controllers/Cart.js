@@ -34,7 +34,7 @@ export const addProductToCart = async(req, res) => {
     }
 }
 
-export const deleteProductToCart = async(req, res) => {
+export const destroyProductCart = async(req, res) => {
     const { tableID, productID } = req.body;
     console.log("tableID: " + tableID + " productID: " + productID)
     try {
@@ -53,6 +53,23 @@ export const deleteProductToCart = async(req, res) => {
             await Cart.destroy({where: {productId: productID}})
         }
         res.json({msg: "Product" + {productID} + "destroyed!"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const destroyCart = async(req, res) => {
+    const { tableID } = req.body;
+    console.log("tableID: " + tableID)
+    try {
+        const table = await Tables.findOne({ where: {id: tableID } });
+        if(table === null)
+            console.log('Table not found!')
+        const cartProduct = await Cart.findOne({ where: {tableId: tableID}});
+        if (cartProduct != null) {
+            await Cart.destroy({where: {tableId: tableID}})
+        }
+        res.json({msg: "Cart destroyed!"});
     } catch (error) {
         console.log(error);
     }
@@ -80,3 +97,4 @@ export const getCart = async(req, res) => {
         console.log(error);
     }
 }
+
