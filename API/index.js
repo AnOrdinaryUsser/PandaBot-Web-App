@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import bcrypt from "bcrypt";
-import db from "./config/Database.js";
+import db from "./config/AuthDB.js";
 import db2 from "./config/DataDB.js";
 import router from "./routes/index.js";
 import Sections from "./models/SectionModel.js";

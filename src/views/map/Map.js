@@ -148,16 +148,16 @@ const Map = () => {
     setValidated(true)
     e.preventDefault();
     try {
-      //const response = await axios.get('http://192.168.1.193:10000/getPosition', {}); 
-    //console.log(response.data)
-    //const result = JSON.stringify(response.data).slice(14,45).replace("\\ny", "").split(":")
-    //console.log(result)
-    //console.log(result[0], result[1])
+        const response = await axios.get('http://192.168.1.193:10000/getPosition', {}); 
+        console.log(response.data)
+        const result = JSON.stringify(response.data).slice(14,45).replace("\\ny", "").split(":")
+        console.log(result)
+        console.log(result[0], result[1])
         await axios.post('http://192.168.1.50:9000/addTable', {
             id: id.value,
             seats: seats.value,
-            positionX: 0,
-            positionY: 0,
+            positionX: result[0],
+            positionY: result[1],
             qrURL: "http://192.168.1.50:3000/clientCart?mesa=" + id.value
         });
         navigate("/map");

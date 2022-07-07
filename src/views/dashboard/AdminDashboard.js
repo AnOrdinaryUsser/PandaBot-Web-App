@@ -125,7 +125,7 @@ const AdminDashboard = () => {
       }
       }
 
-      const Register = async (e) => {
+      const addUser = async (e) => {
         const form = e.currentTarget
         if (form.checkValidity() === false) {
           e.preventDefault()
@@ -187,7 +187,7 @@ const AdminDashboard = () => {
             <CModalBody>
     <CForm 
                   validated={validated}
-                  onSubmit={Register}>
+                  onSubmit={addUser}>
                   <p className="text-medium-emphasis">Crea tu cuenta</p>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>

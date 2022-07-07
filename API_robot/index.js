@@ -7,7 +7,7 @@ app.use(cors({ credentials:true, origin:'http://192.168.1.50:3000' }))
 
 
 
-app.get('/', function (req, res) {
+app.get('/sendLocation', function (req, res) {
     var value = req.query["value"]
     //res.json({"value" : value})
     console.log(value)

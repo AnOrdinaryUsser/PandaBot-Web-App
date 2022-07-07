@@ -55,9 +55,9 @@ const Carta = () => {
         console.log(response.data)
       }
     
-    const statusCart = async (tableID) => {
+    const statusOrder = async (tableID) => {
         try {
-            await axios.post('http://192.168.1.50:9000/statusCart', {
+            await axios.post('http://192.168.1.50:9000/statusOrder', {
                 id: tableID
             });
             window.location.reload();
@@ -85,7 +85,7 @@ const Carta = () => {
                             <CCardTitle>Pedido de mesa: {order.tableId}</CCardTitle>
                             <CCardText>
                             Total a pagar: {order.price}
-                            <CButton color="secondary" className="float-end" id="En curso" onClick={() => statusCart(order.id)}><CIcon style={{color:"white"}} icon={cilChevronRight}/></CButton>
+                            <CButton color="secondary" className="float-end" id="En curso" onClick={() => statusOrder(order.id)}><CIcon style={{color:"white"}} icon={cilChevronRight}/></CButton>
                             </CCardText>
                             <CCardText onClick={() => handlerButton(order.tableId)}>Ticket</CCardText>
                         </CCardBody>
@@ -102,7 +102,7 @@ const Carta = () => {
                             <CCardTitle>Pedido de mesa: {order.tableId}</CCardTitle>
                             <CCardText>
                             Total a pagar: {order.price}
-                            <CButton color="secondary" className="float-end" id="Enviado" onClick={() => statusCart(order.id)}><CIcon style={{color:"white"}} icon={cilChevronRight}/></CButton>
+                            <CButton color="secondary" className="float-end" id="Enviado" onClick={() => statusOrder(order.id)}><CIcon style={{color:"white"}} icon={cilChevronRight}/></CButton>
                             </CCardText>
                             <CCardText onClick={() => handlerButton(order.tableId)}>Ticket</CCardText>
                         </CCardBody>
@@ -119,7 +119,7 @@ const Carta = () => {
                             <CCardTitle>Pedido de mesa: {order.tableId}</CCardTitle>
                             <CCardText>
                             Total a pagar: {order.price}
-                            <CButton color="secondary" className="float-end" id="Pagado" onClick={() => statusCart(order.id)}><CIcon style={{color:"white"}} icon={cilChevronRight}/></CButton>
+                            <CButton color="secondary" className="float-end" id="Pagado" onClick={() => statusOrder(order.id)}><CIcon style={{color:"white"}} icon={cilChevronRight}/></CButton>
                             </CCardText>
                             <CCardText onClick={() => handlerButton(order.tableId)}>Ticket</CCardText>
                         </CCardBody>

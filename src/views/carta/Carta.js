@@ -16,40 +16,17 @@ import {
   CModalHeader,
   CFormLabel,
   CModalTitle,
-  CModalFooter,
   CModalBody,
   CForm,
   CFormInput,
-  CInputGroup,
-  CInputGroupText,
-  CLink,
   CFormSelect,
   CNav,
-  CNavGroup,
   CNavItem,
   CNavLink,
   CTabPane,
   CTabContent,
 } from '@coreui/react'
 
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser, cilX } from '@coreui/icons'
-import { 
-  FishIcon, 
-  EggIcon,
-  CeleryIcon,
-  CrustaceanIcon,
-  GlutenIcon,
-  LupinIcon,
-  MilkIcon,
-  MolluscIcon,
-  MustardIcon,
-  NutsIcon,
-  PeanutIcon,
-  SesameIcon,
-  SoyaIcon,
-  SulphiteIcon,
- } from 'react-allergens';
 import { useNavigate } from 'react-router-dom';
 import { MultiSelect } from 'react-multi-select-component';
 import axios from "axios";
@@ -70,7 +47,6 @@ const options = [
   { label: "Altramuces", value: "altramuces" },
   { label: "Sulfitos", value: "sulfitos" },
   { label: "Ninguno", value: "ninguno" },
- 
 ];
 
 
@@ -81,11 +57,19 @@ const Carta = () => {
   const [sections, setSections] = useState([]);
   const [selected, setSelected] = useState([]);
   const [activeKey, setActiveKey] = useState(1)
+  const navigate = useNavigate();
+  const [visible, setVisible] = useState(false)
+  const [validated, setValidated] = useState(false)
+  const [file, setFile] = useState();
+  const [fileName, setFileName] = useState("");
+  const [msg, setMsg] = useState('');
+  const [visibleModify, setVisibleModify] = useState(false)
   
   useEffect(() => {
       getProducts();
       getSections();
   }, []);
+
 
   const getProducts = async () => {
     const response = await axios.get('http://192.168.1.50:9000/getProducts', {
@@ -108,14 +92,6 @@ const Carta = () => {
     setSections(response.data);
     console.log(response.data)
   }
-
-  const navigate = useNavigate();
-  const [visible, setVisible] = useState(false)
-  const [validated, setValidated] = useState(false)
-  const [file, setFile] = useState();
-  const [fileName, setFileName] = useState("");
-  const [msg, setMsg] = useState('');
-  const [visibleModify, setVisibleModify] = useState(false)
 
   const saveFile = (e) => {
     setFile(e.target.files[0]);

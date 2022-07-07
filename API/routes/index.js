@@ -67,7 +67,7 @@ router.get('/getCart', getCart);
 router.post('/addOrder', addOrder);
 router.get('/getOrders', getOrders);
 router.post('/getOrder', getOrder);
-router.post('/statusCart', statusOrder);
+router.post('/statusOrder', statusOrder);
 
 // Mail
 router.post('/recoverPassword', recoverPassword)
