@@ -327,13 +327,12 @@ const Carta = () => {
                     <CCol sm={10} >
                       <CFormSelect id="section" required>
                         <option>Escoja una sección</option>
-                        <option>Entrantes</option>
-                        <option>Platos</option>
-                        <option>Postres</option>
-                        <option>Refrescos</option>
-                        <option>Cervezas</option>
-                        <option>Vinos</option>
-                        <option>Cafes</option>
+                        {sections.map((section,index) => {
+                        return (
+                          <>
+                          <option>{section.name}</option>
+                          </>
+                        )})}
                       </CFormSelect> 
                     </CCol>
                   </CRow>
@@ -359,19 +358,19 @@ const Carta = () => {
                   <CRow className="mb-3">
                     <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Nombre</CFormLabel>
                     <CCol sm={10} >
-                      <CFormInput type="text" id="productName" placeholder={product.name} pattern="^[a-zA-Z ()]*$"  title="Solo puedes introducir letras a-Z, parentesis o espacios" required/>
+                      <CFormInput type="text" id="productName" defaultValue={product.name} pattern="^[a-zA-Z ()]*$"  title="Solo puedes introducir letras a-Z, parentesis o espacios" required/>
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">
                     <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Descp.</CFormLabel>
                     <CCol sm={10} >
-                      <CFormInput type="text" id="descp" placeholder={product.description}/>
+                      <CFormInput type="text" id="descp" defaultValue={product.description}/>
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">
                     <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Precio</CFormLabel>
                     <CCol sm={10} >
-                      <CFormInput type="text" id="price" placeholder={product.price} pattern="[+-]?\d+(?:[.,]\d+)?" required/>
+                      <CFormInput type="text" id="price" defaultValue={product.price} pattern="[+-]?\d+(?:[.,]\d+)?" required/>
                     </CCol>
                   </CRow>
                   <CRow className="mb-3">
@@ -389,14 +388,13 @@ const Carta = () => {
                   <CFormLabel htmlFor="colFormLabel" className="col-sm-2 col-form-label">Sección</CFormLabel>
                     <CCol sm={10} >
                       <CFormSelect id="section" required>
-                        <option>Escoja una sección</option>
-                        <option>Entrantes</option>
-                        <option>Platos</option>
-                        <option>Postres</option>
-                        <option>Refrescos</option>
-                        <option>Cervezas</option>
-                        <option>Vinos</option>
-                        <option>Cafes</option>
+                      <option>Escoja una sección</option>
+                      {sections.map((section,index) => {
+                        return (
+                          <>
+                          <option>{section.name}</option>
+                          </>
+                        )})}
                       </CFormSelect> 
                     </CCol>
                   </CRow>
@@ -406,7 +404,7 @@ const Carta = () => {
                     <CFormInput type="file" onChange={saveFile} enctype="multipart/form-data" required/>
                     </CCol>
                   </CRow>
-                  <CButton className='mb-4' type="submit" color="primary">Modificar</CButton>
+                  <CButton className='className="mb-4 d-grid gap-2 col-6 mx-auto' type="submit" color="secondary" style={{color:"white"}}>Modificar</CButton>
             </CForm>
             </CModalBody>
           </CModal>
