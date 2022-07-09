@@ -53,7 +53,6 @@ export const deleteSection = async(req, res) => {
 export const modifySection = async(req, res) => {
     const { id, name } = req.body;
     try {
-        console.log(section)
         const section = await Sections.findOne({
             where: {
                 id: id,

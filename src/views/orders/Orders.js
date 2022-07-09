@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react'
-
 import {
   CButton,
   CCol,
   CRow,
-  CImage,
   CContainer,
   CCard,
   CCardBody,
@@ -21,10 +19,10 @@ import {
   CTableHeaderCell,
   CTableDataCell,
 } from '@coreui/react'
-
 import CIcon from '@coreui/icons-react'
-import { cilChevronRight, cilInfo } from '@coreui/icons'
-import axios from "axios";
+import { cilChevronRight } from '@coreui/icons'
+import { getOrders, statusOrder } from "../../services/OrdersService.js";
+import { getCart } from "../../services/CartService.js";
 
 const Carta = () => {
     
@@ -33,41 +31,13 @@ const Carta = () => {
     const [cart, setCart] = useState([]);
 
     useEffect(() => {
-        getOrders();
+        getOrders(setOrders);
     }, []);
 
     function handlerButton(tableID) {
         setVisible(!visible);
-        getCart(tableID);
+        getCart(tableID, setCart);
     }
-
-    const getOrders = async () => {
-        const response = await axios.get('http://192.168.1.50:9000/getOrders', {
-        });
-        setOrders(response.data);
-        console.log(response.data)
-    }
-
-    const getCart = async (tableID) => {
-        const response = await axios.get('http://192.168.1.50:9000/getCart?mesa='+tableID, {
-        });
-        setCart(response.data);
-        console.log(response.data)
-      }
-    
-    const statusOrder = async (tableID) => {
-        try {
-            await axios.post('http://192.168.1.50:9000/statusOrder', {
-                id: tableID
-            });
-            window.location.reload();
-        } catch (error) {
-            if (error.response) {
-                setMsg(error.response.data.msg);
-            }
-        }
-    }
-    
 
   return (
     <>

@@ -55,7 +55,7 @@ router.post('/addSection', addSection);
 router.get('/getSections', getSections); 
 router.post('/getSection', getSection); 
 router.post('/deleteSection', deleteSection);
-router.post('modifySection', modifySection) 
+router.post('/modifySection', modifySection) 
 
 // Cart DB
 router.post('/addProductToCart', addProductToCart);
