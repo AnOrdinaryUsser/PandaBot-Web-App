@@ -41,7 +41,7 @@ export const getOrder = async(req, res) => {
         const order = await Order.findOne({ where: {tableId: tableID } });
         res.json(order);
     } catch (error) {
-        console.log(error);
+         res.json(error);
     }
 }
 

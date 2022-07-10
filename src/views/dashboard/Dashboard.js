@@ -1,44 +1,44 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 import {
-    CAvatar,
-    CButton,
-    CButtonGroup,
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
-    CCol,
-    CFormInput,
-    CFormOuput,
-    CProgress,
-    CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-    CContainer,
-    CForm,
-    CFormSelect,
-    CFormCheck,
-  } from "@coreui/react";
+  CAvatar,
+  CButton,
+  CButtonGroup,
+  CCard,
+  CCardBody,
+  CCardFooter,
+  CCardHeader,
+  CCol,
+  CFormInput,
+  CFormOuput,
+  CProgress,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CContainer,
+  CForm,
+  CFormSelect,
+  CFormCheck,
+} from "@coreui/react";
+import { modifyUser } from "../../services/UsersService.js";
 
 const Dashboard = () => {
-  const [name, setName] = useState('');
-  const [id, setId] = useState('');
-  const [email, setEmail] = useState('');
-  const [token, setToken] = useState('');
-  const [expire, setExpire] = useState('');
+  const [name, setName] = useState("");
+  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
+  const [expire, setExpire] = useState("");
   const [user, setUser] = useState([]);
-  const [visibility, setVisibility] = useState(true)
+  const [visibility, setVisibility] = useState(true);
   const navigate = useNavigate();
-  const [validated, setValidated] = useState(false)
-
+  const [validated, setValidated] = useState(false);
 
   const [show, setShow] = useState(true);
   const [edit, setEdit] = useState(false);
@@ -50,79 +50,59 @@ const Dashboard = () => {
     console.log(show);
   };
 
-
   useEffect(() => {
-      refreshToken();
+    refreshToken();
   }, []);
 
   const refreshToken = async () => {
-      try {
-          const response = await axios.get('http://192.168.1.50:9000/token');
-          setToken(response.data.accessToken);
-          console.log(response)
-          const decoded = jwt_decode(response.data.accessToken);
-          setId(decoded.id);
-          setName(decoded.name);
-          setEmail(decoded.email);
-          setExpire(decoded.exp);
-      } catch (error) {
-          if (error.response) {
-              navigate("/");
-          }
+    try {
+      const response = await axios.get("http://192.168.1.50:9000/token");
+      setToken(response.data.accessToken);
+      console.log(response);
+      const decoded = jwt_decode(response.data.accessToken);
+      setId(decoded.id);
+      setName(decoded.name);
+      setEmail(decoded.email);
+      setExpire(decoded.exp);
+    } catch (error) {
+      if (error.response) {
+        navigate("/");
       }
-  }
+    }
+  };
 
   const axiosJWT = axios.create();
 
-  axiosJWT.interceptors.request.use(async (config) => {
+  axiosJWT.interceptors.request.use(
+    async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-          const response = await axios.get('http://192.168.1.50:9000/token');
-          config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-          setToken(response.data.accessToken);
-          const decoded = jwt_decode(response.data.accessToken);
-          setName(decoded.name);
-          setExpire(decoded.exp);
+        const response = await axios.get("http://192.168.1.50:9000/token");
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+        setToken(response.data.accessToken);
+        const decoded = jwt_decode(response.data.accessToken);
+        setName(decoded.name);
+        setExpire(decoded.exp);
       }
       return config;
-  }, (error) => {
+    },
+    (error) => {
       return Promise.reject(error);
-  });
-
-
-  const modifyUser = async (e, name) => {
-    const form = e.currentTarget
-
-    if (form.checkValidity() === false) {
-      e.preventDefault()
-      e.stopPropagation()
     }
-    setValidated(true)
-    e.preventDefault();
-
-    try {
-      await axios.post('http://192.168.1.50:9000/modifyUser', {
-          username: name,
-          name: nombre.value,
-          email: emailInput.value,
-          password: pass.value,
-      });
-      //window.location.reload();
-  } catch (error) {
-      if (error.response) {
-          setMsg(error.response.data.msg);
-      }
-  }
-  }
+  );
 
   return (
     <>
-          <h1 className='mb-4'>Bienvenido de nuevo: {name}</h1>
-          <h2 className='mb-4'>Mis datos</h2>
-          <CContainer>
+      <h1 className="mb-4">Bienvenido de nuevo: {name}</h1>
+      <h2 className="mb-4">Mis datos</h2>
+      <CContainer>
         <CRow>
           <CCol md={20} lg={20} xl={6}>
-            <CForm className="row g-4" validated={validated} onSubmit={(e) => modifyUser(e,name)}>
+            <CForm
+              className="row g-4"
+              validated={validated}
+              onSubmit={(e) => modifyUser(e, name, setValidated)}
+            >
               <CCol md={6}>
                 <CFormInput
                   type="text"
@@ -156,8 +136,8 @@ const Dashboard = () => {
               <CCol md={12}>
                 {show && (
                   <CButton
-                    color="secondary" 
-                    style={{color:"white"}}
+                    color="secondary"
+                    style={{ color: "white" }}
                     aria-pressed="true"
                     onClick={buttonHandler}
                   >
@@ -188,8 +168,8 @@ const Dashboard = () => {
           <p className="mb-4"></p>
         </CRow>
       </CContainer>
-      </>
-  )
-}
+    </>
+  );
+};
 
-export default Dashboard
+export default Dashboard;

@@ -80,7 +80,7 @@ const Login = () => {
   let totalPrice = 0;
   
   useEffect(() => {
-      getOrder();
+      if(getOrder() == null) {}
       getProducts();
       getSections();
   }, []);
@@ -166,9 +166,8 @@ const Login = () => {
     console.log(response.data)
   }
 
-  console.log(order.tableId)
-  
-  if (order.tableId === tableID) {
+  console.log(order.tableID)
+  if (order.tableId == tableID || order.tableID !=  "undefined") {
     return (
       <>
       <h1>Text Example</h1>

@@ -25,9 +25,7 @@ import {
   CTabPane,
   CTabContent,
 } from "@coreui/react";
-import { useNavigate } from "react-router-dom";
 import { MultiSelect } from "react-multi-select-component";
-import axios from "axios";
 import {
   getProducts,
   getProduct,
@@ -76,98 +74,6 @@ const Carta = () => {
     setVisibleModify(!visibleModify);
     getProduct(productID, setProduct);
   }
-
-  /* const modifyProduct = async (e, productID) => {
-    const form = e.currentTarget
-
-    if (form.checkValidity() === false) {
-      e.preventDefault()
-      e.stopPropagation()
-    }
-    setValidated(true)
-
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("fileName", fileName);
-    console.log(formData.get("fileName"))
-
-    try {
-      const res = await axios.post(
-        "http://192.168.1.50:9000/uploadImg",
-        formData
-      );
-      console.log(res);
-    } catch (ex) {
-      console.log(ex);
-    }
-
-    try {
-      await axios.post('http://192.168.1.50:9000/modifyProduct', {
-          id: productID,
-          name: productName.value,
-          description: descp.value,
-          price: price.value,
-          allergens: JSON.stringify(selected),
-          img:formData.get("fileName"),
-          section: section.value
-      });
-      window.location.reload();
-  } catch (error) {
-      if (error.response) {
-          setMsg(error.response.data.msg);
-      }
-  }
-  } */
-
-  /* const addProduct = async (e) => {
-    const form = e.currentTarget
-
-    if (form.checkValidity() === false) {
-      e.preventDefault()
-      e.stopPropagation()
-    }
-    setValidated(true)
-
-    e.preventDefault();
-
-
-    //////////////
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("fileName", fileName);
-    console.log(formData.get("fileName"))
-    //////////////
-
-    try {
-      const res = await axios.post(
-        "http://192.168.1.50:9000/uploadImg",
-        formData
-      );
-      console.log(res);
-    } catch (ex) {
-      console.log(ex);
-    }
-
-
-
-    try {
-        await axios.post('http://192.168.1.50:9000/addProduct', {
-          name: productName.value,
-          description: descp.value,
-          price: price.value,
-          allergens: JSON.stringify(selected),
-          img:formData.get("fileName"),
-          section: section.value
-        });
-        window.location.reload();
-    } catch (error) {
-        if (error.response) {
-            setMsg(error.response.data.msg);
-        }
-    }
-} */
 
   return (
     <>
@@ -310,7 +216,7 @@ const Carta = () => {
                 <CForm
                   className="mb-4"
                   validated={validated}
-                  onSubmit={addProduct}
+                  onSubmit={(e) => addProduct(e,setValidated, file, fileName)}
                 >
                   <CRow className="mb-3">
                     <CFormLabel
@@ -437,7 +343,7 @@ const Carta = () => {
                 <CForm
                   className="mb-4"
                   validated={validated}
-                  onSubmit={(e) => modifyProduct(e, product.id)}
+                  onSubmit={(e) => modifyProduct(e, product.id, setValidated, file, fileName)}
                 >
                   <CRow className="mb-3">
                     <CFormLabel

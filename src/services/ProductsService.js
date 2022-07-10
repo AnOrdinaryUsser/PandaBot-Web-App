@@ -34,7 +34,7 @@ import axios from "axios";
   }
   }
 
-  export const modifyProduct = async (e, productID) => {
+  export const modifyProduct = async (e, productID, setValidated, file, fileName) => {
     const form = e.currentTarget
 
     if (form.checkValidity() === false) {
@@ -51,23 +51,19 @@ import axios from "axios";
     console.log(formData.get("fileName"))
 
     try {
-      const res = await axios.post(
+     /*  const res = await axios.post(
         "http://192.168.1.50:9000/uploadImg",
         formData
       );
-      console.log(res);
-    } catch (ex) {
-      console.log(ex);
-    }
-
-    try {
+      console.log(res) */
+      console.log("AAAAAAAAAAAAAAAAAAAA")
       await axios.post('http://192.168.1.50:9000/modifyProduct', {
           id: productID,
           name: productName.value,
           description: descp.value,
           price: price.value,
           allergens: JSON.stringify(selected),
-          img:formData.get("fileName"),
+          img:"mierda",
           section: section.value
       });
       window.location.reload();
@@ -78,7 +74,7 @@ import axios from "axios";
   }
   }
   
-  export const addProduct = async (e) => {
+  export const addProduct = async (e, setValidated, file, fileName) => {
     const form = e.currentTarget
 
     if (form.checkValidity() === false) {
@@ -106,9 +102,6 @@ import axios from "axios";
     } catch (ex) {
       console.log(ex);
     }
-
-
-
     try {
         await axios.post('http://192.168.1.50:9000/addProduct', {
           name: productName.value,

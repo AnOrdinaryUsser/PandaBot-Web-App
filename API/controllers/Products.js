@@ -49,14 +49,15 @@ export const addProduct = async(req, res) => {
 
 export const modifyProduct = async(req, res) => {
     const { id, name , description , price , allergens, img , section } = req.body;
+    console.log("AAAAAAAAAAAAAA")
+    console.log("ID: " + id)
     try {
-        console.log(section)
+        console.log("AAAAAAAAAAAAAA")
         const product = await Products.findOne({
             where: {
                 id: id,
             }
         })
-        console.log(section)
         const section_id = await Sections.findOne({
             where: {
                 name: section,
