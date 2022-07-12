@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 import {
   CButton,
   CCol,
@@ -34,6 +36,7 @@ import {
   addProduct,
   saveFile,
 } from "../../services/ProductsService.js";
+import { refreshToken } from "../../services/UsersService.js";
 import { getSections } from "../../services/SectionsService.js";
 const options = [
   { label: "Pescado", value: "pescado" },
@@ -54,6 +57,8 @@ const options = [
 ];
 
 const Carta = () => {
+  const [token, setToken] = useState("");
+  const [expire, setExpire] = useState("");
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState([]);
   const [sections, setSections] = useState([]);
@@ -66,6 +71,7 @@ const Carta = () => {
   const [visibleModify, setVisibleModify] = useState(false);
 
   useEffect(() => {
+    refreshToken(setToken, setExpire);
     getProducts(setProducts);
     getSections(setSections);
   }, []);
@@ -74,6 +80,25 @@ const Carta = () => {
     setVisibleModify(!visibleModify);
     getProduct(productID, setProduct);
   }
+
+  const axiosJWT = axios.create();
+
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      const currentDate = new Date();
+      if (expire * 1000 < currentDate.getTime()) {
+        const response = await axios.get("http://192.168.1.50:9000/token");
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+        setToken(response.data.accessToken);
+        const decoded = jwt_decode(response.data.accessToken);
+        setExpire(decoded.exp);
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   return (
     <>
@@ -153,7 +178,7 @@ const Carta = () => {
                                     fluid
                                     className="clearfix"
                                     src={
-                                      "http://192.168.1.128:9000/public/images/" +
+                                      "http://192.168.1.50:9000/public/images/" +
                                       product.img
                                     }
                                     width={200}
@@ -293,7 +318,6 @@ const Carta = () => {
                     </CFormLabel>
                     <CCol sm={10}>
                       <CFormSelect id="section" required>
-                        <option>Escoja una sección</option>
                         {sections.map((section, index) => {
                           return (
                             <>
@@ -420,7 +444,6 @@ const Carta = () => {
                     </CFormLabel>
                     <CCol sm={10}>
                       <CFormSelect id="section" required>
-                        <option>Escoja una sección</option>
                         {sections.map((section, index) => {
                           return (
                             <>

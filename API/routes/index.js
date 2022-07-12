@@ -7,7 +7,7 @@ import { refreshToken } from "../controllers/RefreshToken.js";
 import multer from 'multer';
 import path from 'path';
 import { addSection, getSections, getSection, deleteSection, modifySection } from "../controllers/Sections.js";
-import { addProductToCart, destroyCart, destroyProductCart, getCart } from "../controllers/Cart.js";
+import { addProductToCart, cancelOrder, destroyCart, destroyProductCart, getCart } from "../controllers/Cart.js";
 import { addOrder, getOrders, statusOrder, getOrder } from "../controllers/Order.js";
 import { recoverPassword, resetPassword } from "../controllers/Mail.js";
  
@@ -61,6 +61,7 @@ router.post('/modifySection', modifySection)
 router.post('/addProductToCart', addProductToCart);
 router.post('/destroyProductCart', destroyProductCart);
 router.post('/destroyCart', destroyCart);
+router.post('/cancelOrder', cancelOrder);
 router.get('/getCart', getCart);
 
 // Order DB

@@ -18,6 +18,7 @@ export const addOrder = async(req, res) => {
                 price: totalPrice,
                 tableId: id,
             })
+            
         }
         res.json({msg: "Order added!"});
     } catch (error) {
@@ -49,22 +50,21 @@ export const statusOrder = async(req, res) => {
     const { id } = req.body;
     try {
         //Check if table & product exits
-        const cart = await Order.findOne({ where: {id: id } });
-        if (cart === null) {
+        const order = await Order.findOne({ where: {id: id } });
+        if (order === null) {
             console.log('Order not found!')
         } else {
-            if (cart.status === "En curso") {
+            if (order.status === "En curso") {
                 await Order.update({
                     status: "Enviado",
                 }, {where: {status: "En curso", id: id}})
-            } else if (cart.status === "Enviado") {
+            } else if (order.status === "Enviado") {
                 await Order.update({
                     status: "Pagado",
                 }, {where: {status: "Enviado", id: id}})
-            } else if (cart.status === "Pagado") {
-                await Order.update({
-                    status: "Terminado",
-                }, {where: {status: "Pagado", id: id}})
+            } else if (order.status === "Pagado") {
+                await Order.destroy({where: {status: "Pagado", id: id}})
+                await Cart.destroy({ where: {tableId: order.tableId } });
             }
         }
         res.json({msg: "Order updated!"});

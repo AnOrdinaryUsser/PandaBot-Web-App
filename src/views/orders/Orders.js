@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 import {
   CButton,
   CCol,
@@ -23,13 +25,17 @@ import CIcon from "@coreui/icons-react";
 import { cilChevronRight } from "@coreui/icons";
 import { getOrders, statusOrder } from "../../services/OrdersService.js";
 import { getCart } from "../../services/CartService.js";
+import { refreshToken } from "../../services/UsersService.js";
 
 const Carta = () => {
+  const [token, setToken] = useState("");
+  const [expire, setExpire] = useState("");
   const [visible, setVisible] = useState(false);
   const [orders, setOrders] = useState([]);
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
+    refreshToken(setToken, setExpire);
     getOrders(setOrders);
   }, []);
 
@@ -37,6 +43,26 @@ const Carta = () => {
     setVisible(!visible);
     getCart(tableID, setCart);
   }
+
+  const axiosJWT = axios.create();
+
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      const currentDate = new Date();
+      if (expire * 1000 < currentDate.getTime()) {
+        const response = await axios.get("http://192.168.1.50:9000/token");
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+        setToken(response.data.accessToken);
+        const decoded = jwt_decode(response.data.accessToken);
+        setName(decoded.name);
+        setExpire(decoded.exp);
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
   return (
     <>

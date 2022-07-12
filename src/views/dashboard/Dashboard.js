@@ -1,45 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
-
 import {
-  CAvatar,
   CButton,
-  CButtonGroup,
-  CCard,
-  CCardBody,
-  CCardFooter,
-  CCardHeader,
   CCol,
   CFormInput,
-  CFormOuput,
-  CProgress,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
   CContainer,
   CForm,
-  CFormSelect,
-  CFormCheck,
 } from "@coreui/react";
-import { modifyUser } from "../../services/UsersService.js";
+import { refreshToken, modifyUser } from "../../services/UsersService.js";
 
 const Dashboard = () => {
   const [name, setName] = useState("");
-  const [id, setId] = useState("");
   const [email, setEmail] = useState("");
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
-  const [user, setUser] = useState([]);
   const [visibility, setVisibility] = useState(true);
-  const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
-
   const [show, setShow] = useState(true);
   const [edit, setEdit] = useState(false);
 
@@ -51,25 +29,8 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    refreshToken();
+    refreshToken(setToken, setExpire, setName, setEmail);
   }, []);
-
-  const refreshToken = async () => {
-    try {
-      const response = await axios.get("http://192.168.1.128:9000/token");
-      setToken(response.data.accessToken);
-      console.log(response);
-      const decoded = jwt_decode(response.data.accessToken);
-      setId(decoded.id);
-      setName(decoded.name);
-      setEmail(decoded.email);
-      setExpire(decoded.exp);
-    } catch (error) {
-      if (error.response) {
-        navigate("/");
-      }
-    }
-  };
 
   const axiosJWT = axios.create();
 
@@ -77,7 +38,7 @@ const Dashboard = () => {
     async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get("http://192.168.1.128:9000/token");
+        const response = await axios.get("http://192.168.1.50:9000/token");
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);

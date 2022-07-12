@@ -3,7 +3,7 @@ const app = express()
 const port = 10000
 const rosnodejs = require('rosnodejs')
 const cors = require ("cors")
-app.use(cors({ credentials:true, origin:'http://192.168.1.128:3000' }))
+app.use(cors({ credentials:true, origin:'http://192.168.1.50:3000' }))
 
 
 

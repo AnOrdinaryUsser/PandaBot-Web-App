@@ -1,5 +1,6 @@
-import React, { useState, useEffect} from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 import {
   CButton,
   CCol,
@@ -8,10 +9,8 @@ import {
   CForm,
   CFormInput,
 } from "@coreui/react";
-
-import { useNavigate } from 'react-router-dom';
-import axios from "axios";
-import { addTable} from "../../services/TablesService.js";
+import { addTable } from "../../services/TablesService.js";
+import { refreshToken } from "../../services/UsersService.js";
 
 function init() {
   // Connect to ROS.
@@ -95,61 +94,47 @@ function init() {
 }
 
 const Map = () => {
-
-  const [token, setToken] = useState('');
-  const [expire, setExpire] = useState('');
-  const navigate = useNavigate();
+  const [token, setToken] = useState("");
+  const [expire, setExpire] = useState("");
+  const [validated, setValidated] = useState(false);
 
   useEffect(() => {
-      refreshToken();
-      init();
+    refreshToken(setToken, setExpire);
+    init();
   }, []);
-
-  const [validated, setValidated] = useState(false)
-
-  const refreshToken = async () => {
-      try {
-          const response = await axios.get('http://192.168.1.128:9000/token');
-          setToken(response.data.accessToken);
-          console.log(response)
-          const decoded = jwt_decode(response.data.accessToken);
-          setName(decoded.name);
-          setExpire(decoded.exp);
-      } catch (error) {
-          if (error.response) {
-              navigate("/");
-          }
-      }
-  }
 
   const axiosJWT = axios.create();
 
-  axiosJWT.interceptors.request.use(async (config) => {
+  axiosJWT.interceptors.request.use(
+    async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-          const response = await axios.get('http://192.168.1.128:9000/token');
-          config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-          setToken(response.data.accessToken);
-          const decoded = jwt_decode(response.data.accessToken);
-          setName(decoded.name);
-          setExpire(decoded.exp);
+        const response = await axios.get("http://192.168.1.50:9000/token");
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+        setToken(response.data.accessToken);
+        const decoded = jwt_decode(response.data.accessToken);
+        setName(decoded.name);
+        setExpire(decoded.exp);
       }
       return config;
-  }, (error) => {
+    },
+    (error) => {
       return Promise.reject(error);
-  });
+    }
+  );
 
-return (
+  return (
     <>
       <CContainer fluid>
         <h2 className="mb-4">Añade una mesa</h2>
         <CForm
-        validated={validated}
-        onSubmit={(e) => addTable(e, setValidated)}>
-        <CRow>
-          <CCol xs={4}>
-            <CRow>
-              <p>Numero de mesa:</p>
+          validated={validated}
+          onSubmit={(e) => addTable(e, setValidated)}
+        >
+          <CRow>
+            <CCol xs={4}>
+              <CRow>
+                <p>Numero de mesa:</p>
                 <div className="mb-3">
                   <CFormInput
                     type="number"
@@ -159,31 +144,51 @@ return (
                     required
                   />
                 </div>
-            </CRow>
-            <CRow>
-              <p>Nº. de sitios:</p>
-              <CCol xs="auto">
-                <CButton className="mb-4" color="dark" id="-">-</CButton>
-              </CCol>
-              <CCol xs={3}>
-                  <CFormInput className="text-center" id="seats" placeholder="-" min={1} pattern="[0-9]*" required/>
-              </CCol>
-              <CCol xs="auto">
-                <CButton className="mb-4" color="dark" id="+">+</CButton>
-              </CCol>
-            </CRow>
-            <CRow className="mb-4">
-              <CCol xs={{ span: 4 }}>
-                <div>
-                  <CButton type="submit" style={{backgroundColor: "#3a8cbe", borderColor: "#3a8cbe"}} className="mb-4">Añadir mesa</CButton>
-                </div>
-              </CCol>
-            </CRow>
-          </CCol>
-          <CCol xs={8}>
-            <div id="map" width="640" height="480"></div>
-          </CCol>
-        </CRow>
+              </CRow>
+              <CRow>
+                <p>Nº. de sitios:</p>
+                <CCol xs="auto">
+                  <CButton className="mb-4" color="dark" id="-">
+                    -
+                  </CButton>
+                </CCol>
+                <CCol xs={3}>
+                  <CFormInput
+                    className="text-center"
+                    id="seats"
+                    placeholder="-"
+                    min={1}
+                    pattern="[0-9]*"
+                    required
+                  />
+                </CCol>
+                <CCol xs="auto">
+                  <CButton className="mb-4" color="dark" id="+">
+                    +
+                  </CButton>
+                </CCol>
+              </CRow>
+              <CRow className="mb-4">
+                <CCol xs={{ span: 4 }}>
+                  <div>
+                    <CButton
+                      type="submit"
+                      style={{
+                        backgroundColor: "#3a8cbe",
+                        borderColor: "#3a8cbe",
+                      }}
+                      className="mb-4"
+                    >
+                      Añadir mesa
+                    </CButton>
+                  </div>
+                </CCol>
+              </CRow>
+            </CCol>
+            <CCol xs={8}>
+              <div id="map" width="640" height="480"></div>
+            </CCol>
+          </CRow>
         </CForm>
       </CContainer>
     </>

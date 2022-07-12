@@ -1,14 +1,14 @@
 import axios from "axios";
 
     export const getSections = async (setSections) => {
-        const response = await axios.get('http://192.168.1.128:9000/getSections', {
+        const response = await axios.get('http://192.168.1.50:9000/getSections', {
         });
         setSections(response.data);
         console.log(response.data)
     }
 
     export const getSection = async (sectionID, setSection) => {
-        const response = await axios.post("http://192.168.1.128:9000/getSection", {
+        const response = await axios.post("http://192.168.1.50:9000/getSection", {
           id: sectionID,
         });
         setSection(response.data);
@@ -17,7 +17,7 @@ import axios from "axios";
 
     export const deleteSection = async (e) => {
         try {
-          await axios.post('http://192.168.1.128:9000/deleteSection', {
+          await axios.post('http://192.168.1.50:9000/deleteSection', {
             id: e.currentTarget.id,
           });
           window.location.reload();
@@ -38,7 +38,7 @@ import axios from "axios";
       setValidated(true)
       e.preventDefault();
       try {
-        await axios.post('http://192.168.1.128:9000/addSection', {
+        await axios.post('http://192.168.1.50:9000/addSection', {
             name: sectionInput.value,
         });
         window.location.reload();
@@ -61,7 +61,7 @@ import axios from "axios";
       e.preventDefault();
 
       try {
-      await axios.post('http://192.168.1.128:9000/modifySection', {
+      await axios.post('http://192.168.1.50:9000/modifySection', {
           id: sectionID,
           name: sectionInputModify.value,
       });

@@ -44,7 +44,7 @@ const Login = () => {
     console.log(JSONdata)
 
     // Make a fetch
-    fetch('http://192.168.1.128:9000/login', {
+    fetch('http://192.168.1.50:9000/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ const Login = () => {
     const {user, password} = e.target.elements
     e.preventDefault();
     try {
-        await axios.post('http://192.168.1.128:9000/login', {
+        await axios.post('http://192.168.1.50:9000/login', {
           
             user: user.value,
             password: password.value

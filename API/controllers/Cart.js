@@ -1,6 +1,7 @@
 import Tables from "../models/TableModel.js";
 import Products from "../models/ProductModel.js";
 import Cart from "../models/CartModel.js";
+import Order from "../models/OrderModel.js";
 import { Op } from "sequelize";
 
 export const addProductToCart = async(req, res) => {
@@ -98,3 +99,21 @@ export const getCart = async(req, res) => {
     }
 }
 
+export const cancelOrder = async(req, res) => {
+    const { tableID } = req.body;
+    try {
+        const cart = await Cart.findOne({ where: {tableId: tableID } });
+        if(cart === null)
+            console.log('Cart not found!')
+        const order = await Order.findOne({ where: {tableId: tableID } });
+        if(order === null)
+            console.log('Order not found!')
+        if (cart != null && order != null) {
+            await Cart.destroy({where: {tableId: tableID}})
+            await Order.destroy({where: {tableId: tableID}})
+        }
+        res.json({msg: "Order cancel"});
+    } catch (error) {
+        console.log(error);
+    }
+}
