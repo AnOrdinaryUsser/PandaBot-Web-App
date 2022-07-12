@@ -36,7 +36,7 @@ const Register = () => {
         setValidated(true)
     
         try {
-          await axios.post('http://192.168.1.50:9000/resetPassword', {
+          await axios.post('http://192.168.1.128:9000/resetPassword', {
             token: token,
             pass: password.value
           });

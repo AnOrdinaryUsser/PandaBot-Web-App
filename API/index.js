@@ -18,7 +18,7 @@ const app = express();
 const { DataTypes } = Sequelize;
 const DB_PASSWORD = process.env.DB_PASSWORD
  
-app.use(cors({ credentials:true, origin:'http://192.168.1.50:3000' }));
+app.use(cors({ credentials:true, origin:'http://192.168.1.128:3000' }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(router);

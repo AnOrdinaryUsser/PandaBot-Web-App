@@ -68,6 +68,7 @@ import { getByPlaceholderText } from '@testing-library/react';
 import { faBookOpenReader } from '@fortawesome/free-solid-svg-icons';
 
 
+
 const Login = () => {
 
   const [productsList, setProductsList] = useState([]);
@@ -86,19 +87,19 @@ const Login = () => {
   }, []);
 
   const getProducts = async () => {
-    const response = await axios.get('http://192.168.1.50:9000/getProducts', {
+    const response = await axios.get('http://192.168.1.128:9000/getProducts', {
     });
     setProductsList(response.data);
     console.log(response.data)
   }
   const getSections = async () => {
-    const response = await axios.get('http://192.168.1.50:9000/getSections', {
+    const response = await axios.get('http://192.168.1.128:9000/getSections', {
     });
     setSections(response.data);
     console.log(response.data)
   }
   const getCart = async () => {
-    const response = await axios.get('http://192.168.1.50:9000/getCart?mesa='+tableID, {
+    const response = await axios.get('http://192.168.1.128:9000/getCart?mesa='+tableID, {
     });
     setCart(response.data);
     console.log(response.data)
@@ -111,12 +112,13 @@ const Login = () => {
 
   const queryParams = new URLSearchParams(window.location.search);
   const tableID = queryParams.get('mesa');
+  console.log(tableID)
 
   const addProductToCart = async (e, productID) => {
     e.stopPropagation();
     console.log("tableID: " + tableID + " productID: " + productID)
     try {
-          await axios.post('http://192.168.1.50:9000/addProductToCart', {
+          await axios.post('http://192.168.1.128:9000/addProductToCart', {
             tableID: tableID,
             productID: productID,
         });
@@ -131,7 +133,7 @@ const Login = () => {
     e.stopPropagation();
     console.log("tableID: " + tableID + " productID: " + productID)
     try {
-          await axios.post('http://192.168.1.50:9000/destroyProductCart', {
+          await axios.post('http://192.168.1.128:9000/destroyProductCart', {
             tableID: tableID,
             productID: productID,
         });
@@ -147,7 +149,7 @@ const Login = () => {
     e.stopPropagation();
     console.log("totalPrice: " + totalPrice + "mesa: " + id)
     try {
-          await axios.post('http://192.168.1.50:9000/addOrder', {
+          await axios.post('http://192.168.1.128:9000/addOrder', {
             totalPrice: totalPrice,
             id: id,
         });
@@ -159,18 +161,38 @@ const Login = () => {
   }
 
   const getOrder = async () => {
-    const response = await axios.post('http://192.168.1.50:9000/getOrder', {
+    const response = await axios.post('http://192.168.1.128:9000/getOrder', {
       tableID: tableID,
     });
     setOrder(response.data);
     console.log(response.data)
   }
-
-  console.log(order.tableID)
-  if (order.tableId == tableID || order.tableID !=  "undefined") {
+  console.log(order)
+  if (order != null) {
     return (
       <>
-      <h1>Text Example</h1>
+      <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+      <CContainer>
+        <CRow className="justify-content-center">
+          <CCol md={9} lg={7} xl={6}>
+                  <h1 className='text-center mb-3'>Ya se ha realizado un pedido para esta mesa</h1>
+                  <p className='text-center mb-3'>Si quiere realizar otro pedido, deberá eliminar el pedido actual o esperar a finalizar el pedido actual</p>
+                  <div className="d-grid gap-2 d-md-flex justify-content-center mb-4">
+                    <Link to="/ticket">
+                      <CButton color="secondary" aria-pressed="true">Ver pedido</CButton>
+                    </Link>
+                  </div>
+          </CCol>
+        </CRow>
+        <CRow className="justify-content-center">
+          <CCol md={9} lg={7} xl={6}> 
+          <div className="d-grid gap-2 d-md-flex justify-content-center">
+            <CButton color="danger" aria-pressed="true">Cancelar pedido</CButton>
+          </div>
+          </CCol>
+        </CRow>
+      </CContainer>
+    </div>
       </>
     )
   } else {
@@ -215,7 +237,7 @@ const Login = () => {
                       <CCard className="justify-content-center mb-4">
                         <CRow className='g-0'>
                         <CCol md={4}>
-                          <CCardImage align='center' className="clearfix" src={"http://192.168.1.50:9000/public/images/" + product.img} />
+                          <CCardImage align='center' className="clearfix" src={"http://192.168.1.128:9000/public/images/" + product.img} />
                         </CCol>
                         <CCol md={8}>
                               <CCardBody>
@@ -314,7 +336,7 @@ const Login = () => {
                 <CCard className="mb-3">
                    <CRow className="g-0">
                      <CCol md={4}>
-                       <CCardImage src={"http://192.168.1.50:9000/public/images/" + product["products.img"]} />
+                       <CCardImage src={"http://192.168.1.128:9000/public/images/" + product["products.img"]} />
                      </CCol>
                      <CCol md={8}>
                        <CCardBody>

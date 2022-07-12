@@ -36,10 +36,10 @@ const Register = () => {
         setValidated(true)
     
         try {
-          await axios.post('http://192.168.1.50:9000/recoverPassword', {
+          await axios.post('http://192.168.1.128:9000/recoverPassword', {
             email: email.value
           });
-          window.location.replace("http://192.168.1.50:3000/SentEmail");
+          window.location.replace("http://192.168.1.128:3000/SentEmail");
           //navigate("/")
       } catch (error) {
           if (error.response) {

@@ -153,7 +153,7 @@ const Carta = () => {
                                     fluid
                                     className="clearfix"
                                     src={
-                                      "http://192.168.1.50:9000/public/images/" +
+                                      "http://192.168.1.128:9000/public/images/" +
                                       product.img
                                     }
                                     width={200}
@@ -216,7 +216,7 @@ const Carta = () => {
                 <CForm
                   className="mb-4"
                   validated={validated}
-                  onSubmit={(e) => addProduct(e,setValidated, file, fileName)}
+                  onSubmit={(e) => addProduct(e,setValidated, file, fileName, selected)}
                 >
                   <CRow className="mb-3">
                     <CFormLabel
@@ -343,7 +343,7 @@ const Carta = () => {
                 <CForm
                   className="mb-4"
                   validated={validated}
-                  onSubmit={(e) => modifyProduct(e, product.id, setValidated, file, fileName)}
+                  onSubmit={(e) => modifyProduct(e, product.id, setValidated, file, fileName, selected)}
                 >
                   <CRow className="mb-3">
                     <CFormLabel

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const refreshToken = async (setToken, setExpire) => {
   try {
-    const response = await axios.get("http://192.168.1.50:9000/token");
+    const response = await axios.get("http://192.168.1.128:9000/token");
     setToken(response.data.accessToken);
     setExpire(decoded.exp);
     console.log(response);
@@ -15,7 +15,7 @@ export const refreshToken = async (setToken, setExpire) => {
 };
 
 export const getUsers = async (setUsers, token, axiosJWT) => {
-  const response = await axiosJWT.get("http://192.168.1.50:9000/users", {
+  const response = await axiosJWT.get("http://192.168.1.128:9000/users", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -25,7 +25,7 @@ export const getUsers = async (setUsers, token, axiosJWT) => {
 
 export const deleteUser = async (e) => {
   try {
-    await axios.post("http://192.168.1.50:9000/deleteUser", {
+    await axios.post("http://192.168.1.128:9000/deleteUser", {
       id: e.currentTarget.id,
     });
     window.location.reload();
@@ -46,7 +46,7 @@ export const addUser = async (e, setValidated) => {
 
   e.preventDefault();
   try {
-    await axios.post("http://192.168.1.50:9000/users", {
+    await axios.post("http://192.168.1.128:9000/users", {
       name: user.value,
       email: email.value,
       password: pass.value,
@@ -71,7 +71,7 @@ export const modifyUser = async (e, name, setValidated) => {
   e.preventDefault();
 
   try {
-    await axios.post("http://192.168.1.50:9000/modifyUser", {
+    await axios.post("http://192.168.1.128:9000/modifyUser", {
       username: name,
       name: nombre.value,
       email: emailInput.value,
