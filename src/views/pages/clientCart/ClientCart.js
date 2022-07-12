@@ -102,7 +102,11 @@ const Login = () => {
             <CRow className="justify-content-center">
               <CCol md={9} lg={7} xl={6}>
                 <div className="d-grid gap-2 d-md-flex justify-content-center">
-                  <CButton color="danger" aria-pressed="true" onClick={() => cancelOrder(tableID)}>
+                  <CButton
+                    color="danger"
+                    aria-pressed="true"
+                    onClick={() => cancelOrder(tableID)}
+                  >
                     Cancelar pedido
                   </CButton>
                 </div>
