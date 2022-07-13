@@ -6,6 +6,10 @@ import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/inde
 import { Sidebar } from '@coreui/coreui';
 import AppSidebarAdmin from 'src/components/AppSidebarAdmin';
 
+/**
+ * @component Default Layout
+ * @description Is a default layout for the views.
+ */
 const DefaultLayout = () => {
 
   const [name, setName] = useState('');
@@ -25,7 +29,7 @@ const DefaultLayout = () => {
 
   const refreshToken = async () => {
     try {
-        const response = await axios.get('http://192.168.1.50:9000/token');
+        const response = await axios.get('http://192.168.1.128:9000/token');
         setToken(response.data.accessToken);
         console.log(response)
         const decoded = jwt_decode(response.data.accessToken);
@@ -44,7 +48,7 @@ const axiosJWT = axios.create();
 axiosJWT.interceptors.request.use(async (config) => {
     const currentDate = new Date();
     if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get('http://192.168.1.50:9000/token');
+        const response = await axios.get('http://192.168.1.128:9000/token');
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);

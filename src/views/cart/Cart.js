@@ -56,7 +56,12 @@ const options = [
   { label: "Ninguno", value: "ninguno" },
 ];
 
-const Carta = () => {
+/**
+ * @description View for Cart
+ * This view will show the different sections and products that are in the system. You can also add, modify and delete a product.
+ * 
+ */
+const Cart = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
   const [products, setProducts] = useState([]);
@@ -87,7 +92,7 @@ const Carta = () => {
     async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get("http://192.168.1.50:9000/token");
+        const response = await axios.get("http://192.168.1.128:9000/token");
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);
@@ -178,7 +183,7 @@ const Carta = () => {
                                     fluid
                                     className="clearfix"
                                     src={
-                                      "http://192.168.1.50:9000/public/images/" +
+                                      "http://192.168.1.128:9000/public/images/" +
                                       product.img
                                     }
                                     width={200}
@@ -488,4 +493,4 @@ const Carta = () => {
   );
 };
 
-export default Carta;
+export default Cart;

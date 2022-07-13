@@ -1,7 +1,14 @@
+/**
+ * @file Controller to handle frontend tables requests
+ */
 import Users from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
- 
+
+/**
+ * Module to get all users
+ * @module getUsers
+ */
 export const getUsers = async(req, res) => {
     try {
         const users = await Users.findAll({
@@ -12,6 +19,10 @@ export const getUsers = async(req, res) => {
     }
 }
 
+/**
+ * Module to register an user
+ * @module Register
+ */
 export const Register = async(req, res) => {
     const { name, email, password, confPassword } = req.body;
     if(password !== confPassword) return res.status(400).json({msg: "Password and Confirm Password do not match"});
@@ -29,7 +40,11 @@ export const Register = async(req, res) => {
         console.log(error);
     }
 }
- 
+
+/**
+ * Module to login an user
+ * @module Login
+ */
 export const Login = async(req, res) => {
     try {
         const user = await Users.findAll({
@@ -63,7 +78,11 @@ export const Login = async(req, res) => {
         res.status(404).json({msg:"User not found"});
     }
 }
- 
+
+/**
+ * Module to logout an user
+ * @module Logout
+ */
 export const Logout = async(req, res) => {
     const refreshToken = req.cookies.refreshToken;
     if(!refreshToken) return res.sendStatus(204);
@@ -83,6 +102,10 @@ export const Logout = async(req, res) => {
     return res.sendStatus(200);
 }
 
+/**
+ * Module to modify data of an user
+ * @module modifyUser
+ */
 export const modifyUser = async(req, res) => {
     const { username, name, email, password } = req.body;
     console.log(req.body)
@@ -111,6 +134,10 @@ export const modifyUser = async(req, res) => {
     }
 }
 
+/**
+ * Module to delete an user
+ * @module deleteUser
+ */
 export const deleteUser = async(req, res) => {
     const { id } = req.body;
     try {

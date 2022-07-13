@@ -1,6 +1,13 @@
+/**
+ * @file Controller to handle frontend refresh of token requests
+ */
 import Users from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
- 
+
+/**
+ * Module to refresh a user session identifier
+ * @module refreshToken
+ */
 export const refreshToken = async(req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken;

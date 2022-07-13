@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: views/pages/clientCart/Ticket.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: views/pages/clientCart/Ticket.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  CButton,
+  CCol,
+  CRow,
+  CContainer,
+  CFormInput,
+  CCard,
+  CCardBody,
+  CCardImage,
+} from "@coreui/react";
+import { getCart } from "../../../services/CartService.js";
+
+/**
+ * @description View for Ticket
+ * In this view the user can see the order he/she has placed for that table or cancel it.
+ */
+const Ticket = () => {
+  const queryParams = new URLSearchParams(window.location.search);
+  const tableID = queryParams.get("mesa");
+
+  const URL = "/clientCart?mesa=" + tableID;
+
+  const [cart, setCart] = useState([]);
+  let totalPrice = 0;
+
+  useEffect(() => {
+    getCart(tableID, setCart);
+  }, []);
+
+  return (
+    &lt;>
+      &lt;div className="bg-light min-vh-100 d-flex flex-row justify-items-center">
+        &lt;CContainer className="justify-content-center mb-4">
+          &lt;h1>&lt;/h1>
+          &lt;h1 className="modal-title mb-4">
+            Ticket de la mesa número: {tableID}
+          &lt;/h1>
+          {cart.map((product, index) => {
+            totalPrice +=
+              product["products.cart.qty"] * product["products.price"];
+            return (
+              &lt;CRow className="justify-content-center mb-4" key={index}>
+                &lt;CCol xs={9}>
+                  &lt;CCard className="mb-3">
+                    &lt;CRow className="g-0">
+                      &lt;CCol md={4}>
+                        &lt;CCardImage
+                          src={
+                            "http://192.168.1.128:9000/public/images/" +
+                            product["products.img"]
+                          }
+                        />
+                      &lt;/CCol>
+                      &lt;CCol md={8}>
+                        &lt;CCardBody>
+                          &lt;h3>{product["products.name"]}&lt;/h3>
+                          &lt;h4 className="text-end">
+                            {product["products.price"]} €
+                          &lt;/h4>
+                        &lt;/CCardBody>
+                      &lt;/CCol>
+                    &lt;/CRow>
+                  &lt;/CCard>
+                &lt;/CCol>
+                &lt;CCol xs={3} className="justify-items-content">
+                  &lt;CFormInput
+                    className="text-center"
+                    value={product["products.cart.qty"]}
+                    disabled
+                  />
+                  &lt;p>&lt;/p>
+                &lt;/CCol>
+              &lt;/CRow>
+            );
+          })}
+          &lt;h3 className="mb-4">Total a pagar: {totalPrice} €&lt;/h3>
+          &lt;Link to={URL}>
+            &lt;CButton color="secondary" aria-pressed="true">
+              Volver
+            &lt;/CButton>
+          &lt;/Link>
+        &lt;/CContainer>
+      &lt;/div>
+    &lt;/>
+  );
+};
+
+export default Ticket;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-CartService.html">CartService</a></li><li><a href="module-MailService.html">MailService</a></li><li><a href="module-OrdersService.html">OrdersService</a></li><li><a href="module-ProductsService.html">ProductsService</a></li><li><a href="module-SectionsService.html">SectionsService</a></li><li><a href="module-TablesService.html">TablesService</a></li><li><a href="module-UsersService.html">UsersService</a></li></ul><h3>Classes</h3><ul><li><a href="AppBreadcrumb.html">AppBreadcrumb</a></li><li><a href="AppContent.html">AppContent</a></li><li><a href="AppFooter.html">AppFooter</a></li><li><a href="AppHeader.html">AppHeader</a></li><li><a href="AppSidebar.html">AppSidebar</a></li><li><a href="AppSidebarAdmin.html">AppSidebarAdmin</a></li><li><a href="DefaultLayout.html">DefaultLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdminDashboard">AdminDashboard</a></li><li><a href="global.html#Cart">Cart</a></li><li><a href="global.html#ClientCart">ClientCart</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#EnterMail">EnterMail</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Map">Map</a></li><li><a href="global.html#Orders">Orders</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#ResetPassword">ResetPassword</a></li><li><a href="global.html#Sections">Sections</a></li><li><a href="global.html#SentEmail">SentEmail</a></li><li><a href="global.html#Tables">Tables</a></li><li><a href="global.html#Ticket">Ticket</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jul 13 2022 12:39:16 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -5,6 +5,10 @@ import routes from '../routes'
 
 import { CBreadcrumb, CBreadcrumbItem } from '@coreui/react'
 
+/**
+ * @component AppBreadcrumb
+ * @description Component for navigation.
+ */
 const AppBreadcrumb = () => {
   const currentLocation = useLocation().pathname
 

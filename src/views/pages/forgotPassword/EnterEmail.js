@@ -13,6 +13,10 @@ import {
 import image from "./../../../assets/images/backgroundLogin.jpg";
 import { forgotPassword } from "../../../services/MailService.js"
 
+/**
+ * @description View for EnterMail
+ * In this view, the user enters his or her e-mail address in order to reset his or her password.
+ */
 const EnterMail = () => {
   const [validated, setValidated] = useState(false);
 

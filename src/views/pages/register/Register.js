@@ -14,6 +14,10 @@ import {
 import CIcon from "@coreui/icons-react";
 import { cilLockLocked, cilUser } from "@coreui/icons";
 
+/**
+ * @description View for Register
+ * In this view the user can register.
+ */
 const Register = () => {
   const [validated, setValidated] = useState(false);
 

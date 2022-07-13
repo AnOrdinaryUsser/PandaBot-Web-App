@@ -21,7 +21,8 @@
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand",
-    "docs": "jsdoc -c jsdoc.conf.json"
+    "docsFrontend": "jsdoc -c jsdoc.conf-frontend.json",
+    "docsBackend": "jsdoc -c jsdoc.conf-backend.json"
   },
   "config": {
     "coreui_library_short_version": "4.1"

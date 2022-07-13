@@ -1,9 +1,16 @@
+/**
+ * @file Controller to handle frontend shopping cart requests
+ */
 import Tables from "../models/TableModel.js";
 import Products from "../models/ProductModel.js";
 import Cart from "../models/CartModel.js";
 import Order from "../models/OrderModel.js";
 import { Op } from "sequelize";
 
+/**
+ * Module to add a product to the shopping cart
+ * @module addProductToCart
+ */
 export const addProductToCart = async(req, res) => {
     const { tableID, productID } = req.body;
     console.log("tableID: " + tableID + " productID: " + productID)
@@ -35,6 +42,10 @@ export const addProductToCart = async(req, res) => {
     }
 }
 
+/**
+ * Module to delete a product to the shopping cart
+ * @module destroyProductCart
+ */
 export const destroyProductCart = async(req, res) => {
     const { tableID, productID } = req.body;
     console.log("tableID: " + tableID + " productID: " + productID)
@@ -59,6 +70,10 @@ export const destroyProductCart = async(req, res) => {
     }
 }
 
+/**
+ * Module to delete the shopping cart
+ * @module destroyCart
+ */
 export const destroyCart = async(req, res) => {
     const { tableID } = req.body;
     console.log("tableID: " + tableID)
@@ -76,6 +91,10 @@ export const destroyCart = async(req, res) => {
     }
 }
 
+/**
+ * Module to get all products to the shopping cart
+ * @module getCart
+ */
 export const getCart = async(req, res) => {
     //sconsole.log(req.query.mesa);
     const tableID  = req.query.mesa;
@@ -99,6 +118,10 @@ export const getCart = async(req, res) => {
     }
 }
 
+/**
+ * Module to delete the shopping cart and the order
+ * @module cancelOrder
+ */
 export const cancelOrder = async(req, res) => {
     const { tableID } = req.body;
     try {

@@ -1,0 +1,21 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "source": {
+    "include": ["API/config", "API/controllers", "API/models", "API/routes", "API/middleware"],
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": ["plugins/markdown", "better-docs/component"],
+  "templates": {
+    "better-docs": {
+      "name": "My React components"
+    }
+  },
+  "opts": {
+    "destination": "docsBackend",
+    "recurse": true
+  }
+}

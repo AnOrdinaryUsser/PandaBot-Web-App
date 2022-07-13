@@ -28,6 +28,10 @@ import {
   addUser,
 } from "../../services/UsersService.js";
 
+/**
+ * @description View for AdminDashboard
+ * This view will display the data of the user who is logged in to the system. In addition, you can edit the data of the logged in user.
+ */
 const AdminDashboard = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
@@ -46,7 +50,7 @@ const AdminDashboard = () => {
     async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get("http://192.168.1.50:9000/token");
+        const response = await axios.get("http://192.168.1.128:9000/token");
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);

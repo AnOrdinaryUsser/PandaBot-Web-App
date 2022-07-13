@@ -1,6 +1,10 @@
 import React from 'react'
 import { CFooter } from '@coreui/react'
 
+/**
+ * @component AppFooter
+ * @description Component footer.
+ */
 const AppFooter = () => {
   return (
     <CFooter>

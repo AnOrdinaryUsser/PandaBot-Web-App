@@ -1,3 +1,6 @@
+/**
+ * @file Data database configuration file
+ */
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 

@@ -1,3 +1,6 @@
+/**
+ * @file Data model for sections
+ */
 import { Sequelize } from "sequelize";
 import db from "../config/DataDB.js";
  

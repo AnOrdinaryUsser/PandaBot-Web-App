@@ -13,6 +13,10 @@ import {
 import image from "./../../../assets/images/backgroundLogin.jpg";
 import { changePassword } from "../../../services/MailService.js";
 
+/**
+ * @description View for ResetPasssword
+ * In this view the user enters his or her new password.
+ */
 const ResetPassword = () => {
   const [validated, setValidated] = useState(false);
 

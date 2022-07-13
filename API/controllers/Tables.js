@@ -1,5 +1,12 @@
+/**
+ * @file Controller to handle frontend tables requests
+ */
 import Tables from "../models/TableModel.js";
- 
+
+/**
+ * Module to get all tables
+ * @module getTables
+ */
 export const getTables = async(req, res) => {
     try {
         const tables = await Tables.findAll({
@@ -10,7 +17,11 @@ export const getTables = async(req, res) => {
         console.log(error);
     }
 }
- 
+
+/**
+ * Module to add a table
+ * @module addTable
+ */
 export const addTable = async(req, res) => {
     const { id, seats, positionX, positionY, qrURL } = req.body;
     try {
@@ -27,6 +38,10 @@ export const addTable = async(req, res) => {
     }
 }
 
+/**
+ * Module to delete a table
+ * @module deleteTable
+ */
 export const deleteTable = async(req, res) => {
     const { id } = req.body;
     try {

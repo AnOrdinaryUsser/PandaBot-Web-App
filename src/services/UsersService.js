@@ -15,7 +15,7 @@ import jwt_decode from "jwt-decode";
  */
 export const refreshToken = async (setToken, setExpire, setName, setEmail) => {
   try {
-    const response = await axios.get("http://192.168.1.50:9000/token");
+    const response = await axios.get("http://192.168.1.128:9000/token");
     setToken(response.data.accessToken);
     console.log(response);
     const decoded = jwt_decode(response.data.accessToken);
@@ -37,7 +37,7 @@ export const refreshToken = async (setToken, setExpire, setName, setEmail) => {
  * @param {Object} axiosJWT Axios token
  */
 export const getUsers = async (setUsers, token, axiosJWT) => {
-  const response = await axiosJWT.get("http://192.168.1.50:9000/users", {
+  const response = await axiosJWT.get("http://192.168.1.128:9000/users", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -52,7 +52,7 @@ export const getUsers = async (setUsers, token, axiosJWT) => {
  */
 export const deleteUser = async (e) => {
   try {
-    await axios.post("http://192.168.1.50:9000/deleteUser", {
+    await axios.post("http://192.168.1.128:9000/deleteUser", {
       id: e.currentTarget.id,
     });
     window.location.reload();
@@ -79,7 +79,7 @@ export const addUser = async (e, setValidated) => {
 
   e.preventDefault();
   try {
-    await axios.post("http://192.168.1.50:9000/users", {
+    await axios.post("http://192.168.1.128:9000/users", {
       name: user.value,
       email: email.value,
       password: pass.value,
@@ -111,7 +111,7 @@ export const modifyUser = async (e, name, setValidated) => {
   e.preventDefault();
 
   try {
-    await axios.post("http://192.168.1.50:9000/modifyUser", {
+    await axios.post("http://192.168.1.128:9000/modifyUser", {
       username: name,
       name: nombre.value,
       email: emailInput.value,
@@ -141,7 +141,7 @@ export const Auth = async (e, setValidated) => {
   const { user, password } = e.target.elements;
   e.preventDefault();
   try {
-    await axios.post("http://192.168.1.50:9000/login", {
+    await axios.post("http://192.168.1.128:9000/login", {
       user: user.value,
       password: password.value,
     });
@@ -169,7 +169,7 @@ export const Register = async (e, setValidated) => {
 
   e.preventDefault();
   try {
-    await axios.post("http://192.168.1.50:9000/users", {
+    await axios.post("http://192.168.1.128:9000/users", {
       name: user.value,
       email: email.value,
       password: pass.value,

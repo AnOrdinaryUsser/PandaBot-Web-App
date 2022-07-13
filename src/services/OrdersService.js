@@ -11,7 +11,7 @@ import axios from "axios";
  * @param {Array} setOrder Array of a order
  */
 export const getOrder = async (tableID, setOrder) => {
-  const response = await axios.post("http://192.168.1.50:9000/getOrder", {
+  const response = await axios.post("http://192.168.1.128:9000/getOrder", {
     tableID: tableID,
   });
   setOrder(response.data);
@@ -24,7 +24,7 @@ export const getOrder = async (tableID, setOrder) => {
  * @param {Array} setOrders Array of orders
  */
 export const getOrders = async (setOrders) => {
-  const response = await axios.get("http://192.168.1.50:9000/getOrders", {});
+  const response = await axios.get("http://192.168.1.128:9000/getOrders", {});
   setOrders(response.data);
   console.log(response.data);
 };
@@ -40,7 +40,7 @@ export const addOrder = async (e, totalPrice, id) => {
   e.stopPropagation();
   console.log("totalPrice: " + totalPrice + "mesa: " + id);
   try {
-    await axios.post("http://192.168.1.50:9000/addOrder", {
+    await axios.post("http://192.168.1.128:9000/addOrder", {
       totalPrice: totalPrice,
       id: id,
     });
@@ -59,7 +59,7 @@ export const addOrder = async (e, totalPrice, id) => {
  */
 export const statusOrder = async (tableID) => {
   try {
-    await axios.post("http://192.168.1.50:9000/statusOrder", {
+    await axios.post("http://192.168.1.128:9000/statusOrder", {
       id: tableID,
     });
     window.location.reload();

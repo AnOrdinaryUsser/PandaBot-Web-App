@@ -27,7 +27,11 @@ import { getOrders, statusOrder } from "../../services/OrdersService.js";
 import { getCart } from "../../services/CartService.js";
 import { refreshToken } from "../../services/UsersService.js";
 
-const Carta = () => {
+/**
+ * @description View for Orders
+ * This view will list all the orders in the system and the status of each one.
+ */
+const Orders = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
   const [visible, setVisible] = useState(false);
@@ -50,7 +54,7 @@ const Carta = () => {
     async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get("http://192.168.1.50:9000/token");
+        const response = await axios.get("http://192.168.1.128:9000/token");
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);
@@ -213,4 +217,4 @@ const Carta = () => {
   );
 };
 
-export default Carta;
+export default Orders;

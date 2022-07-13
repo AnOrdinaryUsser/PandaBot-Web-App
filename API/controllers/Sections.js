@@ -1,5 +1,12 @@
+/**
+ * @file Controller to handle frontend sections request
+ */
 import Sections from "../models/SectionModel.js";
 
+/**
+ * Module to add a section
+ * @module addSection
+ */
 export const addSection = async(req, res) => {
     const { name } = req.body;
     try {
@@ -12,7 +19,10 @@ export const addSection = async(req, res) => {
     }
 }
 
-
+/**
+ * Module to get all sections
+ * @module getSections
+ */
 export const getSections = async(req, res) => {
     try {
         const sections = await Sections.findAll({
@@ -24,6 +34,10 @@ export const getSections = async(req, res) => {
     }
 }
 
+/**
+ * Module to get a section
+ * @module getSection
+ */
 export const getSection = async(req, res) => {
     const { id } = req.body;
     try {
@@ -38,6 +52,10 @@ export const getSection = async(req, res) => {
     }
 }
 
+/**
+ * Module to delete a section
+ * @module deleteSection
+ */
 export const deleteSection = async(req, res) => {
     const { id } = req.body;
     try {
@@ -50,6 +68,10 @@ export const deleteSection = async(req, res) => {
     }
 }
 
+/**
+ * Module to modify a section
+ * @module modifySection
+ */
 export const modifySection = async(req, res) => {
     const { id, name } = req.body;
     try {

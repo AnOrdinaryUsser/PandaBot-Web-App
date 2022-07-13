@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/Order.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/Order.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Controller to handle frontend orders requests
+ */
+import Cart from "../models/CartModel.js";
+import Order from "../models/OrderModel.js";
+
+/**
+ * Module to add an order
+ * @module addOrder
+ */
+export const addOrder = async(req, res) => {
+    const { totalPrice, id } = req.body;
+    try {
+        //Check if table &amp; product exits
+        const cart = await Cart.findOne({ where: {tableId: id } });
+        console.log(cart)
+        if (cart === null) {
+            console.log('Cart not found!')
+        } else {
+            await Order.create({
+                status: "En curso",
+                price: totalPrice,
+                tableId: id,
+            })
+            
+        }
+        res.json({msg: "Order added!"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/**
+ * Module to get all orders
+ * @module getOrders
+ */
+export const getOrders = async(req, res) => {
+    try {
+        const orders = await Order.findAll();
+        res.json(orders);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/**
+ * Module to get an order
+ * @module getOrder
+ */
+export const getOrder = async(req, res) => {
+    const { tableID } = req.body;
+    try {
+        const order = await Order.findOne({ where: {tableId: tableID } });
+        res.json(order);
+    } catch (error) {
+         res.json(error);
+    }
+}
+
+/**
+ * Module to change status of an order
+ * @module statusOrder
+ */
+export const statusOrder = async(req, res) => {
+    const { id } = req.body;
+    try {
+        //Check if table &amp; product exits
+        const order = await Order.findOne({ where: {id: id } });
+        if (order === null) {
+            console.log('Order not found!')
+        } else {
+            if (order.status === "En curso") {
+                await Order.update({
+                    status: "Enviado",
+                }, {where: {status: "En curso", id: id}})
+            } else if (order.status === "Enviado") {
+                await Order.update({
+                    status: "Pagado",
+                }, {where: {status: "Enviado", id: id}})
+            } else if (order.status === "Pagado") {
+                await Order.destroy({where: {status: "Pagado", id: id}})
+                await Cart.destroy({ where: {tableId: order.tableId } });
+            }
+        }
+        res.json({msg: "Order updated!"});
+    } catch (error) {
+        console.log(error);
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-addOrder.html">addOrder</a></li><li><a href="module-addProduct.html">addProduct</a></li><li><a href="module-addProductToCart.html">addProductToCart</a></li><li><a href="module-addSection.html">addSection</a></li><li><a href="module-addTable.html">addTable</a></li><li><a href="module-cancelOrder.html">cancelOrder</a></li><li><a href="module-deleteProduct.html">deleteProduct</a></li><li><a href="module-deleteSection.html">deleteSection</a></li><li><a href="module-deleteTable.html">deleteTable</a></li><li><a href="module-deleteUser.html">deleteUser</a></li><li><a href="module-destroyCart.html">destroyCart</a></li><li><a href="module-destroyProductCart.html">destroyProductCart</a></li><li><a href="module-getCart.html">getCart</a></li><li><a href="module-getOrder.html">getOrder</a></li><li><a href="module-getOrders.html">getOrders</a></li><li><a href="module-getProduct.html">getProduct</a></li><li><a href="module-getProducts.html">getProducts</a></li><li><a href="module-getSection.html">getSection</a></li><li><a href="module-getSections.html">getSections</a></li><li><a href="module-getTables.html">getTables</a></li><li><a href="module-getUsers.html">getUsers</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-Logout.html">Logout</a></li><li><a href="module-modifyProduct.html">modifyProduct</a></li><li><a href="module-modifySection.html">modifySection</a></li><li><a href="module-modifyUser.html">modifyUser</a></li><li><a href="module-recoverPassword.html">recoverPassword</a></li><li><a href="module-refreshToken.html">refreshToken</a></li><li><a href="module-Register.html">Register</a></li><li><a href="module-resetPassword.html">resetPassword</a></li><li><a href="module-statusOrder.html">statusOrder</a></li><li><a href="module-uploadImg.html">uploadImg</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jul 13 2022 12:34:11 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

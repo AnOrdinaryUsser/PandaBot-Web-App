@@ -1,3 +1,6 @@
+/**
+ * @file Data model for users
+ */
 import { Sequelize } from "sequelize";
 import db from "../config/AuthDB.js";
  

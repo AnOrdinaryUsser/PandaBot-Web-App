@@ -5,6 +5,10 @@ import { CContainer, CSpinner } from '@coreui/react'
 // routes config
 import routes from '../routes'
 
+/**
+ * @component AppContent
+ * @description Component with App content.
+ */
 const AppContent = () => {
   return (
     <CContainer lg>

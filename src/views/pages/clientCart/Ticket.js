@@ -12,7 +12,11 @@ import {
 } from "@coreui/react";
 import { getCart } from "../../../services/CartService.js";
 
-const Register = () => {
+/**
+ * @description View for Ticket
+ * In this view the user can see the order he/she has placed for that table or cancel it.
+ */
+const Ticket = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const tableID = queryParams.get("mesa");
 
@@ -44,7 +48,7 @@ const Register = () => {
                       <CCol md={4}>
                         <CCardImage
                           src={
-                            "http://192.168.1.50:9000/public/images/" +
+                            "http://192.168.1.128:9000/public/images/" +
                             product["products.img"]
                           }
                         />
@@ -83,4 +87,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Ticket;

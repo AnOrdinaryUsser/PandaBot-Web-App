@@ -28,7 +28,11 @@ import {
 } from "../../services/TablesService.js";
 import { refreshToken } from "../../services/UsersService.js";
 
-const Tables1 = () => {
+/**
+ * @description View for Tables
+ * This view shows all tables that have been added and their corresponding QR codes. Tables can also be deleted.
+ */
+const Tables = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
   const [tables, setTables] = useState([]);
@@ -63,7 +67,7 @@ const Tables1 = () => {
     async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get("http://192.168.1.50:9000/token");
+        const response = await axios.get("http://192.168.1.128:9000/token");
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);
@@ -182,4 +186,4 @@ const Tables1 = () => {
   );
 };
 
-export default Tables1;
+export default Tables;

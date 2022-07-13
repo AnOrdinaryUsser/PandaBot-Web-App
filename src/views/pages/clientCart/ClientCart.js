@@ -51,7 +51,11 @@ import {
   cancelOrder,
 } from "../../../services/CartService.js";
 
-const Login = () => {
+/**
+ * @description View for ClientCart
+ * This view shows a menu with all products, where the customer can add products to the shopping cart and see their total price.
+ */
+const ClientCart = () => {
   const [productsList, setProductsList] = useState([]);
   const [sections, setSections] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -171,7 +175,7 @@ const Login = () => {
                                 align="center"
                                 className="clearfix"
                                 src={
-                                  "http://192.168.1.50:9000/public/images/" +
+                                  "http://192.168.1.128:9000/public/images/" +
                                   product.img
                                 }
                               />
@@ -402,7 +406,7 @@ const Login = () => {
                           <CCol md={4}>
                             <CCardImage
                               src={
-                                "http://192.168.1.50:9000/public/images/" +
+                                "http://192.168.1.128:9000/public/images/" +
                                 product["products.img"]
                               }
                             />
@@ -468,4 +472,4 @@ const Login = () => {
   }
 };
 
-export default Login;
+export default ClientCart;

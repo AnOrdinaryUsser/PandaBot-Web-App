@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: views/orders/Orders.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: views/orders/Orders.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import {
+  CButton,
+  CCol,
+  CRow,
+  CContainer,
+  CCard,
+  CCardBody,
+  CCardTitle,
+  CCardText,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+  CTableRow,
+  CTableHead,
+  CTableBody,
+  CTable,
+  CTableHeaderCell,
+  CTableDataCell,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilChevronRight } from "@coreui/icons";
+import { getOrders, statusOrder } from "../../services/OrdersService.js";
+import { getCart } from "../../services/CartService.js";
+import { refreshToken } from "../../services/UsersService.js";
+
+/**
+ * @description View for Orders
+ * This view will list all the orders in the system and the status of each one.
+ */
+const Orders = () => {
+  const [token, setToken] = useState("");
+  const [expire, setExpire] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    refreshToken(setToken, setExpire);
+    getOrders(setOrders);
+  }, []);
+
+  function handlerButton(tableID) {
+    setVisible(!visible);
+    getCart(tableID, setCart);
+  }
+
+  const axiosJWT = axios.create();
+
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      const currentDate = new Date();
+      if (expire * 1000 &lt; currentDate.getTime()) {
+        const response = await axios.get("http://192.168.1.128:9000/token");
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+        setToken(response.data.accessToken);
+        const decoded = jwt_decode(response.data.accessToken);
+        setName(decoded.name);
+        setExpire(decoded.exp);
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  return (
+    &lt;>
+      &lt;CContainer>
+        &lt;CRow>
+          &lt;h2 className="mb-4">Pedidos&lt;/h2>
+        &lt;/CRow>
+        &lt;CRow>
+          &lt;CCol>
+            &lt;h3 className="mb-4">En curso&lt;/h3>
+            {orders
+              .filter((orders) => orders.status == "En curso")
+              .map((order, index) => {
+                return (
+                  &lt;CCard
+                    key={index}
+                    style={{ width: "22rem" }}
+                    className="mb-4"
+                  >
+                    &lt;CCardBody>
+                      &lt;CCardTitle>Pedido de mesa: {order.tableId}&lt;/CCardTitle>
+                      &lt;CCardText>
+                        Total a pagar: {order.price}
+                        &lt;CButton
+                          color="secondary"
+                          className="float-end"
+                          id="En curso"
+                          onClick={() => statusOrder(order.id)}
+                        >
+                          &lt;CIcon
+                            style={{ color: "white" }}
+                            icon={cilChevronRight}
+                          />
+                        &lt;/CButton>
+                      &lt;/CCardText>
+                      &lt;CCardText onClick={() => handlerButton(order.tableId)}>
+                        Ticket
+                      &lt;/CCardText>
+                    &lt;/CCardBody>
+                  &lt;/CCard>
+                );
+              })}
+          &lt;/CCol>
+          &lt;CCol>
+            &lt;h3 className="mb-4">Enviado&lt;/h3>
+            {orders
+              .filter((orders) => orders.status == "Enviado")
+              .map((order, index) => {
+                return (
+                  &lt;CCard
+                    key={index}
+                    style={{ width: "22rem" }}
+                    className="mb-4"
+                  >
+                    &lt;CCardBody>
+                      &lt;CCardTitle>Pedido de mesa: {order.tableId}&lt;/CCardTitle>
+                      &lt;CCardText>
+                        Total a pagar: {order.price}
+                        &lt;CButton
+                          color="secondary"
+                          className="float-end"
+                          id="Enviado"
+                          onClick={() => statusOrder(order.id)}
+                        >
+                          &lt;CIcon
+                            style={{ color: "white" }}
+                            icon={cilChevronRight}
+                          />
+                        &lt;/CButton>
+                      &lt;/CCardText>
+                      &lt;CCardText onClick={() => handlerButton(order.tableId)}>
+                        Ticket
+                      &lt;/CCardText>
+                    &lt;/CCardBody>
+                  &lt;/CCard>
+                );
+              })}
+          &lt;/CCol>
+          &lt;CCol>
+            &lt;h3 className="mb-4">Pagado&lt;/h3>
+            {orders
+              .filter((orders) => orders.status == "Pagado")
+              .map((order, index) => {
+                return (
+                  &lt;CCard
+                    key={index}
+                    style={{ width: "22rem" }}
+                    className="mb-4"
+                  >
+                    &lt;CCardBody>
+                      &lt;CCardTitle>Pedido de mesa: {order.tableId}&lt;/CCardTitle>
+                      &lt;CCardText>
+                        Total a pagar: {order.price}
+                        &lt;CButton
+                          color="secondary"
+                          className="float-end"
+                          id="Pagado"
+                          onClick={() => statusOrder(order.id)}
+                        >
+                          &lt;CIcon
+                            style={{ color: "white" }}
+                            icon={cilChevronRight}
+                          />
+                        &lt;/CButton>
+                      &lt;/CCardText>
+                      &lt;CCardText onClick={() => handlerButton(order.tableId)}>
+                        Ticket
+                      &lt;/CCardText>
+                    &lt;/CCardBody>
+                  &lt;/CCard>
+                );
+              })}
+          &lt;/CCol>
+        &lt;/CRow>
+      &lt;/CContainer>
+      &lt;CModal
+        alignment="center"
+        visible={visible}
+        onClose={() => setVisible(false)}
+      >
+        &lt;CModalHeader onClose={() => setVisible(false)}>
+          &lt;CModalTitle>Ticket&lt;/CModalTitle>
+        &lt;/CModalHeader>
+        &lt;CModalBody>
+          &lt;CTable>
+            &lt;CTableHead>
+              &lt;CTableRow>
+                &lt;CTableHeaderCell scope="col">Nombre&lt;/CTableHeaderCell>
+                &lt;CTableHeaderCell scope="col">Cant.&lt;/CTableHeaderCell>
+              &lt;/CTableRow>
+            &lt;/CTableHead>
+            &lt;CTableBody>
+              {cart.map((product, index) => {
+                return (
+                  &lt;CTableRow key={index}>
+                    &lt;CTableDataCell>{product["products.name"]}&lt;/CTableDataCell>
+                    &lt;CTableDataCell>
+                      {product["products.cart.qty"]}
+                    &lt;/CTableDataCell>
+                  &lt;/CTableRow>
+                );
+              })}
+            &lt;/CTableBody>
+          &lt;/CTable>
+        &lt;/CModalBody>
+      &lt;/CModal>
+    &lt;/>
+  );
+};
+
+export default Orders;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-CartService.html">CartService</a></li><li><a href="module-MailService.html">MailService</a></li><li><a href="module-OrdersService.html">OrdersService</a></li><li><a href="module-ProductsService.html">ProductsService</a></li><li><a href="module-SectionsService.html">SectionsService</a></li><li><a href="module-TablesService.html">TablesService</a></li><li><a href="module-UsersService.html">UsersService</a></li></ul><h3>Classes</h3><ul><li><a href="AppBreadcrumb.html">AppBreadcrumb</a></li><li><a href="AppContent.html">AppContent</a></li><li><a href="AppFooter.html">AppFooter</a></li><li><a href="AppHeader.html">AppHeader</a></li><li><a href="AppSidebar.html">AppSidebar</a></li><li><a href="AppSidebarAdmin.html">AppSidebarAdmin</a></li><li><a href="DefaultLayout.html">DefaultLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdminDashboard">AdminDashboard</a></li><li><a href="global.html#Cart">Cart</a></li><li><a href="global.html#ClientCart">ClientCart</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#EnterMail">EnterMail</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Map">Map</a></li><li><a href="global.html#Orders">Orders</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#ResetPassword">ResetPassword</a></li><li><a href="global.html#Sections">Sections</a></li><li><a href="global.html#SentEmail">SentEmail</a></li><li><a href="global.html#Tables">Tables</a></li><li><a href="global.html#Ticket">Ticket</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jul 13 2022 12:39:16 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

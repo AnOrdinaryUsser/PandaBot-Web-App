@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: views/pages/login/Login.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: views/pages/login/Login.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardGroup,
+  CCol,
+  CContainer,
+  CForm,
+  CFormInput,
+  CInputGroup,
+  CInputGroupText,
+  CRow,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilLockLocked, cilUser } from "@coreui/icons";
+import image from "./../../../assets/images/backgroundLogin.jpg";
+import { Auth } from "../../../services/UsersService.js";
+
+/**
+ * @description View for Login
+ * In this view the user can log in to the system.
+ */
+const Login = () => {
+  const [validated, setValidated] = useState(false);
+
+  return (
+    &lt;div
+      style={{
+        backgroundImage: `url(${image})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+      className="min-vh-100 d-flex flex-row align-items-center"
+    >
+      &lt;CContainer>
+        &lt;CRow className="justify-content-center">
+          &lt;CCol md={8}>
+            &lt;CCardGroup>
+              &lt;CCard className="p-4">
+                &lt;CCardBody>
+                  &lt;CForm onSubmit={(e) => Auth(e, setValidated)}>
+                    &lt;h1>Login&lt;/h1>
+                    &lt;p className="text-medium-emphasis">
+                      Inicia sesión con tu cuenta
+                    &lt;/p>
+                    &lt;CInputGroup className="mb-3">
+                      &lt;CInputGroupText>
+                        &lt;CIcon icon={cilUser} />
+                      &lt;/CInputGroupText>
+                      &lt;CFormInput
+                        id="user"
+                        placeholder="Usuario"
+                        pattern="^[a-zA-Z0-9_.-]*$"
+                        autoComplete="username"
+                      />
+                    &lt;/CInputGroup>
+                    &lt;CInputGroup className="mb-4">
+                      &lt;CInputGroupText>
+                        &lt;CIcon icon={cilLockLocked} />
+                      &lt;/CInputGroupText>
+                      &lt;CFormInput
+                        id="password"
+                        type="password"
+                        placeholder="Contraseña"
+                        autoComplete="current-password"
+                      />
+                    &lt;/CInputGroup>
+                    &lt;CRow>
+                      &lt;CCol xs={6}>
+                        &lt;CButton type="submit" color="primary" className="px-4">
+                          Continuar
+                        &lt;/CButton>
+                      &lt;/CCol>
+                      &lt;CCol xs={6} className="text-right">
+                        &lt;Link to="/EnterEmail">
+                          &lt;CButton color="link" className="px-0">
+                            Olvide mi contraseña
+                          &lt;/CButton>
+                        &lt;/Link>
+                      &lt;/CCol>
+                    &lt;/CRow>
+                  &lt;/CForm>
+                &lt;/CCardBody>
+              &lt;/CCard>
+              &lt;CCard
+                className="text-white bg-primary py-5"
+                style={{ width: "44%" }}
+              >
+                &lt;CCardBody className="text-center">
+                  &lt;div>
+                    &lt;h2>Registrarse&lt;/h2>
+                    &lt;p>
+                      Si quieres disfrutar de todos los servicios que ofrece
+                      NombreEmpresa registrate ahora
+                    &lt;/p>
+                    &lt;Link to="/register">
+                      &lt;CButton
+                        color="primary"
+                        className="mt-3"
+                        active
+                        tabIndex={-1}
+                      >
+                        Registrate
+                      &lt;/CButton>
+                    &lt;/Link>
+                  &lt;/div>
+                &lt;/CCardBody>
+              &lt;/CCard>
+            &lt;/CCardGroup>
+          &lt;/CCol>
+        &lt;/CRow>
+      &lt;/CContainer>
+    &lt;/div>
+  );
+};
+
+export default Login;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-CartService.html">CartService</a></li><li><a href="module-MailService.html">MailService</a></li><li><a href="module-OrdersService.html">OrdersService</a></li><li><a href="module-ProductsService.html">ProductsService</a></li><li><a href="module-SectionsService.html">SectionsService</a></li><li><a href="module-TablesService.html">TablesService</a></li><li><a href="module-UsersService.html">UsersService</a></li></ul><h3>Classes</h3><ul><li><a href="AppBreadcrumb.html">AppBreadcrumb</a></li><li><a href="AppContent.html">AppContent</a></li><li><a href="AppFooter.html">AppFooter</a></li><li><a href="AppHeader.html">AppHeader</a></li><li><a href="AppSidebar.html">AppSidebar</a></li><li><a href="AppSidebarAdmin.html">AppSidebarAdmin</a></li><li><a href="DefaultLayout.html">DefaultLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdminDashboard">AdminDashboard</a></li><li><a href="global.html#Cart">Cart</a></li><li><a href="global.html#ClientCart">ClientCart</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#EnterMail">EnterMail</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Map">Map</a></li><li><a href="global.html#Orders">Orders</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#ResetPassword">ResetPassword</a></li><li><a href="global.html#Sections">Sections</a></li><li><a href="global.html#SentEmail">SentEmail</a></li><li><a href="global.html#Tables">Tables</a></li><li><a href="global.html#Ticket">Ticket</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jul 13 2022 12:39:16 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

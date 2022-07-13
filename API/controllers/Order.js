@@ -1,9 +1,13 @@
-import Tables from "../models/TableModel.js";
-import Products from "../models/ProductModel.js";
+/**
+ * @file Controller to handle frontend orders requests
+ */
 import Cart from "../models/CartModel.js";
-import { Op } from "sequelize";
 import Order from "../models/OrderModel.js";
 
+/**
+ * Module to add an order
+ * @module addOrder
+ */
 export const addOrder = async(req, res) => {
     const { totalPrice, id } = req.body;
     try {
@@ -26,6 +30,10 @@ export const addOrder = async(req, res) => {
     }
 }
 
+/**
+ * Module to get all orders
+ * @module getOrders
+ */
 export const getOrders = async(req, res) => {
     try {
         const orders = await Order.findAll();
@@ -35,7 +43,10 @@ export const getOrders = async(req, res) => {
     }
 }
 
-
+/**
+ * Module to get an order
+ * @module getOrder
+ */
 export const getOrder = async(req, res) => {
     const { tableID } = req.body;
     try {
@@ -46,6 +57,10 @@ export const getOrder = async(req, res) => {
     }
 }
 
+/**
+ * Module to change status of an order
+ * @module statusOrder
+ */
 export const statusOrder = async(req, res) => {
     const { id } = req.body;
     try {

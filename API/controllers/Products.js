@@ -1,7 +1,13 @@
+/**
+ * @file Controller to handle frontend products requests
+ */
 import Products from "../models/ProductModel.js";
-import multer from 'multer';
 import Sections from "../models/SectionModel.js";
 
+/**
+ * Module to get all products
+ * @module getProducts
+ */
 export const getProducts = async(req, res) => {
     try {
         const products = await Products.findAll({
@@ -13,6 +19,10 @@ export const getProducts = async(req, res) => {
     }
 }
 
+/**
+ * Module to get a product
+ * @module getProduct
+ */
 export const getProduct = async(req, res) => {
     const { id } = req.body;
     try {
@@ -23,7 +33,10 @@ export const getProduct = async(req, res) => {
     }
 }
  
- 
+/**
+ * Module to add a product
+ * @module addProduct
+ */
 export const addProduct = async(req, res) => {
     const { name , description , price , allergens, img , section } = req.body;
     try {
@@ -47,6 +60,10 @@ export const addProduct = async(req, res) => {
     }
 }
 
+/**
+ * Module to modify a product
+ * @module modifyProduct
+ */
 export const modifyProduct = async(req, res) => {
     const { id, name , description , price , allergens, img , section } = req.body;
     console.log("AAAAAAAAAAAAAA")
@@ -77,6 +94,10 @@ export const modifyProduct = async(req, res) => {
     }
 }
 
+/**
+ * Module to delete a product
+ * @module deleteProduct
+ */
 export const deleteProduct = async(req, res) => {
     const { id } = req.body;
     try {
@@ -89,11 +110,15 @@ export const deleteProduct = async(req, res) => {
     }
 }
 
+/**
+ * Module to upload an image
+ * @module uploadImg
+ */
 export const uploadImg = async(req, res) => {
     try {
         res.json({msg: "ImageUpload"});
     } catch (error) {
-        return res.status(201).json({ url: "http://192.168.1.50:9000/image/" + imageName });
+        return res.status(201).json({ url: "http://192.168.1.128:9000/image/" + imageName });
     }
 }
 

@@ -16,7 +16,10 @@ import { useNavigate } from 'react-router-dom'
 import logo  from './../assets/brand/logo.png'
 import axios from 'axios';
 
-
+/**
+ * @component AppHeader
+ * @description Component app header.
+ */
 const AppHeader = () => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
@@ -25,7 +28,7 @@ const AppHeader = () => {
 
   const Logout = async () => {
     try {
-        await axios.delete('http://192.168.1.50:9000/logout');
+        await axios.delete('http://192.168.1.128:9000/logout');
         navigate("/");
     } catch (error) {
         console.log(error);

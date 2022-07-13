@@ -17,6 +17,11 @@ import CIcon from "@coreui/icons-react";
 import { cilLockLocked, cilUser } from "@coreui/icons";
 import image from "./../../../assets/images/backgroundLogin.jpg";
 import { Auth } from "../../../services/UsersService.js";
+
+/**
+ * @description View for Login
+ * In this view the user can log in to the system.
+ */
 const Login = () => {
   const [validated, setValidated] = useState(false);
 

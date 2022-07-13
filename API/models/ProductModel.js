@@ -1,3 +1,6 @@
+/**
+ * @file Data model for products
+ */
 import { Sequelize } from "sequelize";
 import db from "../config/DataDB.js";
  

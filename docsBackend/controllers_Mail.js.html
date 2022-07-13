@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/Mail.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/Mail.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Controller to handle frontend mail requests
+ */
+import nodemailer from 'nodemailer'
+import Users from "../models/UserModel.js";
+import bcrypt from "bcrypt";
+
+/**
+ * Module to recover password
+ * @module recoverPassword
+ */
+export const recoverPassword = async (req, res) => {
+    const { token, email} = req.body;
+
+    const user = await Users.findOne({
+        where: {
+            email: email,
+        }
+    })
+    if (user === null) {
+        console.log("User don't exit");
+    } else {
+        const transporter = nodemailer.createTransport({
+            service: "hotmail",
+            auth: {
+                user: "pandabot-not-reply@hotmail.com",
+                pass: "elefante005",
+            },
+        })
+        try {
+            var mailOptions = {
+                from: '"Panda Bot" &lt;pandabot-not-reply@hotmail.com>',
+                to: email,
+                subject: 'Solicitud de contrseña olvidada',
+                text: 'Solicitud de contraseña',
+                html: '&lt;!doctype html>&lt;html lang="en-US">&lt;head> &lt;meta content="text/html; charset=utf-8" http-equiv="Content-Type" /> &lt;title>Reset Password Email&lt;/title> &lt;meta name="description" content="Reset Password Email"> &lt;style type="text/css"> a:hover {text-decoration: underline !important;} &lt;/style>&lt;/head>&lt;body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">&lt;table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8" style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: "Open Sans", sans-serif;"> &lt;tr> &lt;td> &lt;table style="background-color: #f2f3f8; max-width:670px; margin:0 auto;" width="100%" border="0" align="center" cellpadding="0" cellspacing="0"> &lt;tr> &lt;td style="height:80px;">&amp;nbsp;&lt;/td>&lt;/tr>&lt;tr>&lt;td style="text-align:center;"> &lt;a href="https://rakeshmandal.com" title="logo" target="_blank"> &lt;img width="60" src="https://173-ke.com/wp-content/uploads/2020/04/cropped-Panda-Logo.png" title="logo" alt="logo"> &lt;/a> &lt;/td> &lt;/tr> &lt;tr> &lt;td style="height:20px;">&amp;nbsp;&lt;/td>&lt;/tr>&lt;tr>&lt;td>&lt;table width="95%" border="0" align="center" cellpadding="0" cellspacing="0" style="max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);"> &lt;tr> &lt;td style="height:40px;">&amp;nbsp;&lt;/td> &lt;/tr> &lt;tr> &lt;td style="padding:0 35px;"> &lt;h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:"Rubik",sans-serif;">Hola ' + user.name + ', has solicitado restablecer tu contraseña&lt;/h1> &lt;span style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;">&lt;/span> &lt;p style="color:#455056; font-size:15px;line-height:24px; margin:0;"> No hay problema, aquí puedes rrestablecerla. Para la próxima vez no te olvides de ella!&lt;p>&lt;/p>&lt;a href="http://192.168.1.128:3000/resetPassword?token=' + user.refresh_token + '">Contraseña&lt;/a>&lt;/p>&lt;/td>&lt;/tr>&lt;tr>&lt;td style="height:40px;">&amp;nbsp;&lt;/td>&lt;/tr>&lt;/table>&lt;/td>&lt;tr>&lt;td style="height:20px;">&amp;nbsp;&lt;/td>&lt;/tr>&lt;tr>&lt;td style="text-align:center;"> &lt;p style="font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;">&amp;copy; &lt;strong>Panda Robot&lt;/strong>&lt;/p>&lt;/td>&lt;/tr>&lt;tr>&lt;td style="height:80px;">&amp;nbsp;&lt;/td>&lt;/tr>&lt;/table>&lt;/td>&lt;/tr>&lt;/table>&lt;/body>&lt;/html>'
+            };
+            
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log('Message sent: %s', info.messageId);
+            });
+            res.json({msg: "Mesage sent"});
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+   
+}
+
+/**
+ * Module to reset password
+ * @module resetPassword
+ */
+export const resetPassword = async(req, res) => {
+    const { token, pass } = req.body;
+
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(pass, salt);
+
+    const user = await Users.findOne({
+        where:{
+            refresh_token: token
+        }
+    });
+    console.log(user)
+    if (user === null ) {
+        res.json({msg: "User dont exit"});
+    } else {
+        await Users.update({password: hashPassword},{
+            where:{
+                refresh_token: token
+            }
+        });
+        res.json({msg: "Pasword UPDATE"});
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-addOrder.html">addOrder</a></li><li><a href="module-addProduct.html">addProduct</a></li><li><a href="module-addProductToCart.html">addProductToCart</a></li><li><a href="module-addSection.html">addSection</a></li><li><a href="module-addTable.html">addTable</a></li><li><a href="module-cancelOrder.html">cancelOrder</a></li><li><a href="module-deleteProduct.html">deleteProduct</a></li><li><a href="module-deleteSection.html">deleteSection</a></li><li><a href="module-deleteTable.html">deleteTable</a></li><li><a href="module-deleteUser.html">deleteUser</a></li><li><a href="module-destroyCart.html">destroyCart</a></li><li><a href="module-destroyProductCart.html">destroyProductCart</a></li><li><a href="module-getCart.html">getCart</a></li><li><a href="module-getOrder.html">getOrder</a></li><li><a href="module-getOrders.html">getOrders</a></li><li><a href="module-getProduct.html">getProduct</a></li><li><a href="module-getProducts.html">getProducts</a></li><li><a href="module-getSection.html">getSection</a></li><li><a href="module-getSections.html">getSections</a></li><li><a href="module-getTables.html">getTables</a></li><li><a href="module-getUsers.html">getUsers</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-Logout.html">Logout</a></li><li><a href="module-modifyProduct.html">modifyProduct</a></li><li><a href="module-modifySection.html">modifySection</a></li><li><a href="module-modifyUser.html">modifyUser</a></li><li><a href="module-recoverPassword.html">recoverPassword</a></li><li><a href="module-refreshToken.html">refreshToken</a></li><li><a href="module-Register.html">Register</a></li><li><a href="module-resetPassword.html">resetPassword</a></li><li><a href="module-statusOrder.html">statusOrder</a></li><li><a href="module-uploadImg.html">uploadImg</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jul 13 2022 12:34:11 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

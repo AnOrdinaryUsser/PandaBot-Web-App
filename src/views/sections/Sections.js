@@ -29,7 +29,11 @@ import {
 } from "../../services/SectionsService.js";
 import { refreshToken } from "../../services/UsersService.js";
 
-const Secciones = () => {
+/**
+ * @description View for Sections
+ * This view shows all sections that have been added in the system. In this view, you can add, modify and delete a section.
+ */
+const Sections = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
   const [sections, setSections] = useState([]);
@@ -54,7 +58,7 @@ const Secciones = () => {
     async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get("http://192.168.1.50:9000/token");
+        const response = await axios.get("http://192.168.1.128:9000/token");
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);
@@ -216,4 +220,4 @@ const Secciones = () => {
   );
 };
 
-export default Secciones;
+export default Sections;

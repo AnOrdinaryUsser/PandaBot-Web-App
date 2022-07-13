@@ -93,6 +93,10 @@ function init() {
   } // end display pose marker
 }
 
+/**
+ * @description View for Map
+ * This view shows a map with the real-time position of the robot and allows the user to add a table.
+ */
 const Map = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
@@ -109,7 +113,7 @@ const Map = () => {
     async (config) => {
       const currentDate = new Date();
       if (expire * 1000 < currentDate.getTime()) {
-        const response = await axios.get("http://192.168.1.50:9000/token");
+        const response = await axios.get("http://192.168.1.128:9000/token");
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);

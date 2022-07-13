@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: views/pages/clientCart/ClientCart.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: views/pages/clientCart/ClientCart.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  CButton,
+  CCol,
+  CRow,
+  CContainer,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalFooter,
+  CModalBody,
+  CFormInput,
+  CNav,
+  CNavItem,
+  CNavLink,
+  CTabPane,
+  CTabContent,
+  CCard,
+  CCardBody,
+  CHeader,
+  CHeaderNav,
+  CHeaderToggler,
+  CCardImage,
+} from "@coreui/react";
+import {
+  FishIcon,
+  EggIcon,
+  CeleryIcon,
+  CrustaceanIcon,
+  GlutenIcon,
+  LupinIcon,
+  MilkIcon,
+  MolluscIcon,
+  MustardIcon,
+  NutsIcon,
+  PeanutIcon,
+  SesameIcon,
+  SoyaIcon,
+  SulphiteIcon,
+} from "react-allergens";
+import CIcon from "@coreui/icons-react";
+import { cilCart, cilPlus, cilTrash } from "@coreui/icons";
+import { getOrder, addOrder } from "../../../services/OrdersService.js";
+import { getProducts } from "../../../services/ProductsService.js";
+import { getSections } from "../../../services/SectionsService.js";
+import {
+  getCart,
+  addProductToCart,
+  destroyProductCart,
+  cancelOrder,
+} from "../../../services/CartService.js";
+
+/**
+ * @description View for ClientCart
+ * This view shows a menu with all products, where the customer can add products to the shopping cart and see their total price.
+ */
+const ClientCart = () => {
+  const [productsList, setProductsList] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [activeKey, setActiveKey] = useState(1);
+  const [cart, setCart] = useState([]);
+  const [order, setOrder] = useState([]);
+  let totalPrice = 0;
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const tableID = queryParams.get("mesa");
+
+  const URL = "/ticket?mesa=" + tableID;
+
+  useEffect(() => {
+    getOrder(tableID, setOrder);
+    getProducts(setProductsList);
+    getSections(setSections);
+  }, []);
+
+  function handlerButtonCart() {
+    setVisible(!visible);
+    getCart(tableID, setCart);
+  }
+
+  if (order != null &amp;&amp; order.status != "Terminado") {
+    return (
+      &lt;>
+        &lt;div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+          &lt;CContainer>
+            &lt;CRow className="justify-content-center">
+              &lt;CCol md={9} lg={7} xl={6}>
+                &lt;h1 className="text-center mb-3">
+                  Ya se ha realizado un pedido para esta mesa
+                &lt;/h1>
+                &lt;p className="text-center mb-3">
+                  Si quiere realizar otro pedido, deberá eliminar el pedido
+                  actual o esperar a finalizar el pedido actual
+                &lt;/p>
+                &lt;div className="d-grid gap-2 d-md-flex justify-content-center mb-4">
+                  &lt;Link to={URL}>
+                    &lt;CButton color="secondary" aria-pressed="true">
+                      Ver pedido
+                    &lt;/CButton>
+                  &lt;/Link>
+                &lt;/div>
+              &lt;/CCol>
+            &lt;/CRow>
+            &lt;CRow className="justify-content-center">
+              &lt;CCol md={9} lg={7} xl={6}>
+                &lt;div className="d-grid gap-2 d-md-flex justify-content-center">
+                  &lt;CButton
+                    color="danger"
+                    aria-pressed="true"
+                    onClick={() => cancelOrder(tableID)}
+                  >
+                    Cancelar pedido
+                  &lt;/CButton>
+                &lt;/div>
+              &lt;/CCol>
+            &lt;/CRow>
+          &lt;/CContainer>
+        &lt;/div>
+      &lt;/>
+    );
+  } else {
+    return (
+      &lt;>
+        &lt;CHeader position="sticky" className="mb-4">
+          &lt;CContainer fluid className="justify-content-center">
+            &lt;CNav className="justify-content-center">
+              {sections.map((section, index) => {
+                return (
+                  &lt;CNavItem key={index}>
+                    &lt;CNavLink
+                      className="nav-link active"
+                      aria-current="page"
+                      href="javascript:void(0);"
+                      active={activeKey === 1}
+                      onClick={() => setActiveKey(section.id)}
+                      style={{ color: "black" }}
+                    >
+                      {section.name}
+                    &lt;/CNavLink>
+                  &lt;/CNavItem>
+                );
+              })}
+            &lt;/CNav>
+            &lt;CHeaderNav className="d-none d-md-flex me-auto">&lt;/CHeaderNav>
+
+            &lt;CHeaderToggler>
+              &lt;CIcon icon={cilCart} size="lg" onClick={handlerButtonCart} />
+            &lt;/CHeaderToggler>
+          &lt;/CContainer>
+        &lt;/CHeader>
+
+        &lt;CTabContent>
+          {sections.map((section, index) => {
+            return (
+              &lt;CTabPane
+                key={section.id}
+                role="tabpanel"
+                visible={activeKey === section.id}
+              >
+                {productsList
+                  .filter((product) => product.section == section.id)
+                  .map((product, index) => {
+                    var allergens = JSON.parse(product.allergens);
+                    return (
+                      &lt;CContainer
+                        className="justify-content-center"
+                        key={product.id}
+                      >
+                        &lt;CCard className="justify-content-center mb-4">
+                          &lt;CRow className="g-0">
+                            &lt;CCol md={4}>
+                              &lt;CCardImage
+                                align="center"
+                                className="clearfix"
+                                src={
+                                  "http://192.168.1.128:9000/public/images/" +
+                                  product.img
+                                }
+                              />
+                            &lt;/CCol>
+                            &lt;CCol md={8}>
+                              &lt;CCardBody>
+                                &lt;CContainer fluid>
+                                  &lt;CRow>
+                                    &lt;CRow>
+                                      &lt;h1>{product.name}&lt;/h1>
+                                      &lt;p>{product.description}&lt;/p>
+                                    &lt;/CRow>
+                                    &lt;CRow className="mb-4">
+                                      {allergens.map((p) => {
+                                        switch (p.label) {
+                                          case "Pescado":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;FishIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "FrutosSecos":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;NutsIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Lacteos":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;MilkIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Moluscos":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;MolluscIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Cereales con gluten":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;GlutenIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Crustáceos":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;CrustaceanIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Huevos":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;EggIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Cacahuetes":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;PeanutIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Soja":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;SoyaIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Apio":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;CeleryIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Mostaza":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;MustardIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Sésamo":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;SesameIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Altramuces":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;LupinIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Sulfitos":
+                                            return (
+                                              &lt;CCol xs={1}>
+                                                {" "}
+                                                &lt;SulphiteIcon
+                                                  width="25px"
+                                                  height="25px"
+                                                />{" "}
+                                              &lt;/CCol>
+                                            );
+                                            break;
+                                          case "Ninguno":
+                                            return &lt;CCol xs={1}>&lt;/CCol>;
+                                            break;
+                                        }
+                                      })}
+                                      &lt;CCol className="text-end">
+                                        &lt;h3>{product.price} €&lt;/h3>
+                                      &lt;/CCol>
+                                    &lt;/CRow>
+                                    &lt;CRow className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                      &lt;CCol xs={12} xl={3}>
+                                        &lt;CButton
+                                          onClick={(e) =>
+                                            addProductToCart(
+                                              e,
+                                              tableID,
+                                              product.id
+                                            )
+                                          }
+                                          color="secondary"
+                                        >
+                                          &lt;CIcon icon={cilPlus} /> Añadir al
+                                          carrito
+                                        &lt;/CButton>
+                                      &lt;/CCol>
+                                    &lt;/CRow>
+                                  &lt;/CRow>
+                                &lt;/CContainer>
+                              &lt;/CCardBody>
+                            &lt;/CCol>
+                          &lt;/CRow>
+                        &lt;/CCard>
+                      &lt;/CContainer>
+                    );
+                  })}
+              &lt;/CTabPane>
+            );
+          })}
+        &lt;/CTabContent>
+        &lt;CModal
+          size="xl"
+          alignment="center"
+          visible={visible}
+          onClose={() => setVisible(false)}
+        >
+          &lt;CModalHeader onClose={() => setVisible(false)}>
+            &lt;CModalTitle>Carrito&lt;/CModalTitle>
+          &lt;/CModalHeader>
+          &lt;CModalBody>
+            &lt;CContainer className="justify-content-center">
+              {cart.map((product, index) => {
+                totalPrice +=
+                  product["products.cart.qty"] * product["products.price"];
+                return (
+                  &lt;CRow className="justify-content-center" key={index}>
+                    &lt;CCol xs={9}>
+                      &lt;CCard className="mb-3">
+                        &lt;CRow className="g-0">
+                          &lt;CCol md={4}>
+                            &lt;CCardImage
+                              src={
+                                "http://192.168.1.128:9000/public/images/" +
+                                product["products.img"]
+                              }
+                            />
+                          &lt;/CCol>
+                          &lt;CCol md={8}>
+                            &lt;CCardBody>
+                              &lt;h3>{product["products.name"]}&lt;/h3>
+                              &lt;h4 className="text-end">
+                                {product["products.price"]} €
+                              &lt;/h4>
+                            &lt;/CCardBody>
+                          &lt;/CCol>
+                        &lt;/CRow>
+                      &lt;/CCard>
+                    &lt;/CCol>
+                    &lt;CCol xs={3} className="justify-items-content">
+                      &lt;CFormInput
+                        className="text-center"
+                        value={product["products.cart.qty"]}
+                      />
+                      &lt;p>&lt;/p>
+                      &lt;CButton
+                        className="float-end shadow-none"
+                        style={{
+                          color: "white",
+                          border: "none",
+                          boxShadow: "white",
+                          background: "white",
+                          boxShadowColor: "white",
+                        }}
+                        onClick={(e) =>
+                          destroyProductCart(
+                            e,
+                            tableID,
+                            product["products.cart.productId"]
+                          )
+                        }
+                      >
+                        &lt;CIcon
+                          style={{ color: "red" }}
+                          icon={cilTrash}
+                          size="xl"
+                        />
+                      &lt;/CButton>
+                    &lt;/CCol>
+                  &lt;/CRow>
+                );
+              })}
+            &lt;/CContainer>
+            &lt;CModalFooter>
+              &lt;h3>{totalPrice} €&lt;/h3>
+              &lt;CButton
+                color="success"
+                onClick={(e) => addOrder(e, totalPrice, tableID)}
+              >
+                Pedir
+              &lt;/CButton>
+            &lt;/CModalFooter>
+          &lt;/CModalBody>
+        &lt;/CModal>
+      &lt;/>
+    );
+  }
+};
+
+export default ClientCart;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-CartService.html">CartService</a></li><li><a href="module-MailService.html">MailService</a></li><li><a href="module-OrdersService.html">OrdersService</a></li><li><a href="module-ProductsService.html">ProductsService</a></li><li><a href="module-SectionsService.html">SectionsService</a></li><li><a href="module-TablesService.html">TablesService</a></li><li><a href="module-UsersService.html">UsersService</a></li></ul><h3>Classes</h3><ul><li><a href="AppBreadcrumb.html">AppBreadcrumb</a></li><li><a href="AppContent.html">AppContent</a></li><li><a href="AppFooter.html">AppFooter</a></li><li><a href="AppHeader.html">AppHeader</a></li><li><a href="AppSidebar.html">AppSidebar</a></li><li><a href="AppSidebarAdmin.html">AppSidebarAdmin</a></li><li><a href="DefaultLayout.html">DefaultLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AdminDashboard">AdminDashboard</a></li><li><a href="global.html#Cart">Cart</a></li><li><a href="global.html#ClientCart">ClientCart</a></li><li><a href="global.html#Dashboard">Dashboard</a></li><li><a href="global.html#EnterMail">EnterMail</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#Map">Map</a></li><li><a href="global.html#Orders">Orders</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#ResetPassword">ResetPassword</a></li><li><a href="global.html#Sections">Sections</a></li><li><a href="global.html#SentEmail">SentEmail</a></li><li><a href="global.html#Tables">Tables</a></li><li><a href="global.html#Ticket">Ticket</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jul 13 2022 12:39:16 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

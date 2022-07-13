@@ -1,3 +1,6 @@
+/**
+ * @file AuthDB Users' database configuration file
+ */
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();

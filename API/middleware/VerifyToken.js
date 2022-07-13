@@ -1,3 +1,6 @@
+/**
+ * @file Middleware to check the session identifier of an user
+ */
 import jwt from "jsonwebtoken";
  
 export const verifyToken = (req, res, next) => {

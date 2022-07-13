@@ -1,3 +1,6 @@
+/**
+ * @file Routes or endpoints
+ */
 import express from "express";
 import { getUsers, Register, Login, Logout, modifyUser, deleteUser } from "../controllers/Users.js";
 import { addTable, getTables, deleteTable } from "../controllers/Tables.js";
@@ -5,7 +8,6 @@ import { addProduct, modifyProduct, deleteProduct, getProducts, getProduct, uplo
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import multer from 'multer';
-import path from 'path';
 import { addSection, getSections, getSection, deleteSection, modifySection } from "../controllers/Sections.js";
 import { addProductToCart, cancelOrder, destroyCart, destroyProductCart, getCart } from "../controllers/Cart.js";
 import { addOrder, getOrders, statusOrder, getOrder } from "../controllers/Order.js";
@@ -13,7 +15,7 @@ import { recoverPassword, resetPassword } from "../controllers/Mail.js";
  
 const router = express.Router();
 
-//! Use of Multer
+//Multer
 var storage = multer.diskStorage({
     destination: (req, file, callBack) => {
         callBack(null, './public/images/')     // './public/images/' directory name where save the file
