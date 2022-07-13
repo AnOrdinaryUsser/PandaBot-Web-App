@@ -4,7 +4,7 @@
     "dictionaries": ["jsdoc", "closure"]
   },
   "source": {
-    "include": ["API/config", "API/controllers", "API/models", "API/routes", "API/middleware"],
+    "include": ["backend/config", "backend/controllers", "backend/models", "backend/routes", "backend/middleware"],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"
   },
